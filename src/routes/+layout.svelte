@@ -3,9 +3,12 @@
     import { onMount } from 'svelte';
     import { api, setApiKey } from '$lib/api';
     import { goto } from '$app/navigation';
+    import type { GetMyAgent200Response } from '$lib/spacetraders-sdk/dist';
     
-    $: curMoney = 0;
-    let username = "Loading...";
+    let myAgent: GetMyAgent200Response;
+    let location;
+    $: username = myAgent?.data.symbol ?? "Loading...";
+    $: curMoney = myAgent?.data.credits ?? 0;
 
     onMount(async () => {
       if (!$api) {
@@ -17,7 +20,11 @@
           return
         }
       }
-      username = (await $api.agents.getMyAgent()).data.data.symbol;
+      myAgent = (await $api.agents.getMyAgent()).data;
+      const coords = myAgent.data.headquarters.split("-");
+      const system = coords.slice(0, 2).join("-");
+      const waypoint = coords.slice(0, 3).join("-");
+      location = (await $api.systems.getWaypoint(system, waypoint))
     })
 </script>
 
@@ -62,6 +69,13 @@
             </div>
           </div>
         </li>
+        </ul>
+        <ul class="card m-3 text-black">
+          <div class="card-body">
+            <h3 class="card-title">Location:</h3> 
+            <p class="text-secondary">Symbol: {myAgent?.data.headquarters}</p>
+            <p class="text-secondary">System: {myAgent?.data.headquarters.split("-").splice(0, 2).join("-")}</p>
+          </div>
         </ul>
       </div>
     </div>
