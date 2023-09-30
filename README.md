@@ -1,5 +1,5 @@
 # Spacetraders
 ## Setup
-1. Generate the spacetraders-sdk: `./generate_api.sh`
-2. `npm i`
+1. `npm i`
+2. `npm run generate`
 3. `npm run dev`

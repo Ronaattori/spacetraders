@@ -1,27 +1,17 @@
 <script lang="ts">
     import img from '$lib/images/munkki.jpg';
     import { onMount } from 'svelte';
-    import { api, setApiKey } from '$lib/api';
-    import { goto } from '$app/navigation';
-    import type { GetMyAgent200Response } from '$lib/spacetraders-sdk/dist';
+    import { api } from '$lib/api';
+    import type { Agent } from '$lib/api-sdk';
     
-    let myAgent: GetMyAgent200Response;
+    let myAgent: Agent;
     let location;
-    $: username = myAgent?.data.symbol ?? "Loading...";
-    $: curMoney = myAgent?.data.credits ?? 0;
+    $: username = myAgent?.symbol ?? "Loading...";
+    $: curMoney = myAgent?.credits ?? 0;
 
     onMount(async () => {
-      if (!$api) {
-        const ls = localStorage.getItem("apiKey");
-        if (ls) {
-          setApiKey(ls);
-        } else {
-          goto("/user/login");
-          return
-        }
-      }
       myAgent = (await $api.agents.getMyAgent()).data;
-      const coords = myAgent.data.headquarters.split("-");
+      const coords = myAgent.headquarters.split("-");
       const system = coords.slice(0, 2).join("-");
       const waypoint = coords.slice(0, 3).join("-");
       location = (await $api.systems.getWaypoint(system, waypoint))
@@ -73,8 +63,8 @@
         <ul class="card m-3 text-black">
           <div class="card-body">
             <h3 class="card-title">Location:</h3> 
-            <p class="text-secondary">Symbol: {myAgent?.data.headquarters}</p>
-            <p class="text-secondary">System: {myAgent?.data.headquarters.split("-").splice(0, 2).join("-")}</p>
+            <p class="text-secondary">Symbol: {myAgent?.headquarters}</p>
+            <p class="text-secondary">System: {myAgent?.headquarters.split("-").splice(0, 2).join("-")}</p>
           </div>
         </ul>
       </div>

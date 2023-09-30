@@ -1,18 +1,21 @@
 <script lang="ts">
-    import { DefaultApi, FactionSymbols } from '$lib/spacetraders-sdk';
+    import { api } from "$lib/api";
+    import { FactionSymbols } from "$lib/api-sdk";
 
-    let selectedFaction: FactionSymbols = "COSMIC";
+
+
+    let selectedFaction:FactionSymbols = FactionSymbols.COSMIC;
     let username: string;
     let apiKey: string = "";
 
     async function register() {
-        const api = new DefaultApi();
-        const res = await api.register({
-          faction: selectedFaction,
-          symbol: username,
-        })
-        apiKey = res.data.data.token;
-        localStorage.setItem("apiKey", apiKey);
+      const res = await $api.default.register({
+        faction: selectedFaction,
+        symbol: username
+      });
+      apiKey = res.data.token;
+      localStorage.setItem("apiKey", apiKey);
+      window.location.replace("/");
     }
 </script>
 

@@ -1,12 +1,12 @@
 <script lang="ts">
     import { onMount } from 'svelte';
     import { api } from '$lib/api';
-    import type { Contract } from '$lib/spacetraders-sdk/dist';
+    import type { Contract } from '$lib/api-sdk';
 
     let contracts:Array<Contract> = [];
     onMount(async () => {
         const res = await $api.contracts.getContracts();
-        contracts = res.data.data;
+        contracts = res.data;
     })
 
     function toggleInfo(id: string) {

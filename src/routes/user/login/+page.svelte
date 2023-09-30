@@ -1,8 +1,12 @@
 <script lang="ts">
     let apiKey = "";
+    function login() {
+        localStorage.setItem("apiKey", apiKey);
+        window.location.replace("/");
+    }
 </script>
 
-<form on:submit={() => localStorage.setItem("apiKey", apiKey)}>
+<form on:submit={login}>
     <div class="mb-3">
         <label class="form-label">Api key</label>
         <input type="text" class="form-control" name="apiKey" bind:value={apiKey}/>
