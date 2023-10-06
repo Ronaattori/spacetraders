@@ -22,6 +22,9 @@
 
 <Notifications notifications={notifications}/>
 
+<button class="bg-yellow-400">
+  ölsakdjf
+</button>
 <div class="page">
   <!-- Sidebar -->
   <aside class="navbar navbar-vertical navbar-expand-sm navbar-dark">
