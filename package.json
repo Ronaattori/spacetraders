@@ -4,6 +4,8 @@
   "devDependencies": {
     "@sveltejs/adapter-auto": "^2.0.0",
     "@sveltejs/kit": "^1.20.4",
+    "@tabler/icons-svelte": "^2.38.0",
+    "axios": "^1.5.1",
     "openapi-typescript-codegen": "^0.25.0",
     "svelte": "^4.0.5",
     "svelte-adapter-bun": "^0.5.0",
@@ -19,7 +21,7 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "generate": "openapi --exportSchemas true -o ./src/lib/api-sdk --name SpacetradersClient -i 'https://stoplight.io/api/v1/projects/spacetraders/spacetraders/nodes/reference/SpaceTraders.json?fromExportButton=true&snapshotType=http_service&deref=optimizedBundle'"
+    "generate": "openapi --client axios --exportSchemas true -o ./src/lib/api-sdk --name SpacetradersClient -i 'https://stoplight.io/api/v1/projects/spacetraders/spacetraders/nodes/reference/SpaceTraders.json?fromExportButton=true&snapshotType=http_service&deref=optimizedBundle'"
   },
   "type": "module"
 }

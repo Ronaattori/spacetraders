@@ -3,12 +3,14 @@
     import { onMount } from 'svelte';
     import { api } from '$lib/api';
     import type { Agent } from '$lib/api-sdk';
+    import { notifications } from '$lib/stores';
+    import Notifications from '$lib/components/Notifications.svelte';
     
     let myAgent: Agent;
     let location;
     $: username = myAgent?.symbol ?? "Loading...";
     $: curMoney = myAgent?.credits ?? 0;
-
+    
     onMount(async () => {
       myAgent = (await $api.agents.getMyAgent()).data;
       const coords = myAgent.headquarters.split("-");
@@ -17,6 +19,8 @@
       location = (await $api.systems.getWaypoint(system, waypoint))
     })
 </script>
+
+<Notifications notifications={notifications}/>
 
 <div class="page">
   <!-- Sidebar -->
