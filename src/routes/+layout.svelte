@@ -46,6 +46,11 @@
       </Navbutton>
   </Navbar>
   <div class="pl-24">
+    <nav class="navbar bg-slate-200 flex divide-y">
+      <span>Money: {curMoney}</span>
+      <div class="divider divider-horizontal"/>
+      <span>Galactic bithces: 0</span>
+    </nav>
     <slot/>
   </div>
 </div>
