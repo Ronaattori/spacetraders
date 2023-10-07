@@ -591,8 +591,16 @@ video {
   display: none;
 }
 
+.h-32 {
+  height: 8rem;
+}
+
 .w-1 {
   width: 0.25rem;
+}
+
+.w-32 {
+  width: 8rem;
 }
 
 .transform {
@@ -607,9 +615,14 @@ video {
   border-width: 1px;
 }
 
-.bg-yellow-400 {
+.bg-red-700 {
   --tw-bg-opacity: 1;
-  background-color: rgb(250 204 21 / var(--tw-bg-opacity));
+  background-color: rgb(185 28 28 / var(--tw-bg-opacity));
+}
+
+.bg-yellow-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(161 98 7 / var(--tw-bg-opacity));
 }
 
 .p-2 {

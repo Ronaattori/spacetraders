@@ -25,7 +25,7 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-	"tailwind": "tailwindcss -i ./src/app.css -o ./static/tailwind.css --watch",
+	"tailwind": "tailwindcss -i ./src/app.css -o ./src/lib/tailwind.css --watch",
     "generate": "openapi --client axios --exportSchemas true -o ./src/lib/api-sdk --name SpacetradersClient -i 'https://stoplight.io/api/v1/projects/spacetraders/spacetraders/nodes/reference/SpaceTraders.json?fromExportButton=true&snapshotType=http_service&deref=optimizedBundle'"
   },
   "type": "module"

@@ -1,4 +1,5 @@
 <script lang="ts">
+    import "$lib/tailwind.css";
     import img from '$lib/images/munkki.jpg';
     import { onMount } from 'svelte';
     import { api } from '$lib/api';
@@ -22,9 +23,14 @@
 
 <Notifications notifications={notifications}/>
 
-<button class="bg-yellow-400">
-  ölsakdjf
-</button>
+<div class="bg-yellow-700 page h-32 w-32">
+  <aside class="">
+    <button>
+      alöksjd
+    </button>
+  </aside>
+</div>
+
 <div class="page">
   <!-- Sidebar -->
   <aside class="navbar navbar-vertical navbar-expand-sm navbar-dark">
