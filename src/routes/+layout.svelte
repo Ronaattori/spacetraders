@@ -1,5 +1,4 @@
 <script lang="ts">
-    import "$lib/tailwind.css";
     import img from '$lib/images/munkki.jpg';
     import { onMount } from 'svelte';
     import { api } from '$lib/api';
@@ -9,7 +8,6 @@
     import Navbar from "$lib/components/Navbar.svelte";
     import { IconListDetails, IconLogin, IconLogout, IconRegistered, IconSpace } from "@tabler/icons-svelte";
     import Navbutton from "$lib/components/Navbutton.svelte";
-    import Navbar from '$lib/components/Navbar.svelte';
     
     let myAgent: Agent;
     let location;
@@ -27,13 +25,7 @@
 
 <Notifications notifications={notifications}/>
 
-<div class="page">
-  <!-- Sidebar -->
-  <aside class="navbar navbar-vertical navbar-expand-sm navbar-dark">
-    <div class="container-fluid">
-      <button class="navbar-toggler" type="button">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+<Navbar>
       <h1 class="navbar-brand navbar-brand-autodark">
         <a href="/">
           <img src={img} width="110" height="32" alt="Tabler" class="navbar-brand-image">
@@ -77,8 +69,8 @@
           </div>
         </ul>
       </div>
-    </div>
-  </aside>
+
+</Navbar>
   <div class="page-wrapper">
     <header class="navbar navbar-light">
       <div class="container-xl">
@@ -91,4 +83,3 @@
     </header>
     <slot/>
   </div>
-</div>
