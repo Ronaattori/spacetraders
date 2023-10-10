@@ -2,25 +2,14 @@
     import img from '$lib/images/munkki.jpg';
     import { onMount } from 'svelte';
     import { api } from '$lib/api';
-    import type { Agent } from '$lib/api-sdk';
-    import { notifications } from '$lib/stores';
+    import { notifications, myAgent } from '$lib/stores';
     import Notifications from '$lib/components/Notifications.svelte';
     import Navbar from "$lib/components/Navbar.svelte";
-    import { IconListDetails, IconLogin, IconLogout, IconRegistered, IconSpace } from "@tabler/icons-svelte";
-    import Navbutton from "$lib/components/Navbutton.svelte";
     import Dropdown from '$lib/components/Dropdown.svelte';
     
-    let myAgent: Agent;
-    let location;
-    $: username = myAgent?.symbol ?? "Loading...";
-    $: curMoney = myAgent?.credits ?? 0;
-    
     onMount(async () => {
-      myAgent = (await $api.agents.getMyAgent()).data;
-      const coords = myAgent.headquarters.split("-");
-      const system = coords.slice(0, 2).join("-");
-      const waypoint = coords.slice(0, 3).join("-");
-      location = (await $api.systems.getWaypoint(system, waypoint))
+      const res = await $api.agents.getMyAgent();
+      $myAgent = {...$myAgent, ...res.data};
     })
 </script>
 
@@ -37,7 +26,7 @@
       </h1>
     </div>
     <span class="card-body">
-      Logged in as {username} 
+      {$myAgent.symbol ? `Logged in as ${$myAgent.symbol}` : "Not logged in..."}
     </span>
   </div>
   <div class="collapse navbar-collapse" id="sidebar-menu">
@@ -63,6 +52,11 @@
     <ul class="card m-3 text-black">
       <div class="card-body">
         Contracts:...
+        <div>
+          {#each $myAgent.acceptedContracts as contract}
+            <span>{contract.terms.deadline}</span> 
+          {/each}
+        </div>
       </div>
     </ul>
   </div>
@@ -71,7 +65,7 @@
     <header class="navbar navbar-light">
       <div class="container-xl">
         <div>
-          <span>Money: {curMoney}</span>
+          <span>Credits: {$myAgent.credits}</span>
           <span class="border mx-2"/>
           <span>Galactic bitches: {0}</span>
         </div>

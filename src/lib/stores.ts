@@ -1,4 +1,5 @@
 import { writable } from "svelte/store";
+import type { Agent, Contract } from "./api-sdk";
 
 type NotificationLevel =  "info" | "success" | "warning" | "error"
 export interface Notification {
@@ -41,3 +42,12 @@ function createNotifications() {
     }
 }
 export const notifications = createNotifications();
+
+interface MyAgent extends Partial<Agent> {
+    // TODO Add reactive data as needed later    
+    acceptedContracts: Array<Contract>
+}
+
+export const myAgent = writable<MyAgent>({
+    acceptedContracts: [],
+});
