@@ -8,6 +8,7 @@
     import Navbar from "$lib/components/Navbar.svelte";
     import { IconListDetails, IconLogin, IconLogout, IconRegistered, IconSpace } from "@tabler/icons-svelte";
     import Navbutton from "$lib/components/Navbutton.svelte";
+    import Dropdown from '$lib/components/Dropdown.svelte';
     
     let myAgent: Agent;
     let location;
@@ -26,50 +27,45 @@
 <Notifications notifications={notifications}/>
 
 <Navbar>
-      <h1 class="navbar-brand navbar-brand-autodark">
+  <div slot="header" class="card text-dark m-2"> 
+    <div class="card-header">
+      <h1 class="navbar-brand navbar-brand-autodark text-dark">
         <a href="/">
-          <img src={img} width="110" height="32" alt="Tabler" class="navbar-brand-image">
-          Speis treiders
+          <img src={img} width="110" height="32" alt="Tabler">
         </a>
+        Speis treiders
       </h1>
-      <span>
-        Logged in as {username} 
-      </span>
-      <div class="collapse navbar-collapse" id="sidebar-menu">
-        <ul class="navbar-nav pt-lg-3">
-          <li class="nav-item">
-            <a class="nav-link" href="/">
-              <span class="nav-link-title">
-                Home
-              </span>
-            </a>
-          </li>
-          <li>
-          <div class="nav-item dropdown p-2 ">
-            <a class="btn dropdown-toggle" data-bs-toggle="dropdown">Contract</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="/contract">List</a>
-            </div>
-          </div>
-          <div class="nav-item dropdown p-2 ">
-            <a class="btn dropdown-toggle" data-bs-toggle="dropdown">User</a>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="/user/register">Register</a>
-              <a class="dropdown-item" href="/user/login">Login</a>
-              <button class="dropdown-item" on:click={() => localStorage.removeItem("apiKey")}>Logout</button>
-            </div>
-          </div>
-        </li>
-        </ul>
-        <ul class="card m-3 text-black">
-          <div class="card-body">
-            <h3 class="card-title">Location:</h3> 
-            <p class="text-secondary">Symbol: {myAgent?.headquarters}</p>
-            <p class="text-secondary">System: {myAgent?.headquarters.split("-").splice(0, 2).join("-")}</p>
-          </div>
-        </ul>
+    </div>
+    <span class="card-body">
+      Logged in as {username} 
+    </span>
+  </div>
+  <div class="collapse navbar-collapse" id="sidebar-menu">
+    <ul class="navbar-nav pt-lg-3">
+      <li class="nav-item">
+        <a class="nav-link" href="/">
+          <span class="nav-link-title">
+            Home
+          </span>
+        </a>
+      </li>
+      <li>
+        <Dropdown text="Contract">
+          <a href="/contract">List</a>
+        </Dropdown>
+        <Dropdown text="User">
+          <a href="/user/register">Register</a>
+          <a href="/user/login">Login</a>
+          <button on:click={() => localStorage.removeItem("apiKey")}>Logout</button>
+        </Dropdown>
+      </li>
+    </ul>
+    <ul class="card m-3 text-black">
+      <div class="card-body">
+        Contracts:...
       </div>
-
+    </ul>
+  </div>
 </Navbar>
   <div class="page-wrapper">
     <header class="navbar navbar-light">

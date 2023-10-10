@@ -7,6 +7,7 @@
     <button class="navbar-toggler" type="button">
       <span class="navbar-toggler-icon"></span>
     </button>
+    <slot name="header"/>
     <slot/>
   </div>
 </aside>
