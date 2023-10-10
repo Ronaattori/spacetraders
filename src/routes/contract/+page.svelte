@@ -6,17 +6,14 @@
     import Table from '$lib/components/Table.svelte';
     import { notifications } from '$lib/stores';
 
+    let showInfo:Contract | Null
+
     let contracts:Array<Contract> = [];
     onMount(async () => {
         const res = await $api.contracts.getContracts();
         contracts = res.data;
     })
 
-    function toggleInfo(id: string) {
-      const e = document.getElementById(`info_${id}`);
-      if (!e) return;
-      e.style.display == "none" ? e.style.display = "block" : e.style.display = "none";
-    }
     async function acceptContract(contractId:string) {
       const contract = await $api.contracts.acceptContract(contractId);
       notifications.success("Succesfully accepted contract");
@@ -27,10 +24,12 @@
   {#each contracts as contract}
     <tr>
       <td>
-        <button class="btn btn-outline-secondary">
+        <button class="btn btn-outline-secondary" 
+          on:mouseenter={(e) => showInfo = contract}
+          on:mouseleave={() => showInfo = null}>
           Info
         </button>
-        {#if contract.terms.deliver}
+        {#if showInfo == contract}
           <ContractInfo contract={contract}/>
         {/if}
       </td>

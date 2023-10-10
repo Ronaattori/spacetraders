@@ -4,7 +4,7 @@
     export let contract: Contract
 </script>
 
-<div class="card">
+<div class="card position-absolute shadow">
   <div class="card-body">
     <div class="card-secondary">
       {#if contract.terms.deliver}
