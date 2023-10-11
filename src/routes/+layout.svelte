@@ -6,6 +6,7 @@
     import Notifications from '$lib/components/Notifications.svelte';
     import Navbar from "$lib/components/Navbar.svelte";
     import Dropdown from '$lib/components/Dropdown.svelte';
+    import { IconCheck, IconChecklist, IconLogin, IconLogout, IconPlus } from '@tabler/icons-svelte';
     
     onMount(async () => {
       const res = await $api.agents.getMyAgent();
@@ -40,12 +41,24 @@
       </li>
       <li>
         <Dropdown text="Contract">
-          <a href="/contract">List</a>
+          <a href="/contract">
+            <IconChecklist />
+            List
+          </a>
         </Dropdown>
         <Dropdown text="User">
-          <a href="/user/register">Register</a>
-          <a href="/user/login">Login</a>
-          <button on:click={() => localStorage.removeItem("apiKey")}>Logout</button>
+          <a href="/user/register">
+            <IconPlus />
+            Register
+          </a>
+          <a href="/user/login">
+            <IconLogin />
+            Login
+          </a>
+          <a href="#top" on:click={() => localStorage.removeItem("apiKey")}>
+            <IconLogout />
+            Logout
+          </a>
         </Dropdown>
       </li>
     </ul>
