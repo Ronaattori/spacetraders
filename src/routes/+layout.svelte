@@ -49,14 +49,9 @@
         </Dropdown>
       </li>
     </ul>
-    <ul class="card m-3 text-black">
+    <ul class="card m-3 text-black text-nowrap">
       <div class="card-body">
-        Contracts:...
-        <div>
-          {#each $myAgent.acceptedContracts as contract}
-            <span>{contract.terms.deadline}</span> 
-          {/each}
-        </div>
+        Accepted Contracts: {$myAgent.acceptedContracts.length}
       </div>
     </ul>
   </div>
