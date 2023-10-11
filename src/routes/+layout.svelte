@@ -40,6 +40,11 @@
         </a>
       </li>
       <li>
+        <Dropdown text="Navigation">
+          <a href="/navigation">
+            Navigation
+          </a>
+        </Dropdown>
         <Dropdown text="Contract">
           <a href="/contract">
             <IconChecklist />
