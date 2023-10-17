@@ -5,8 +5,8 @@
     import ContractInfo from '$lib/components/ContractInfo.svelte';
     import Table from '$lib/components/Table.svelte';
     import { notifications, myAgent } from '$lib/stores';
-
-    let showInfo:Contract | null
+    import { tooltip } from '$lib/use';
+    import Dropdown from '$lib/components/Dropdown.svelte';
 
     let contracts:Array<Contract> = [];
     onMount(async () => {
@@ -27,13 +27,9 @@
     <tr>
       <td>
         <button class="btn btn-outline-secondary" 
-          on:mouseenter={(e) => showInfo = contract}
-          on:mouseleave={() => showInfo = null}>
+          use:tooltip={{component: ContractInfo, props: {contract: contract}}}>
           Info
         </button>
-        {#if showInfo == contract}
-          <ContractInfo contract={contract}/>
-        {/if}
       </td>
       <td>{contract.type}</td>
       <td>{contract.factionSymbol}</td>

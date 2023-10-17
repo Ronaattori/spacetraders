@@ -3,6 +3,7 @@
     import { WaypointTrait, type Ship, type Waypoint } from "$lib/api-sdk";
     import Table from "$lib/components/Table.svelte";
     import { myAgent } from "$lib/stores";
+    import { tooltip } from "$lib/use";
     import { onMount } from "svelte";
 
     let selectedShip: Ship
