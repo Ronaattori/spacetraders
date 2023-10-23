@@ -1,86 +1,100 @@
 <script lang="ts">
     import { api } from "$lib/api";
-    import { WaypointTrait, type Ship, type Waypoint, type ShipyardShip, type Shipyard } from "$lib/api-sdk";
+    import { ShipNavStatus, type Ship, type Waypoint } from "$lib/api-sdk";
     import ShipInfo from "$lib/components/ShipInfo.svelte";
     import Table from "$lib/components/Table.svelte";
+    import { createTimer } from "$lib/lib";
     import { myAgent, notifications } from "$lib/stores";
     import { tooltip } from "$lib/use";
     import { onMount } from "svelte";
+    import type { Tweened } from "svelte/motion";
+    import type { Writable } from "svelte/store";
 
-    let selectedShip: Ship
+    let selectedShip: Ship;
+    $: nav = selectedShip?.nav
+    let arrivalTime: Writable<number> | null;
     let waypoints: Array<Waypoint> = [];
 
-    let shipyards: Array<Shipyard> = [];
-
     onMount(async () => {
-        $myAgent.ships = (await $api.fleet.getMyShips()).data;
+        const res = await $api.fleet.getMyShips();
+        $myAgent.ships = res.data;
     })
-    async function handleSelect(ship: Ship) {
+    async function selectShip(ship:Ship) {
+        arrivalTime = createTimer(new Date(ship.nav.route.arrival));
+        console.log($arrivalTime)
         selectedShip = ship;
-        shipyards = [];
-        findWaypoints(ship);
+        waypoints = (await $api.systems.getSystemWaypoints(ship.nav.systemSymbol)).data
     }
-    async function findWaypoints(ship: Ship) {
-        const res = await $api.systems.getSystemWaypoints(ship.nav.systemSymbol)
-        waypoints = res.data;
-        waypoints.forEach(async (x) => {
-            for (const trait of x.traits) {
-                if (trait.symbol == WaypointTrait.symbol.SHIPYARD) {
-                    const shipyard = await $api.systems.getShipyard(x.systemSymbol, x.symbol);
-                    shipyards = [...shipyards, shipyard.data];
-                }
-            }
-        });
+    async function orbitShip() {
+        const res = await $api.fleet.orbitShip(selectedShip.symbol);
+        notifications.success(`Ship ${selectedShip.symbol} succesfully sent to orbit`)
+        selectedShip = {...selectedShip, ...res.data};
     }
-    async function purchaseShip(ship: ShipyardShip, from: Shipyard) {
-        if (!ship.type) {
-            notifications.warning("Ship type not defined?");
-            return;
-        }
-        const res = await $api.fleet.purchaseShip({
-            shipType: ship.type,
-            waypointSymbol: from.symbol
-        });
-        notifications.success(`Ship ${res.data.ship.symbol} succesfully purchased!`)
+    async function refuelShip() {
+        const res = await $api.fleet.refuelShip(selectedShip.symbol);
+        notifications.success("Ship refueled");
         $myAgent = {...$myAgent, ...res.data.agent};
-        $myAgent.ships = [...$myAgent.ships, res.data.ship];
+        selectedShip.fuel = res.data.fuel;
+    }
+    async function dockShip() {
+        const res = await $api.fleet.dockShip(selectedShip.symbol);
+        notifications.success(`Ship ${selectedShip.symbol} succesfully docked`)
+        selectedShip = {...selectedShip, ...res.data};
+    }
+    async function navigateTo(waypoint: string) {
+        const res = await $api.fleet.navigateShip(selectedShip.symbol, {waypointSymbol: waypoint});
+        notifications.success(`Navigated to ${res.data.nav.waypointSymbol}`)
+        selectedShip = {...selectedShip, ...res.data};
     }
 </script>
+
 <div>
    Select ship:
    {#each $myAgent.ships as ship}
         <button class="btn {selectedShip == ship ? "btn-primary" : ""}" 
-        on:click={() => handleSelect(ship)}>
+        on:click={() => selectShip(ship)}
+        use:tooltip={{component: ShipInfo, props: {ship: ship}}}>
             {ship.symbol}
         </button>
    {/each} 
 </div>
-
-{#each shipyards as shipyard}
+{#if selectedShip}
+    <h1>
+        Current system: {nav.systemSymbol} <br>
+        Current waypoint: {nav.waypointSymbol} <br>
+        State: {nav.status} <br>
+        Time to destination: {$arrivalTime}
+    </h1>
     <div>
-        <h2>{shipyard.symbol}</h2>
-        <Table columns={["Name", "Price", "Type", ""]}>
-            {#if shipyard.ships}
-                {#each shipyard.ships as ship}
-                    <tr>
-                        <td>{ship.name}</td>
-                        <td>{ship.purchasePrice}</td>
-                        <td>{ship.type}</td>
-                        <td>
-                            <button class="btn" 
-                            use:tooltip={{component: ShipInfo, props: {ship: ship}}}>
-                                Full info
-                            </button>
-                            <button class="btn"
-                            on:click={() => purchaseShip(ship, shipyard)}>
-                                Buy
-                            </button>
-                        </td>
-                    </tr>
-                {/each}
-                {:else}
-                    <tr> <td>No ships</td> </tr>
-            {/if}
-        </Table>
+        {#if nav.status == ShipNavStatus.DOCKED}
+            <button class="btn" on:click={orbitShip}>
+                Orbit ship
+            </button>
+            <button class="btn" on:click={refuelShip}>
+                Refuel
+            </button> 
+            {:else}
+            <button class="btn" on:click={dockShip}>
+                Dock ship
+            </button>
+        {/if}
     </div>
-{/each}
+    Waypoints:
+    <Table columns={["Name", "Type", "Traits", "Navigate"]}>
+        {#each waypoints as waypoint}
+            <tr>
+                <td>{waypoint.symbol}</td>
+                <td>{waypoint.type}</td>
+                <td>
+                    {waypoint.traits.map(x => x.name)}
+                </td>
+                <td>
+                    <button class="btn" 
+                    on:click={() => navigateTo(waypoint.symbol)}>
+                        Jump to
+                    </button>
+                </td>
+            </tr> 
+        {/each}
+    </Table>
+{/if}

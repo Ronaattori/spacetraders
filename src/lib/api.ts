@@ -22,7 +22,11 @@ class AxiosHttpRequest extends BaseHttpRequest {
       })
     }
     onError(error:ApiError) {
-      notifications.error(error.body.error.message, error.message);
+      try {
+        notifications.error(error.body.error.message, error.message);
+      } catch {
+        notifications.error(error.toString());        
+      }
     }
 }
   

@@ -45,6 +45,11 @@
             Navigation
           </a>
         </Dropdown>
+        <Dropdown text="Shop">
+          <a href="/shop">
+            Shop
+          </a>
+        </Dropdown>
         <Dropdown text="Contract">
           <a href="/contract">
             <IconChecklist />
