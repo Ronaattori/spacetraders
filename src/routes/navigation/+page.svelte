@@ -13,6 +13,9 @@
     $: selectedShip, $myAgent = $myAgent
     $: if(selectedShip) {
         arrivalTime = createTimer(new Date(selectedShip.nav.route.arrival));
+        if (selectedShip.cooldown.expiration) {
+            miningCooldown = createTimer(new Date(selectedShip.cooldown.expiration));
+        }
         $api.systems.getSystemWaypoints(selectedShip.nav.systemSymbol).then(res => {
             waypoints = res.data;
         });
@@ -21,6 +24,7 @@
     let selectedShip: Ship;
     $: nav = selectedShip?.nav
     let arrivalTime: Writable<number> | null;
+    let miningCooldown: Writable<number> | null;
     let waypoints: Array<Waypoint> = [];
 
     onMount(async () => {
@@ -48,6 +52,12 @@
         notifications.success(`Navigated to ${res.data.nav.waypointSymbol}`)
         selectedShip = Object.assign(selectedShip, res.data)
     }
+    async function extractResources() {
+        const res = await $api.fleet.extractResources(selectedShip.symbol)
+        notifications.success(`Succesfully extracted resources`)
+        selectedShip = Object.assign(selectedShip, res.data)
+        console.log(res)
+    }
 </script>
 
 <div>
@@ -65,7 +75,8 @@
         Current system: {nav.systemSymbol} <br>
         Current waypoint: {nav.waypointSymbol} <br>
         State: {nav.status} <br>
-        Time to destination: {$arrivalTime}
+        Time to destination: {$arrivalTime} <br>
+        Mining cooldown: {$miningCooldown}
     </h1>
     <div>
         {#if nav.status == ShipNavStatus.DOCKED}
@@ -78,6 +89,9 @@
             {:else}
             <button class="btn" on:click={dockShip}>
                 Dock ship
+            </button>
+            <button class="btn" on:click={extractResources}>
+                Extract resources
             </button>
         {/if}
     </div>
