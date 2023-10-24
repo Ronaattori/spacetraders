@@ -56,7 +56,6 @@
         const res = await $api.fleet.extractResources(selectedShip.symbol)
         notifications.success(`Succesfully extracted resources`)
         selectedShip = Object.assign(selectedShip, res.data)
-        console.log(res)
     }
 </script>
 
