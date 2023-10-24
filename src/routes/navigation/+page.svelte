@@ -11,6 +11,12 @@
 
     // Update $myAgent when selectedShip changes
     $: selectedShip, $myAgent = $myAgent
+    $: if(selectedShip) {
+        arrivalTime = createTimer(new Date(selectedShip.nav.route.arrival));
+        $api.systems.getSystemWaypoints(selectedShip.nav.systemSymbol).then(res => {
+            waypoints = res.data;
+        });
+    }
 
     let selectedShip: Ship;
     $: nav = selectedShip?.nav
@@ -21,11 +27,6 @@
         const res = await $api.fleet.getMyShips();
         $myAgent.ships = res.data;
     })
-    async function selectShip(ship:Ship) {
-        arrivalTime = createTimer(new Date(ship.nav.route.arrival));
-        selectedShip = ship;
-        waypoints = (await $api.systems.getSystemWaypoints(ship.nav.systemSymbol)).data
-    }
     async function orbitShip() {
         const res = await $api.fleet.orbitShip(selectedShip.symbol);
         notifications.success(`Ship ${selectedShip.symbol} succesfully sent to orbit`)
@@ -53,7 +54,7 @@
    Select ship:
    {#each $myAgent.ships as ship (ship.symbol)}
         <button class="btn {selectedShip == ship ? "btn-primary" : ""}" 
-        on:click={() => selectShip(ship)}
+        on:click={() => selectedShip = ship}
         use:tooltip={{component: ShipInfo, props: {ship: ship}}}>
             {ship.symbol}
         </button>
