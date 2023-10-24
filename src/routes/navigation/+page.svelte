@@ -7,8 +7,10 @@
     import { myAgent, notifications } from "$lib/stores";
     import { tooltip } from "$lib/use";
     import { onMount } from "svelte";
-    import type { Tweened } from "svelte/motion";
     import type { Writable } from "svelte/store";
+
+    // Update $myAgent when selectedShip changes
+    $: selectedShip, $myAgent = $myAgent
 
     let selectedShip: Ship;
     $: nav = selectedShip?.nav
@@ -21,36 +23,35 @@
     })
     async function selectShip(ship:Ship) {
         arrivalTime = createTimer(new Date(ship.nav.route.arrival));
-        console.log($arrivalTime)
         selectedShip = ship;
         waypoints = (await $api.systems.getSystemWaypoints(ship.nav.systemSymbol)).data
     }
     async function orbitShip() {
         const res = await $api.fleet.orbitShip(selectedShip.symbol);
         notifications.success(`Ship ${selectedShip.symbol} succesfully sent to orbit`)
-        selectedShip = {...selectedShip, ...res.data};
+        selectedShip = Object.assign(selectedShip, res.data)
     }
     async function refuelShip() {
         const res = await $api.fleet.refuelShip(selectedShip.symbol);
         notifications.success("Ship refueled");
-        $myAgent = {...$myAgent, ...res.data.agent};
+        $myAgent = Object.assign($myAgent, res.data.agent)
         selectedShip.fuel = res.data.fuel;
     }
     async function dockShip() {
         const res = await $api.fleet.dockShip(selectedShip.symbol);
         notifications.success(`Ship ${selectedShip.symbol} succesfully docked`)
-        selectedShip = {...selectedShip, ...res.data};
+        selectedShip = Object.assign(selectedShip, res.data)
     }
     async function navigateTo(waypoint: string) {
         const res = await $api.fleet.navigateShip(selectedShip.symbol, {waypointSymbol: waypoint});
         notifications.success(`Navigated to ${res.data.nav.waypointSymbol}`)
-        selectedShip = {...selectedShip, ...res.data};
+        selectedShip = Object.assign(selectedShip, res.data)
     }
 </script>
 
 <div>
    Select ship:
-   {#each $myAgent.ships as ship}
+   {#each $myAgent.ships as ship (ship.symbol)}
         <button class="btn {selectedShip == ship ? "btn-primary" : ""}" 
         on:click={() => selectShip(ship)}
         use:tooltip={{component: ShipInfo, props: {ship: ship}}}>
