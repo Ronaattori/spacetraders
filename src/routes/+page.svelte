@@ -1,44 +1,33 @@
 <script lang="ts">
+    import { ThreeHelper } from "$lib/ThreeHelper";
     import { onMount } from "svelte";
     import { BoxGeometry, Material, Mesh, MeshBasicMaterial, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer, type ColorRepresentation } from "three";
+    import munkki from "$lib/images/munkki.jpg"
 
     let container:HTMLElement; 
     const raycaster = new Raycaster();
     const pointer = new Vector2();
 
-    onMount(() => {
-        const scene = new Scene();
-        const camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    const scene = new Scene();
+    const camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    const threeHelper = new ThreeHelper(scene, camera, pointer);
+
+    onMount(async () => {
             
-        const renderer = new WebGLRenderer();
-        renderer.setSize( window.innerWidth, window.innerHeight );
-        container.appendChild( renderer.domElement );
-        
-        const geometry = new BoxGeometry( 1, 1, 1 );
-        const material = new MeshBasicMaterial( { color: 0x00ff00 } );
-        const cube = new Mesh( geometry, material );
-        cube.name = "cube"
-        scene.add( cube );
+        container.appendChild(threeHelper.renderer.domElement);
+       
+        const munkkiTexture = threeHelper.textureLoader.load(munkki)
+        const ball = threeHelper.addBall({map: munkkiTexture})
+        threeHelper.onMouseOver(ball, () => {
+            changeColor(ball, Math.random() * 0xffffff)            
+        })
 
         camera.position.z = 5;
         
-        function animate() {
-            requestAnimationFrame( animate );
-            cube.rotation.x += 0.01;
-            cube.rotation.y += 0.01;
-            
-            // update the picking ray with the camera and pointer position
-            raycaster.setFromCamera( pointer, camera );
-            // calculate objects intersecting the picking ray
-            const intersects = raycaster.intersectObject( cube );
-            if (intersects.length > 0) {
-                const obj = intersects[0].object as Mesh
-                changeColor(obj, Math.random() * 0xffffff)
-            }
-
-            renderer.render( scene, camera );
-        }
-        animate();
+        threeHelper.rotateMesh(ball, "x", 0.001)
+        threeHelper.rotateMesh(ball, "y", 0.001)
+        
+        threeHelper.animate();
     })  
     function changeColor(mesh: Mesh, color:ColorRepresentation) {
         const material = mesh.material as MeshBasicMaterial
