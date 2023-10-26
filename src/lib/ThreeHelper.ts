@@ -1,6 +1,6 @@
 import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster } from "three";
 import munkki from "$lib/images/munkki.jpg"
-import type { Waypoint } from "./api-sdk";
+import type { System, SystemWaypoint, Waypoint } from "./api-sdk";
 import { api } from "./api";
 
 export class ThreeHelper {
@@ -22,13 +22,8 @@ export class ThreeHelper {
         this.animate = this.animate.bind(this); // I don't quite understand the animation loop yet, but this is needed
 
         this.renderer.setSize( window.innerWidth, window.innerHeight );
-        
-        // const munkkiTexture = this.textureLoader.load(munkki)
-        // this.ball = this.addBall({map: munkkiTexture})
-        // this.rotateMesh(this.ball, "x", 0.001)
-        // console.log(this.runOnRender)
-
     }
+
     animate() {
         requestAnimationFrame(this.animate);
         for (const func of this.runOnRender) {
@@ -45,9 +40,6 @@ export class ThreeHelper {
         this.renderer.render( this.scene, this.camera );
     }
     
-    async drawSystem(systemSymbol: string) {
-    }
-
     onMouseOver(mesh: Mesh, onMouseOver: () => void) {
         this.lookForIntersect.set(mesh, onMouseOver);
     }
@@ -55,17 +47,16 @@ export class ThreeHelper {
         this.runOnRender.push(() => mesh.rotation[axis] += perFrame)
     }
 
-    createWaypoint(waypoint: Waypoint) {
-        const ball = this.createSphere();
-        ball.name = waypoint.symbol;
-        ball.position.x += 3
-        return ball
-    }
-
     createSphere(parameters?: MeshBasicMaterialParameters) {
         const geometry = new SphereGeometry( 1, 32, 32 );
         const material = new MeshBasicMaterial(parameters);
         const ball = new Mesh( geometry, material );
         return ball;
+    }
+    
+    setMeshColor(mesh: Mesh, color: number | "random") {
+        const material = mesh.material as MeshBasicMaterial
+        const _color = color == "random" ? Math.random() * 0xffffff : color
+        material.color.set(_color);
     }
 }

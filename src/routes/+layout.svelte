@@ -11,6 +11,8 @@
     onMount(async () => {
       const res = await api.agents.getMyAgent();
       $myAgent = {...$myAgent, ...res.data};
+      const ships = (await api.fleet.getMyShips()).data;
+      $myAgent.ships = ships
     })
 </script>
 

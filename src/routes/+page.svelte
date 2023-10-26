@@ -5,36 +5,33 @@
     import munkki from "$lib/images/munkki.jpg"
     import { api } from "$lib/api";
     import { myAgent } from "$lib/stores";
+    import type { Ship } from "$lib/api-sdk";
+    import { ThreeSystem } from "$lib/ThreeSystem";
 
     let container:HTMLElement; 
+    let selectedShip: Ship;
     const pointer = new Vector2();
 
     const scene = new Scene();
     const camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     const threeHelper = new ThreeHelper(scene, camera, pointer);
+    
+    async function selectShip(ship: Ship) {
+        selectedShip = ship;
+        const system = (await api.systems.getSystem(ship.nav.systemSymbol)).data
+        const sys = new ThreeSystem(system, threeHelper, {scale: 0.6});
+        sys.drawSystem()
+    }
 
     onMount(async () => {
+        selectShip($myAgent.ships[0])
         container.appendChild(threeHelper.renderer.domElement);
        
-        const munkkiTexture = threeHelper.textureLoader.load(munkki)
-        const ball = threeHelper.createSphere({map: munkkiTexture})
-        threeHelper.scene.add(ball)
-
-        threeHelper.onMouseOver(ball, () => {
-            changeColor(ball, Math.random() * 0xffffff)            
-        })
-
-        camera.position.z = 10;
-        
-        threeHelper.addRotation(ball, "x", 0.001)
-        threeHelper.addRotation(ball, "y", 0.001)
+        camera.position.z = 60;
         
         threeHelper.animate();
     })  
-    function changeColor(mesh: Mesh, color:ColorRepresentation) {
-        const material = mesh.material as MeshBasicMaterial
-        material.color.set(color);
-    }
+
     function onPointerMove( event:MouseEvent ) {
         // calculate pointer position in normalized device coordinates
         // (-1 to +1) for both components
@@ -51,6 +48,16 @@
 </script>
 
 <!-- svelte-ignore a11y-no-static-element-interactions -->
+<div>
+   Select ship:
+   {#each $myAgent.ships as ship (ship.symbol)}
+        <button class="btn {selectedShip == ship ? "btn-primary" : ""}" 
+        on:click={() => selectShip(ship)}>
+            {ship.symbol}
+        </button>
+   {/each} 
+</div>
+
 <div bind:this={container} on:mousemove={onPointerMove}>
 
 </div>
