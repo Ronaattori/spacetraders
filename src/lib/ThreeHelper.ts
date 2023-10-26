@@ -46,7 +46,7 @@ export class ThreeHelper {
     onMouseOver(mesh: Mesh, onMouseOver: () => void) {
         this.lookForIntersect.set(mesh, onMouseOver);
     }
-    rotateMesh(mesh: Mesh, axis: "x" | "y", perFrame: number) {
+    addRotation(mesh: Mesh, axis: "x" | "y", perFrame: number) {
         this.runOnRender.push(() => mesh.rotation[axis] += perFrame)
     }
 

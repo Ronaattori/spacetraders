@@ -5,7 +5,6 @@
     import munkki from "$lib/images/munkki.jpg"
 
     let container:HTMLElement; 
-    const raycaster = new Raycaster();
     const pointer = new Vector2();
 
     const scene = new Scene();
@@ -13,7 +12,6 @@
     const threeHelper = new ThreeHelper(scene, camera, pointer);
 
     onMount(async () => {
-            
         container.appendChild(threeHelper.renderer.domElement);
        
         const munkkiTexture = threeHelper.textureLoader.load(munkki)
@@ -24,8 +22,8 @@
 
         camera.position.z = 5;
         
-        threeHelper.rotateMesh(ball, "x", 0.001)
-        threeHelper.rotateMesh(ball, "y", 0.001)
+        threeHelper.addRotation(ball, "x", 0.001)
+        threeHelper.addRotation(ball, "y", 0.001)
         
         threeHelper.animate();
     })  
@@ -41,7 +39,7 @@
         const topPad = container.getBoundingClientRect().top;
         const wid = (event.clientX - sidebarPad)
         const hei = (event.clientY - topPad)
-        pointer.x = (( wid / window.innerWidth ) * 2 - 1);
+        pointer.x = ( wid / window.innerWidth  * 2 - 1);
         pointer.y = - ( hei / window.innerHeight ) * 2 + 1;
     }
 
