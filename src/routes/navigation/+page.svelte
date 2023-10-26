@@ -16,7 +16,7 @@
         if (selectedShip.cooldown.expiration) {
             miningCooldown = createTimer(new Date(selectedShip.cooldown.expiration));
         }
-        $api.systems.getSystemWaypoints(selectedShip.nav.systemSymbol).then(res => {
+        api.systems.getSystemWaypoints(selectedShip.nav.systemSymbol).then(res => {
             waypoints = res.data;
         });
     }
@@ -28,32 +28,32 @@
     let waypoints: Array<Waypoint> = [];
 
     onMount(async () => {
-        const res = await $api.fleet.getMyShips();
+        const res = await api.fleet.getMyShips();
         $myAgent.ships = res.data;
     })
     async function orbitShip() {
-        const res = await $api.fleet.orbitShip(selectedShip.symbol);
+        const res = await api.fleet.orbitShip(selectedShip.symbol);
         notifications.success(`Ship ${selectedShip.symbol} succesfully sent to orbit`)
         selectedShip = Object.assign(selectedShip, res.data)
     }
     async function refuelShip() {
-        const res = await $api.fleet.refuelShip(selectedShip.symbol);
+        const res = await api.fleet.refuelShip(selectedShip.symbol);
         notifications.success("Ship refueled");
         $myAgent = Object.assign($myAgent, res.data.agent)
         selectedShip.fuel = res.data.fuel;
     }
     async function dockShip() {
-        const res = await $api.fleet.dockShip(selectedShip.symbol);
+        const res = await api.fleet.dockShip(selectedShip.symbol);
         notifications.success(`Ship ${selectedShip.symbol} succesfully docked`)
         selectedShip = Object.assign(selectedShip, res.data)
     }
     async function navigateTo(waypoint: string) {
-        const res = await $api.fleet.navigateShip(selectedShip.symbol, {waypointSymbol: waypoint});
+        const res = await api.fleet.navigateShip(selectedShip.symbol, {waypointSymbol: waypoint});
         notifications.success(`Navigated to ${res.data.nav.waypointSymbol}`)
         selectedShip = Object.assign(selectedShip, res.data)
     }
     async function extractResources() {
-        const res = await $api.fleet.extractResources(selectedShip.symbol)
+        const res = await api.fleet.extractResources(selectedShip.symbol)
         notifications.success(`Succesfully extracted resources`)
         selectedShip = Object.assign(selectedShip, res.data)
     }

@@ -34,5 +34,5 @@ const client = new SpacetradersClient({
   TOKEN: async () => localStorage.getItem("apiKey") ?? ""
 }, AxiosHttpRequest);
 
-export const api = readable(client);
+export const api = client
 

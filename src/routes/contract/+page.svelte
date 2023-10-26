@@ -10,13 +10,13 @@
 
     let contracts:Array<Contract> = [];
     onMount(async () => {
-        const res = await $api.contracts.getContracts();
+        const res = await api.contracts.getContracts();
         contracts = res.data;
         $myAgent.acceptedContracts = contracts.filter((x) => x.accepted);
     })
 
     async function acceptContract(contractId:string) {
-      const contract = await $api.contracts.acceptContract(contractId);
+      const contract = await api.contracts.acceptContract(contractId);
       $myAgent = {...$myAgent, ...contract};
       notifications.success("Succesfully accepted contract");
     }

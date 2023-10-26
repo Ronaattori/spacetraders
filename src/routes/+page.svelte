@@ -3,6 +3,8 @@
     import { onMount } from "svelte";
     import { BoxGeometry, Material, Mesh, MeshBasicMaterial, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer, type ColorRepresentation } from "three";
     import munkki from "$lib/images/munkki.jpg"
+    import { api } from "$lib/api";
+    import { myAgent } from "$lib/stores";
 
     let container:HTMLElement; 
     const pointer = new Vector2();
@@ -15,12 +17,14 @@
         container.appendChild(threeHelper.renderer.domElement);
        
         const munkkiTexture = threeHelper.textureLoader.load(munkki)
-        const ball = threeHelper.addBall({map: munkkiTexture})
+        const ball = threeHelper.createSphere({map: munkkiTexture})
+        threeHelper.scene.add(ball)
+
         threeHelper.onMouseOver(ball, () => {
             changeColor(ball, Math.random() * 0xffffff)            
         })
 
-        camera.position.z = 5;
+        camera.position.z = 10;
         
         threeHelper.addRotation(ball, "x", 0.001)
         threeHelper.addRotation(ball, "y", 0.001)

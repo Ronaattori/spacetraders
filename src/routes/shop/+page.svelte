@@ -15,7 +15,7 @@
 
     $: console.log(selectedShip)
     onMount(async () => {
-        $myAgent.ships = (await $api.fleet.getMyShips()).data;
+        $myAgent.ships = (await api.fleet.getMyShips()).data;
     })
     async function handleSelect(ship: Ship) {
         selectedShip = ship;
@@ -23,16 +23,16 @@
         findWaypoints(ship);
     }
     async function findWaypoints(ship: Ship) {
-        const res = await $api.systems.getSystemWaypoints(ship.nav.systemSymbol)
+        const res = await api.systems.getSystemWaypoints(ship.nav.systemSymbol)
         waypoints = res.data;
         waypoints.forEach(async (x) => {
             for (const trait of x.traits) {
                 if (trait.symbol == WaypointTrait.symbol.SHIPYARD) {
-                    const shipyard = await $api.systems.getShipyard(x.systemSymbol, x.symbol);
+                    const shipyard = await api.systems.getShipyard(x.systemSymbol, x.symbol);
                     shipyards = [...shipyards, shipyard.data];
                 }
                 if (trait.symbol == WaypointTrait.symbol.MARKETPLACE) {
-                    const marketplace = await $api.systems.getMarket(x.systemSymbol, x.symbol);
+                    const marketplace = await api.systems.getMarket(x.systemSymbol, x.symbol);
                     markets = [...markets, marketplace.data];
                 }
             }
@@ -43,7 +43,7 @@
             notifications.warning("Ship type not defined?");
             return;
         }
-        const res = await $api.fleet.purchaseShip({
+        const res = await api.fleet.purchaseShip({
             shipType: ship.type,
             waypointSymbol: from.symbol
         });
@@ -52,7 +52,7 @@
         $myAgent.ships = [...$myAgent.ships, res.data.ship];
     }
     async function sellItem(item: ShipCargoItem) {
-        const res = $api.fleet.sellCargo(selectedShip.symbol, {
+        const res = api.fleet.sellCargo(selectedShip.symbol, {
             symbol: item.symbol as TradeSymbol,
             units: item.units
         })

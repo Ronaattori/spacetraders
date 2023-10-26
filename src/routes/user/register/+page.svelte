@@ -9,7 +9,7 @@
     let apiKey: string = "";
 
     async function register() {
-      const res = await $api.default.register({
+      const res = await api.default.register({
         faction: selectedFaction,
         symbol: username
       });

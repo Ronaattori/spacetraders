@@ -1,5 +1,7 @@
 import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster } from "three";
 import munkki from "$lib/images/munkki.jpg"
+import type { Waypoint } from "./api-sdk";
+import { api } from "./api";
 
 export class ThreeHelper {
     scene: Scene;
@@ -43,6 +45,9 @@ export class ThreeHelper {
         this.renderer.render( this.scene, this.camera );
     }
     
+    async drawSystem(systemSymbol: string) {
+    }
+
     onMouseOver(mesh: Mesh, onMouseOver: () => void) {
         this.lookForIntersect.set(mesh, onMouseOver);
     }
@@ -50,12 +55,17 @@ export class ThreeHelper {
         this.runOnRender.push(() => mesh.rotation[axis] += perFrame)
     }
 
-    addBall(parameters?: MeshBasicMaterialParameters, runBeforeAdd?: (mesh: Mesh) => void) {
+    createWaypoint(waypoint: Waypoint) {
+        const ball = this.createSphere();
+        ball.name = waypoint.symbol;
+        ball.position.x += 3
+        return ball
+    }
+
+    createSphere(parameters?: MeshBasicMaterialParameters) {
         const geometry = new SphereGeometry( 1, 32, 32 );
         const material = new MeshBasicMaterial(parameters);
         const ball = new Mesh( geometry, material );
-        runBeforeAdd?.(ball);
-        this.scene.add(ball);
         return ball;
     }
 }

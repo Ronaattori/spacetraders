@@ -9,7 +9,7 @@
     import { IconCheck, IconChecklist, IconLogin, IconLogout, IconPlus } from '@tabler/icons-svelte';
     
     onMount(async () => {
-      const res = await $api.agents.getMyAgent();
+      const res = await api.agents.getMyAgent();
       $myAgent = {...$myAgent, ...res.data};
     })
 </script>
