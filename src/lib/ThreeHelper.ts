@@ -1,7 +1,8 @@
-import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster } from "three";
+import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster, Line, Vector3, BufferGeometry, CircleGeometry, LineBasicMaterial, Group } from "three";
 import munkki from "$lib/images/munkki.jpg"
 import type { System, SystemWaypoint, Waypoint } from "./api-sdk";
 import { api } from "./api";
+import { randFloat } from "three/src/math/MathUtils";
 
 export class ThreeHelper {
     scene: Scene;
@@ -42,6 +43,21 @@ export class ThreeHelper {
     
     onMouseOver(mesh: Mesh, onMouseOver: () => void) {
         this.lookForIntersect.set(mesh, onMouseOver);
+    }
+    addOrbit(mesh: Mesh, radius: number, speed: number) {
+        const x = mesh.position.x;
+        const z = mesh.position.z
+        let angle = 0
+
+        // Randomize the speed a bit
+        // TODO: Implement a proper way to offset waypoints
+        speed += randFloat(0.0001, 0.005)
+
+        this.runOnRender.push(() => {
+            angle += speed
+            mesh.position.x = x + radius * Math.cos(angle)
+            mesh.position.z = z + radius * Math.sin(angle)
+        })
     }
     addRotation(mesh: Mesh, axis: "x" | "y", perFrame: number) {
         this.runOnRender.push(() => mesh.rotation[axis] += perFrame)

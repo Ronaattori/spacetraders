@@ -26,6 +26,7 @@ export class ThreeSystem {
 
     async drawSystem() {
         this.threeHelper.scene.clear()
+        console.log(this.waypoints)
         for (const waypoint of this.waypoints) {
             const mesh = this.createWaypoint(waypoint)
             this.threeHelper.setMeshColor(mesh, "random")
@@ -33,7 +34,7 @@ export class ThreeSystem {
             this.threeHelper.addRotation(mesh, "y", 0.001)
 
             this.threeHelper.onMouseOver(mesh, () => {
-                // console.log(waypoint.symbol)
+                console.log(waypoint.symbol)
             })
 
             this.threeHelper.scene.add(mesh)
@@ -44,9 +45,14 @@ export class ThreeSystem {
         const texure = this.threeHelper.textureLoader.load(munkki);
         const ball = this.threeHelper.createSphere({map: texure});
         ball.name = waypoint.symbol;
+        
         // Scale down the galaxy a bit
-        ball.position.x = waypoint.x * this.scale
-        ball.position.z = waypoint.y * this.scale
+        ball.position.x = waypoint.x
+        ball.position.z = waypoint.y
+        
+        if (waypoint.orbits) {
+            this.threeHelper.addOrbit(ball, 15, 0.005)    
+        }
         
         return ball
     }
