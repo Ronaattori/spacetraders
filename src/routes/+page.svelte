@@ -7,6 +7,9 @@
     import { myAgent } from "$lib/stores";
     import type { Ship } from "$lib/api-sdk";
     import { ThreeSystem } from "$lib/ThreeSystem";
+    // @ts-ignore
+    import { MapControls } from 'three/addons/controls/MapControls'
+
 
     let container:HTMLElement; 
     let selectedShip: Ship;
@@ -16,10 +19,6 @@
     const camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     const threeHelper = new ThreeHelper(scene, camera, pointer);
 
-    document.body.onwheel = (e: WheelEvent) => {
-        var delta = e.deltaY < 0 ? 2 : -2;
-        camera.position.z += delta;
-    }
 
     async function selectShip(ship: Ship) {
         selectedShip = ship;
@@ -34,11 +33,14 @@
         
         container.appendChild(threeHelper.renderer.domElement);
        
-        camera.position.z = 60;
+        camera.position.set(0, 50, -50)
         
         threeHelper.animate();
     })  
 
+    // Camera movement handling
+    const controls = new MapControls(camera, threeHelper.renderer.domElement)
+    controls.enableDamping = true;
     function onPointerMove( event:MouseEvent ) {
         // calculate pointer position in normalized device coordinates
         // (-1 to +1) for both components

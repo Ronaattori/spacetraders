@@ -46,7 +46,7 @@ export class ThreeSystem {
         ball.name = waypoint.symbol;
         // Scale down the galaxy a bit
         ball.position.x = waypoint.x * this.scale
-        ball.position.y = waypoint.y * this.scale
+        ball.position.z = waypoint.y * this.scale
         
         return ball
     }
