@@ -15,7 +15,12 @@
     const scene = new Scene();
     const camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
     const threeHelper = new ThreeHelper(scene, camera, pointer);
-    
+
+    document.body.onwheel = (e: WheelEvent) => {
+        var delta = e.deltaY < 0 ? 2 : -2;
+        camera.position.z += delta;
+    }
+
     async function selectShip(ship: Ship) {
         selectedShip = ship;
         const system = (await api.systems.getSystem(ship.nav.systemSymbol)).data
@@ -25,6 +30,8 @@
 
     onMount(async () => {
         selectShip($myAgent.ships[0])
+
+        
         container.appendChild(threeHelper.renderer.domElement);
        
         camera.position.z = 60;
