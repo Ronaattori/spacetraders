@@ -1,5 +1,9 @@
 import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster, Line, Vector3, BufferGeometry, CircleGeometry, LineBasicMaterial, Group } from "three";
 import { randFloat } from "three/src/math/MathUtils";
+// @ts-ignore
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
+// @ts-ignore
+import { RGBELoader } from 'three/addons/loaders/RGBELoader'
 
 type RunOnAnimateAction = {
     action: () => void,
@@ -19,6 +23,8 @@ export class ThreeHelper {
 
     renderer = new WebGLRenderer();
     textureLoader = new TextureLoader();
+    gltfLoader = new GLTFLoader();
+    rgbeLoader = new RGBELoader();
     raycaster = new Raycaster();
     
     runOnAnimate: RunOnAnimateAction[] = [];
