@@ -32,10 +32,9 @@ export class ThreeSystem {
             this.threeHelper.addRotation(mesh, "x", 0.001)
             this.threeHelper.addRotation(mesh, "y", 0.001)
 
-            // TODO: Fix adding multiple mouseovers to a mesh
-            // this.threeHelper.onMouseOver(mesh, () => {
-            //     console.log(waypoint.symbol)
-            // })
+            this.threeHelper.onMouseOver(mesh, () => {
+                console.log(waypoint.symbol)
+            })
             this.threeHelper.scene.add(mesh)
         }
     }

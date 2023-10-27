@@ -5,6 +5,11 @@ type RunOnAnimateAction = {
     action: () => void,
     skip: boolean
 }
+type LookForIntersectAction = {
+    object: Mesh,
+    action: () => void,
+    skip?: boolean    
+}
 
 export class ThreeHelper {
     scene: Scene;
@@ -15,8 +20,8 @@ export class ThreeHelper {
     textureLoader = new TextureLoader();
     raycaster = new Raycaster();
     
-    runOnAnimate: Array<RunOnAnimateAction> = []
-    lookForIntersect: Map<Mesh, () => void> = new Map();
+    runOnAnimate: RunOnAnimateAction[] = [];
+    lookForIntersect: LookForIntersectAction[] = [];
 
     constructor(scene: Scene, camera: Camera, pointer: Vector2) {
         this.scene = scene;
@@ -36,16 +41,21 @@ export class ThreeHelper {
 
         // Handle mouseover stuff
         this.raycaster.setFromCamera( this.pointer, this.camera );
-        for (const [mesh, func] of this.lookForIntersect) {
-            const intersects = this.raycaster.intersectObject(mesh);
+        for (const action of this.lookForIntersect) {
+            const intersects = this.raycaster.intersectObject(action.object);
             if (intersects.length == 0) continue
-            func();
+            action.action();
         }
         this.renderer.render( this.scene, this.camera );
     }
     
     onMouseOver(mesh: Mesh, onMouseOver: () => void) {
-        this.lookForIntersect.set(mesh, onMouseOver);
+        const action: LookForIntersectAction = {
+            object: mesh,
+            action: onMouseOver
+        }
+        this.lookForIntersect.push(action)
+        return action;
     }
     addOrbit(mesh: Mesh, radius: number, speed: number) {
         const x = mesh.position.x;
