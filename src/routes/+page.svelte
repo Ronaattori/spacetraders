@@ -28,9 +28,10 @@
     }
 
     onMount(async () => {
-        selectShip($myAgent.ships[0])
+        if ($myAgent.ships.length > 0) {
+            selectShip($myAgent.ships[0])
+        }
 
-        
         container.appendChild(threeHelper.renderer.domElement);
        
         camera.position.set(0, 50, -50)

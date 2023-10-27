@@ -1,8 +1,10 @@
 import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster, Line, Vector3, BufferGeometry, CircleGeometry, LineBasicMaterial, Group } from "three";
-import munkki from "$lib/images/munkki.jpg"
-import type { System, SystemWaypoint, Waypoint } from "./api-sdk";
-import { api } from "./api";
 import { randFloat } from "three/src/math/MathUtils";
+
+type RunOnAnimateAction = {
+    action: () => void,
+    skip: boolean
+}
 
 export class ThreeHelper {
     scene: Scene;
@@ -13,8 +15,8 @@ export class ThreeHelper {
     textureLoader = new TextureLoader();
     raycaster = new Raycaster();
     
-    private runOnRender: Array<() => void> = []
-    private lookForIntersect: Map<Mesh, () => void> = new Map();
+    runOnAnimate: Array<RunOnAnimateAction> = []
+    lookForIntersect: Map<Mesh, () => void> = new Map();
 
     constructor(scene: Scene, camera: Camera, pointer: Vector2) {
         this.scene = scene;
@@ -27,8 +29,9 @@ export class ThreeHelper {
 
     animate() {
         requestAnimationFrame(this.animate);
-        for (const func of this.runOnRender) {
-            func();
+        for (const action of this.runOnAnimate) {
+            if (action.skip) continue;
+            action.action();
         }
 
         // Handle mouseover stuff
@@ -53,14 +56,24 @@ export class ThreeHelper {
         // TODO: Implement a proper way to offset waypoints
         speed += randFloat(0.0001, 0.005)
 
-        this.runOnRender.push(() => {
-            angle += speed
-            mesh.position.x = x + radius * Math.cos(angle)
-            mesh.position.z = z + radius * Math.sin(angle)
-        })
+        const action: RunOnAnimateAction = {
+            skip: false,
+            action: () => {
+                angle += speed
+                mesh.position.x = x + radius * Math.cos(angle)
+                mesh.position.z = z + radius * Math.sin(angle)
+            }
+        }
+        this.runOnAnimate.push(action)
+        return action;
     }
     addRotation(mesh: Mesh, axis: "x" | "y", perFrame: number) {
-        this.runOnRender.push(() => mesh.rotation[axis] += perFrame)
+        const action: RunOnAnimateAction = {
+            skip: false,
+            action: () => mesh.rotation[axis] += perFrame
+        }
+        this.runOnAnimate.push(action);
+        return action;
     }
 
     createSphere(parameters?: MeshBasicMaterialParameters) {

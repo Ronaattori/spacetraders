@@ -26,17 +26,16 @@ export class ThreeSystem {
 
     async drawSystem() {
         this.threeHelper.scene.clear()
-        console.log(this.waypoints)
         for (const waypoint of this.waypoints) {
             const mesh = this.createWaypoint(waypoint)
             this.threeHelper.setMeshColor(mesh, "random")
             this.threeHelper.addRotation(mesh, "x", 0.001)
             this.threeHelper.addRotation(mesh, "y", 0.001)
 
-            this.threeHelper.onMouseOver(mesh, () => {
-                console.log(waypoint.symbol)
-            })
-
+            // TODO: Fix adding multiple mouseovers to a mesh
+            // this.threeHelper.onMouseOver(mesh, () => {
+            //     console.log(waypoint.symbol)
+            // })
             this.threeHelper.scene.add(mesh)
         }
     }
@@ -51,7 +50,10 @@ export class ThreeSystem {
         ball.position.z = waypoint.y
         
         if (waypoint.orbits) {
-            this.threeHelper.addOrbit(ball, 15, 0.005)    
+            const orbit = this.threeHelper.addOrbit(ball, 15, 0.005)    
+            this.threeHelper.onMouseOver(ball, () => {
+                orbit.skip = true
+            })
         }
         
         return ball
