@@ -52,6 +52,8 @@ export class ThreeSystem {
             const orbit = this.threeHelper.addOrbit(ball, 15, 0.005)    
             this.threeHelper.onMouseOver(ball, () => {
                 orbit.skip = true
+            }, () => {
+                orbit.skip = false
             })
         }
         

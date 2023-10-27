@@ -8,6 +8,7 @@ type RunOnAnimateAction = {
 type LookForIntersectAction = {
     object: Mesh,
     action: () => void,
+    onLeave?: () => void,
     skip?: boolean    
 }
 
@@ -22,6 +23,8 @@ export class ThreeHelper {
     
     runOnAnimate: RunOnAnimateAction[] = [];
     lookForIntersect: LookForIntersectAction[] = [];
+    private lookForIntersectsActive: LookForIntersectAction[] = [];
+
 
     constructor(scene: Scene, camera: Camera, pointer: Vector2) {
         this.scene = scene;
@@ -41,18 +44,34 @@ export class ThreeHelper {
 
         // Handle mouseover stuff
         this.raycaster.setFromCamera( this.pointer, this.camera );
+        const currentlyActive:LookForIntersectAction[] = []
         for (const action of this.lookForIntersect) {
             const intersects = this.raycaster.intersectObject(action.object);
             if (intersects.length == 0) continue
             action.action();
+
+            currentlyActive.push(action)
+            if (!this.lookForIntersectsActive.includes(action)) {
+                this.lookForIntersectsActive.push(action)        
+            }
         }
+        // And run the onLeave of actions that weren't active anymore
+        this.lookForIntersectsActive = this.lookForIntersectsActive.filter(action => {
+            if (currentlyActive.includes(action)) {
+                return true
+            }
+            action.onLeave?.()
+            return false
+        });
+
         this.renderer.render( this.scene, this.camera );
     }
     
-    onMouseOver(mesh: Mesh, onMouseOver: () => void) {
+    onMouseOver(mesh: Mesh, onMouseOver: () => void, onLeave?: () => void) {
         const action: LookForIntersectAction = {
             object: mesh,
-            action: onMouseOver
+            action: onMouseOver,
+            onLeave: onLeave
         }
         this.lookForIntersect.push(action)
         return action;
