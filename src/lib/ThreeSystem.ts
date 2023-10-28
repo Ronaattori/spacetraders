@@ -1,4 +1,4 @@
-import { EquirectangularReflectionMapping, type Scene, type Texture } from "three";
+import { EquirectangularReflectionMapping, Vector3, type Scene, type Texture } from "three";
 import type { System, SystemWaypoint } from "./api-sdk"
 import type { ThreeHelper } from "./ThreeHelper";
 import munkki from '$lib/images/munkki.jpg'
@@ -28,11 +28,11 @@ export class ThreeSystem {
         this.threeHelper.scene.clear()
 
         // Create a skybox
-        this.threeHelper.rgbeLoader.load("/src/lib/3d_assets/skybox.hdr", (texture: Texture) => {
+        this.threeHelper.textureLoader.load("/src/lib/images/skybox.png", (texture) => {
             texture.mapping = EquirectangularReflectionMapping
             this.threeHelper.scene.background = texture
             this.threeHelper.scene.environment = texture
-        });
+        })
 
         // Render the waypoints
         for (const waypoint of this.waypoints) {
@@ -40,6 +40,7 @@ export class ThreeSystem {
             this.threeHelper.setMeshColor(mesh, "random")
             this.threeHelper.addRotation(mesh, "x", 0.001)
             this.threeHelper.addRotation(mesh, "y", 0.001)
+            // mesh.scale.set(3, 3, 3)
 
             this.threeHelper.onMouseOver(mesh, () => {
                 console.log(waypoint.symbol)
