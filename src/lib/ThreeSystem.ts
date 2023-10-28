@@ -40,7 +40,7 @@ export class ThreeSystem {
             this.threeHelper.setMeshColor(mesh, "random")
             this.threeHelper.addRotation(mesh, "x", 0.001)
             this.threeHelper.addRotation(mesh, "y", 0.001)
-            // mesh.scale.set(3, 3, 3)
+            mesh.scale.set(1.5, 1.5, 1.5)
 
             this.threeHelper.onMouseOver(mesh, () => {
                 console.log(waypoint.symbol)
