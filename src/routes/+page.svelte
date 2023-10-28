@@ -33,6 +33,7 @@
         }
 
         container.appendChild(threeHelper.renderer.domElement);
+        container.appendChild(threeHelper.css2dRenderer.domElement);
        
         camera.position.set(0, 50, -50)
         

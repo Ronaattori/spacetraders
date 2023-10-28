@@ -1,9 +1,11 @@
-import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster, Line, Vector3, BufferGeometry, CircleGeometry, LineBasicMaterial, Group } from "three";
+import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster, Line, Vector3, BufferGeometry, CircleGeometry, LineBasicMaterial, Group, LatheGeometry } from "three";
 import { randFloat, randInt } from "three/src/math/MathUtils";
 // @ts-ignore
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
 // @ts-ignore
 import { RGBELoader } from 'three/addons/loaders/RGBELoader'
+// @ts-ignore
+import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer'
 
 type RunOnAnimateAction = {
     action: () => void,
@@ -22,6 +24,7 @@ export class ThreeHelper {
     pointer: Vector2;
 
     renderer = new WebGLRenderer();
+    css2dRenderer;
     textureLoader = new TextureLoader();
     gltfLoader = new GLTFLoader();
     rgbeLoader = new RGBELoader();
@@ -42,6 +45,14 @@ export class ThreeHelper {
         window.addEventListener("resize", () => {
             this.renderer.setSize( window.innerWidth, window.innerHeight );
         });
+        
+        // Prepare the label renderer
+        const labelRenderer = new CSS2DRenderer()
+        labelRenderer.setSize(window.innerWidth, window.innerHeight)
+        labelRenderer.domElement.style.position = 'absolute';
+        labelRenderer.domElement.style.top = '0px';
+        labelRenderer.domElement.style.pointerEvents = 'none';
+        this.css2dRenderer = labelRenderer
     }
 
     animate() {
@@ -74,6 +85,7 @@ export class ThreeHelper {
         });
 
         this.renderer.render( this.scene, this.camera );
+        this.css2dRenderer.render( this.scene, this.camera );
     }
     
     onMouseOver(mesh: Mesh, onMouseOver: () => void, onLeave?: () => void) {
@@ -125,5 +137,17 @@ export class ThreeHelper {
         const material = mesh.material as MeshBasicMaterial
         const _color = color == "random" ? Math.random() * 0xffffff : color
         material.color.set(_color);
+    }
+    addLabel(mesh: Mesh, content: string) {
+        const labelDiv = document.createElement("div") 
+        labelDiv.textContent = content
+        labelDiv.style.color = "white"
+        
+        const label = new CSS2DObject(labelDiv)
+        label.position.set(0, 0, 0)
+        label.center.set(0, 0)
+        mesh.add(label)
+        return label;
+
     }
 }

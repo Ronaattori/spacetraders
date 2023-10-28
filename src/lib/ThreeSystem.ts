@@ -1,7 +1,9 @@
-import { EquirectangularReflectionMapping, Vector3, type Scene, type Texture } from "three";
+import { EquirectangularReflectionMapping, Vector3, Scene, type Texture } from "three";
 import type { System, SystemWaypoint } from "./api-sdk"
 import type { ThreeHelper } from "./ThreeHelper";
 import munkki from '$lib/images/munkki.jpg'
+// @ts-ignore
+import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer'
 
 type SystemOptions = {
     scale?: number
@@ -38,9 +40,6 @@ export class ThreeSystem {
         for (const waypoint of this.waypoints) {
             const mesh = this.createWaypoint(waypoint)
             this.threeHelper.setMeshColor(mesh, "random")
-            this.threeHelper.addRotation(mesh, "x", 0.001)
-            this.threeHelper.addRotation(mesh, "y", 0.001)
-            mesh.scale.set(1.5, 1.5, 1.5)
 
             this.threeHelper.onMouseOver(mesh, () => {
                 console.log(waypoint.symbol)
@@ -55,9 +54,15 @@ export class ThreeSystem {
         const ball = this.threeHelper.createSphere({map: texure});
         ball.name = waypoint.symbol;
         
-        // Scale down the galaxy a bit
+        this.threeHelper.addLabel(ball, waypoint.symbol)
+
         ball.position.x = waypoint.x
         ball.position.z = waypoint.y
+        ball.scale.set(1.5, 1.5, 1.5)
+
+        // Make the planet spin a bit
+        this.threeHelper.addRotation(ball, "x", 0.001)
+        this.threeHelper.addRotation(ball, "y", 0.001)
         
         if (waypoint.orbits) {
             const orbit = this.threeHelper.addOrbit(ball, 5, 0.002)    
