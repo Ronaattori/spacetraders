@@ -25,6 +25,7 @@
         const system = (await api.systems.getSystem(ship.nav.systemSymbol)).data
         const sys = new ThreeSystem(system, threeHelper, {scale: 0.6});
         sys.drawSystem()
+        camera.lookAt(sys.waypoints[0].position)
     }
 
     onMount(async () => {

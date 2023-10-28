@@ -1,25 +1,33 @@
-import { EquirectangularReflectionMapping, Vector3, Scene, type Texture } from "three";
+import { EquirectangularReflectionMapping, Vector3, Scene, type Texture, Mesh } from "three";
 import type { System, SystemWaypoint } from "./api-sdk"
 import type { ThreeHelper } from "./ThreeHelper";
 import munkki from '$lib/images/munkki.jpg'
 // @ts-ignore
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer'
+import { myAgent } from "./stores";
 
 type SystemOptions = {
     scale?: number
 }
 
 export class ThreeSystem {
+    // Data from Spacetraders
     system: System;
-    waypoints: SystemWaypoint[];
-
+    waypointsData: SystemWaypoint[];
+    
+    // Rendered objects
+    waypoints: Mesh[] = []
+    
     scale: number;
     
     threeHelper: ThreeHelper;
 
    constructor(system: System, threeHelper: ThreeHelper, options: SystemOptions) {
     this.system = system
-    this.waypoints = system.waypoints
+    this.waypointsData = system.waypoints
+    
+    // Rendered objects
+    
     
     this.threeHelper = threeHelper
     
@@ -37,7 +45,7 @@ export class ThreeSystem {
         })
 
         // Render the waypoints
-        for (const waypoint of this.waypoints) {
+        for (const waypoint of this.waypointsData) {
             const mesh = this.createWaypoint(waypoint)
             this.threeHelper.setMeshColor(mesh, "random")
 
@@ -47,6 +55,8 @@ export class ThreeSystem {
 
             this.threeHelper.scene.add(mesh)
         }
+        
+        // Draw your ships
     }
 
     createWaypoint(waypoint: SystemWaypoint) {
@@ -73,6 +83,7 @@ export class ThreeSystem {
             })
         }
         
+        this.waypoints.push(ball);
         return ball
     }
 
