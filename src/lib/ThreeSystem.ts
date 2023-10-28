@@ -59,7 +59,7 @@ export class ThreeSystem {
         ball.position.z = waypoint.y
         
         if (waypoint.orbits) {
-            const orbit = this.threeHelper.addOrbit(ball, 15, 0.005)    
+            const orbit = this.threeHelper.addOrbit(ball, 5, 0.002)    
             this.threeHelper.onMouseOver(ball, () => {
                 orbit.skip = true
             }, () => {

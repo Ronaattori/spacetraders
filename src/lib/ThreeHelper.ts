@@ -1,5 +1,5 @@
 import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster, Line, Vector3, BufferGeometry, CircleGeometry, LineBasicMaterial, Group } from "three";
-import { randFloat } from "three/src/math/MathUtils";
+import { randFloat, randInt } from "three/src/math/MathUtils";
 // @ts-ignore
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader'
 // @ts-ignore
@@ -88,11 +88,11 @@ export class ThreeHelper {
     addOrbit(mesh: Mesh, radius: number, speed: number) {
         const x = mesh.position.x;
         const z = mesh.position.z
-        let angle = 0
+        let angle = randInt(0, 200) 
 
         // Randomize the speed a bit
         // TODO: Implement a proper way to offset waypoints
-        speed += randFloat(0.0001, 0.005)
+        speed += randFloat(0.0001, 0.001)
 
         const action: RunOnAnimateAction = {
             skip: false,
