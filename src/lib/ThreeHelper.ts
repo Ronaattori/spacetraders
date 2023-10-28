@@ -39,6 +39,9 @@ export class ThreeHelper {
         this.animate = this.animate.bind(this); // I don't quite understand the animation loop yet, but this is needed
 
         this.renderer.setSize( window.innerWidth, window.innerHeight );
+        window.addEventListener("resize", () => {
+            this.renderer.setSize( window.innerWidth, window.innerHeight );
+        });
     }
 
     animate() {
