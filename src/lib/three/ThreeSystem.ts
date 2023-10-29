@@ -75,7 +75,7 @@ export class ThreeSystem {
         const texure = this.threeHelper.textureLoader.load(munkki);
         const ball = new WaypointObject(this, waypoint, 1.5, {map: texure})
         
-        this.threeHelper.addLabel(ball, waypoint.symbol)
+        const label = this.threeHelper.addLabel(ball, waypoint.symbol)
 
         return ball
     }

@@ -4,7 +4,7 @@ import type { Ship, SystemWaypoint } from "$lib/api-sdk";
 import type { ThreeSystem } from "../ThreeSystem";
 import type { WaypointObject } from "./WaypointObject";
 import { api } from "$lib/api";
-import { notifications } from "$lib/stores";
+import { myAgent, notifications } from "$lib/stores";
 import { tweened } from "svelte/motion";
 
 export class ShipObject extends ExtendedMesh {
@@ -32,7 +32,10 @@ export class ShipObject extends ExtendedMesh {
         this.system.threeHelper.drawLine(this.position, waypoint.position)
 
         const res = await api.fleet.navigateShip(this.ship.symbol, {waypointSymbol: waypoint.name});
-        const duration = this.millisecondsUntilArrival(new Date(res.data.nav.route.arrival))
+        this.ship = Object.assign(this.ship, res.data)
+
+        const arrival = new Date(res.data.nav.route.arrival);
+        const duration = this.millisecondsUntilArrival(arrival)
 
         const x = tweened(this.position.x, {duration: duration})
         const z = tweened(this.position.z, {duration: duration})
@@ -43,6 +46,17 @@ export class ShipObject extends ExtendedMesh {
         setTimeout(() => {
             notifications.success(`Ship ${this.ship.symbol} succesfully arrived at ${waypoint.name}`)
         }, duration);
+        
+        // Add a label to the moving ship
+        const durationString = () => `Arrival: ${this.millisecondsUntilArrival(arrival) / 1000}s`
+        const label = this.system.threeHelper.addLabel(this, durationString())
+        const interval = setInterval(() => {
+            label.element.innerText = durationString()
+        }, 1000)
+        setTimeout(() => {
+            clearInterval(interval)
+        }, duration);
+
     }
 
     millisecondsUntilArrival(arrival: Date) {
