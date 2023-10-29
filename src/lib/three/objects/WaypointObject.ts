@@ -10,9 +10,10 @@ export class WaypointObject extends ExtendedMesh {
     orbit = true;
 
     constructor(system: ThreeSystem, waypoint: SystemWaypoint, radius: number, meshParamenters?: THREE.MeshBasicMaterialParameters) {
-        super()
-        this.geometry = new THREE.SphereGeometry(radius, 32, 32)
-        this.material = new THREE.MeshBasicMaterial(meshParamenters);
+        const geometry = new THREE.SphereGeometry(radius, 32, 32)
+        const material = new THREE.MeshBasicMaterial(meshParamenters);
+        super(geometry, material)
+
         this.system = system;
 
         this.waypoint = waypoint;

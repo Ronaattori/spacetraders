@@ -43,25 +43,23 @@ export class ThreeSystem {
             this.threeHelper.scene.environment = texture
         })
 
+        // Draw your ship
+        this.ship = this.createShip(this.shipData)
+        this.threeHelper.scene.add(this.ship)
+
         // Render the waypoints
         for (const waypoint of this.waypointsData) {
             const mesh = this.createWaypoint(waypoint)
             this.threeHelper.setMeshColor(mesh, "random")
 
-            // // TODO Navigate on on click
-            // this.threeHelper.onMouseOver(mesh, () => {
-            //     if (ship) {
-            //         this.navigateTo(mesh.name)
-            //     }
-            // })
+            mesh.onClick.push({
+                action: () => this.ship.navigateTo(mesh)
+            })
 
             this.waypoints.push(mesh);
             this.threeHelper.scene.add(mesh)
         }
-
-        // Draw your ship
-        this.ship = this.createShip(this.shipData)
-        this.threeHelper.scene.add(this.ship)
+        
     }
 
     getWaypoint(waypointSymbol: string) {

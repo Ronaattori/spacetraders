@@ -1,4 +1,4 @@
-import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster, Line, Vector3, BufferGeometry, CircleGeometry, LineBasicMaterial, Group, LatheGeometry, ConeGeometry, type Intersection } from "three";
+import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster, Line, Vector3, BufferGeometry, CircleGeometry, LineBasicMaterial, Group, LatheGeometry, ConeGeometry, type Intersection, Object3D } from "three";
 import { randFloat, randInt } from "three/src/math/MathUtils";
 // @ts-ignore
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer'
@@ -16,7 +16,7 @@ export class ThreeHelper {
     textureLoader = new TextureLoader();
     raycaster = new Raycaster();
     
-    hovered: Record<string, ExtendedMesh> = {}
+    hovered: Record<string, ExtendedMesh | Object3D> = {}
     
     constructor(scene: Scene, camera: Camera, pointer: Vector2) {
         this.scene = scene;
@@ -26,7 +26,8 @@ export class ThreeHelper {
 
         this.renderer.setSize( window.innerWidth, window.innerHeight );
         window.addEventListener("resize", this.onResize);
-        this.renderer.domElement.addEventListener("pointermove", this.onPointerMove);
+        window.addEventListener("pointermove", this.onPointerMove);
+        window.addEventListener("click", this.onClick);
         
         // Prepare the label renderer
         const labelRenderer = new CSS2DRenderer()
@@ -66,6 +67,11 @@ export class ThreeHelper {
         this.css2dRenderer.setSize( window.innerWidth, window.innerHeight );
         this.renderer.setSize( window.innerWidth, window.innerHeight );
     }
+    onClick = (e: MouseEvent) => {
+        for (const hit of Object.values(this.hovered)) {
+            if (hit instanceof ExtendedMesh) hit.onClick.runAll();
+        }
+    }
 
     onPointerMove = (e: MouseEvent) => {
         // Update our pointers position
@@ -83,7 +89,8 @@ export class ThreeHelper {
         for (const key of Object.keys(this.hovered)) {
             const hit = intersects.find(hit => hit.object.uuid == key)
             if (hit) continue;
-            this.hovered[key].onPointerOut.runAll()
+            const hovered = this.hovered[key];
+            if (hovered instanceof ExtendedMesh) hovered.onPointerOut.runAll()
             delete this.hovered[key]
         }
         
@@ -91,9 +98,9 @@ export class ThreeHelper {
             const uuid = hit.object.uuid
             // Mark an object as hovered and run its onPointerEnters
             if (!this.hovered[uuid]) {
-                const mesh = hit.object as ExtendedMesh
+                const mesh = hit.object
                 this.hovered[uuid] = mesh
-                mesh.onPointerEnter.runAll()
+                if (mesh instanceof ExtendedMesh) mesh.onPointerEnter.runAll()
             }
         }
     }

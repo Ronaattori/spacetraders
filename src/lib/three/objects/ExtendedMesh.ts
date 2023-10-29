@@ -19,7 +19,7 @@ export class ExtendedMesh extends THREE.Mesh {
     onClick = new ActionArray()
     onResize = new ActionArray()
 
-    constructor() {
-        super()
+    constructor(geometry: THREE.BufferGeometry, material: THREE.Material) {
+        super(geometry, material)
     }
 }
