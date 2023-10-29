@@ -3,6 +3,7 @@ import type { Ship, System, SystemWaypoint } from "$lib/api-sdk"
 import type { ThreeHelper } from "./ThreeHelper";
 import munkki from '$lib/images/munkki.jpg'
 import { WaypointObject } from "./objects/WaypointObject";
+import { ShipObject } from "./objects/ShipObject";
 
 type SystemOptions = {
     scale?: number
@@ -15,8 +16,8 @@ export class ThreeSystem {
     shipData: Ship;
     
     // Rendered objects
-    waypoints: Mesh[] = []
-    ship: Mesh | undefined;
+    waypoints: WaypointObject[] = [];
+    ships: ShipObject[] = [];
     
     scale: number;
     
@@ -47,6 +48,7 @@ export class ThreeSystem {
             const mesh = this.createWaypoint(waypoint)
             this.threeHelper.setMeshColor(mesh, "random")
 
+            // // TODO Navigate on on click
             // this.threeHelper.onMouseOver(mesh, () => {
             //     if (ship) {
             //         this.navigateTo(mesh.name)
@@ -58,26 +60,17 @@ export class ThreeSystem {
         
         // Draw your ship
         const ship = this.createShip(this.shipData)
-        this.ship = ship;
         this.threeHelper.scene.add(ship)
     }
 
     getWaypoint(waypointSymbol: string) {
-        const waypoint = this.waypointsData.filter(x => x.symbol == waypointSymbol)[0]
+        const waypoint = this.waypointsData.find(x => x.symbol == waypointSymbol)
         return waypoint;
     }
 
-    navigateTo(waypointSymbol: string) {
-        const waypointMesh = this.threeHelper.scene.getObjectByName(waypointSymbol)
-        if (!waypointMesh || !this.ship) throw "Not ready for navigation";
-        this.threeHelper.drawLine(this.ship.position, waypointMesh.position)
-    }
-
     createShip(ship: Ship) {
-        const mesh = this.threeHelper.createCone({color: 0xffff00})
-        const currentWaypoint = this.waypointsData.filter(x => x.symbol == ship.nav.waypointSymbol)[0]
-        mesh.position.x = currentWaypoint.x
-        mesh.position.z = currentWaypoint.y
+        const mesh = new ShipObject(ship, this, {color: 0xffff00})
+        this.ships.push(mesh);
         return mesh;
     }
     createWaypoint(waypoint: SystemWaypoint) {

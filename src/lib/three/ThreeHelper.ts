@@ -108,13 +108,6 @@ export class ThreeHelper {
         this.scene.add(line)
     }
 
-    createCone(parameters?: MeshBasicMaterialParameters) {
-        const geometry = new ConeGeometry(2, 5, 32)
-        const material = new MeshBasicMaterial(parameters);
-        const cone = new Mesh( geometry, material );
-        return cone;
-    }
-
     setMeshColor(mesh: Mesh, color: number | "random") {
         const material = mesh.material as MeshBasicMaterial
         const _color = color == "random" ? Math.random() * 0xffffff : color
