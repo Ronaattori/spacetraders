@@ -1,6 +1,5 @@
 import { SphereGeometry, type Camera, Mesh, type MeshBasicMaterialParameters, type Scene, MeshBasicMaterial, WebGLRenderer, TextureLoader, Vector2, Raycaster, Line, Vector3, BufferGeometry, CircleGeometry, LineBasicMaterial, Group, LatheGeometry, ConeGeometry, type Intersection, Object3D } from "three";
 import { randFloat, randInt } from "three/src/math/MathUtils";
-// @ts-ignore
 import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer'
 // @ts-ignore
 import { MapControls } from 'three/addons/controls/MapControls'
