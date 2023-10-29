@@ -70,12 +70,12 @@ export class ThreeSystem {
     }
 
     createShip(ship: Ship) {
-        const mesh = new ShipObject(ship, this, {color: 0xffff00})
+        const mesh = new ShipObject(this, ship, {color: 0xffff00})
         return mesh;
     }
     createWaypoint(waypoint: SystemWaypoint) {
         const texure = this.threeHelper.textureLoader.load(munkki);
-        const ball = new WaypointObject(waypoint, 1.5, {map: texure})
+        const ball = new WaypointObject(this, waypoint, 1.5, {map: texure})
         
         this.threeHelper.addLabel(ball, waypoint.symbol)
 

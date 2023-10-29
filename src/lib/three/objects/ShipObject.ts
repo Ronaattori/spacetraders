@@ -10,12 +10,12 @@ export class ShipObject extends ExtendedMesh {
     ship: Ship;
     currentWaypoint: SystemWaypoint | undefined;
 
-    constructor(ship: Ship, system: ThreeSystem, meshParameters?: THREE.MeshBasicMaterialParameters) {
+    constructor(system: ThreeSystem, ship: Ship, meshParameters?: THREE.MeshBasicMaterialParameters) {
         super()
         this.geometry = new THREE.ConeGeometry(2, 5, 32)
         this.material = new THREE.MeshBasicMaterial(meshParameters);
-
         this.system = system;
+
         this.ship = ship;
         this.name = ship.symbol;
 

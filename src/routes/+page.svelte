@@ -2,13 +2,10 @@
     import { ThreeHelper } from "$lib/three/ThreeHelper";
     import { onMount } from "svelte";
     import { BoxGeometry, Material, Mesh, MeshBasicMaterial, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer, type ColorRepresentation } from "three";
-    import munkki from "$lib/images/munkki.jpg"
     import { api } from "$lib/api";
     import { myAgent } from "$lib/stores";
     import type { Ship } from "$lib/api-sdk";
     import { ThreeSystem } from "$lib/three/ThreeSystem";
-    // @ts-ignore
-    import { MapControls } from 'three/addons/controls/MapControls'
 
 
     let container:HTMLElement; 
@@ -41,7 +38,6 @@
 
 </script>
 
-<!-- svelte-ignore a11y-no-static-element-interactions -->
 <div>
    Select ship:
    {#each $myAgent.ships as ship (ship.symbol)}

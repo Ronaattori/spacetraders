@@ -2,15 +2,19 @@ import type { SystemWaypoint } from '$lib/api-sdk';
 import * as THREE from 'three';
 import { ExtendedMesh } from './ExtendedMesh';
 import { randFloat, randInt } from 'three/src/math/MathUtils';
+import type { ThreeSystem } from '../ThreeSystem';
 
 export class WaypointObject extends ExtendedMesh {
+    system: ThreeSystem;
     waypoint: SystemWaypoint;
     orbit = true;
 
-    constructor(waypoint: SystemWaypoint, radius: number, meshParamenters?: THREE.MeshBasicMaterialParameters) {
+    constructor(system: ThreeSystem, waypoint: SystemWaypoint, radius: number, meshParamenters?: THREE.MeshBasicMaterialParameters) {
         super()
         this.geometry = new THREE.SphereGeometry(radius, 32, 32)
         this.material = new THREE.MeshBasicMaterial(meshParamenters);
+        this.system = system;
+
         this.waypoint = waypoint;
         this.name = waypoint.symbol;
 
