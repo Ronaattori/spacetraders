@@ -17,23 +17,23 @@ export class ThreeSystem {
     
     // Rendered objects
     waypoints: WaypointObject[] = [];
-    ships: ShipObject[] = [];
+    ship: ShipObject;
     
     scale: number;
     
     threeHelper: ThreeHelper;
 
-   constructor(system: System, ship: Ship, threeHelper: ThreeHelper, options: SystemOptions) {
-    this.systemData = system
-    this.waypointsData = system.waypoints
-    this.shipData = ship;
-    
-    this.threeHelper = threeHelper
-    
-    this.scale = options.scale ?? 1
-   }
+    constructor(system: System, ship: Ship, threeHelper: ThreeHelper, options: SystemOptions) {    
+        this.systemData = system
+        this.waypointsData = system.waypoints
+        this.shipData = ship;
 
-    async drawSystem() {
+        this.threeHelper = threeHelper
+
+        // Read various options
+        this.scale = options.scale ?? 1
+
+        // Start rendering the system
         this.threeHelper.scene.clear()
 
         // Create a skybox
@@ -55,12 +55,13 @@ export class ThreeSystem {
             //     }
             // })
 
+            this.waypoints.push(mesh);
             this.threeHelper.scene.add(mesh)
         }
-        
+
         // Draw your ship
-        const ship = this.createShip(this.shipData)
-        this.threeHelper.scene.add(ship)
+        this.ship = this.createShip(this.shipData)
+        this.threeHelper.scene.add(this.ship)
     }
 
     getWaypoint(waypointSymbol: string) {
@@ -70,7 +71,6 @@ export class ThreeSystem {
 
     createShip(ship: Ship) {
         const mesh = new ShipObject(ship, this, {color: 0xffff00})
-        this.ships.push(mesh);
         return mesh;
     }
     createWaypoint(waypoint: SystemWaypoint) {
@@ -79,7 +79,6 @@ export class ThreeSystem {
         
         this.threeHelper.addLabel(ball, waypoint.symbol)
 
-        this.waypoints.push(ball);
         return ball
     }
 

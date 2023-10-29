@@ -24,7 +24,6 @@
         selectedShip = ship;
         const system = (await api.systems.getSystem(ship.nav.systemSymbol)).data
         const sys = new ThreeSystem(system, ship, threeHelper, {scale: 0.6});
-        sys.drawSystem()
     }
 
     onMount(async () => {
