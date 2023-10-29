@@ -46,9 +46,7 @@ export class ThreeHelper {
 
         // Call all onRender functions
         for (const mesh of this.getMeshes()) {
-            mesh.onRender.forEach(action => {
-                if (!action.skip) action.action?.()
-            })
+            mesh.onRender.runAll()
         }
 
         this.renderer.render( this.scene, this.camera );
@@ -85,7 +83,7 @@ export class ThreeHelper {
         for (const key of Object.keys(this.hovered)) {
             const hit = intersects.find(hit => hit.object.uuid == key)
             if (hit) continue;
-            this.hovered[key].onPointerOut.forEach(action => action.action())
+            this.hovered[key].onPointerOut.runAll()
             delete this.hovered[key]
         }
         
@@ -95,7 +93,7 @@ export class ThreeHelper {
             if (!this.hovered[uuid]) {
                 const mesh = hit.object as ExtendedMesh
                 this.hovered[uuid] = mesh
-                mesh.onPointerEnter.forEach(action => action.action())
+                mesh.onPointerEnter.runAll()
             }
         }
     }

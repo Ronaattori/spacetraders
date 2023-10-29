@@ -1,14 +1,23 @@
 import * as THREE from 'three';
+
+class ActionArray extends Array<Action> {
+    runAll() {
+        this.forEach(action => {
+            if (!action.skip) action.action()
+        })
+    }
+}
 type Action = {
     action: () => void,
     skip?: boolean
 }
+
 export class ExtendedMesh extends THREE.Mesh {
-    onRender: Action[] = [];
-    onPointerEnter: Action[] = [];
-    onPointerOut: Action[] = [];
-    onClick: Action[] = [];
-    onResize: Action[] = [];
+    onRender = new ActionArray()
+    onPointerEnter = new ActionArray()
+    onPointerOut = new ActionArray()
+    onClick = new ActionArray()
+    onResize = new ActionArray()
 
     constructor() {
         super()
