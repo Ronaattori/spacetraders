@@ -4,6 +4,8 @@ import { CSS2DRenderer, CSS2DObject } from 'three/addons/renderers/CSS2DRenderer
 // @ts-ignore
 import { MapControls } from 'three/addons/controls/MapControls'
 import { ExtendedMesh } from "./objects/ExtendedMesh";
+import type { ComponentType } from "svelte";
+import Tooltip from "$lib/components/Tooltip.svelte";
 
 export class ThreeHelper {
     scene: Scene;
@@ -116,6 +118,31 @@ export class ThreeHelper {
         const material = mesh.material as MeshBasicMaterial
         const _color = color == "random" ? Math.random() * 0xffffff : color
         material.color.set(_color);
+    }
+    addTooltip(mesh: ExtendedMesh, content: string | {component: ComponentType, props: any}) {
+        let element = document.createElement("div");
+        if (typeof content == "string") {
+            element.innerText = content;
+        } else {
+            const component = new Tooltip({
+                target: element,
+                props: {
+                    content: content
+                }
+            });
+        }
+        let tooltip: CSS2DObject
+        mesh.onPointerEnter.push({
+            action: () => {
+                tooltip = new CSS2DObject(element)
+                mesh.add(tooltip)
+            }
+        })
+        mesh.onPointerOut.push({
+            action: () => {
+                tooltip?.removeFromParent()
+            }
+        })
     }
     addLabel(mesh: Mesh, content: string) {
         const labelDiv = document.createElement("div") 
