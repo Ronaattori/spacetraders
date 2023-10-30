@@ -18,7 +18,7 @@ export class ThreeHelper {
     css2dRenderer;
     textureLoader = new TextureLoader();
     raycaster = new Raycaster();
-    effectComposer;
+    // effectComposer;
     
     hovered: Record<string, ExtendedMesh | Object3D> = {}
     

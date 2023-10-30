@@ -8,6 +8,8 @@ import WaypointInfo from "$lib/components/WaypointInfo.svelte";
 import { api } from "$lib/api";
 import { notifications } from "$lib/stores";
 import { SunObject } from "./objects/SunObject";
+import moon from "$lib/images/moon.jpg"
+import moonDisplacement from "$lib/images/moon_displacement.jpg"
 
 type SystemOptions = {
     scale?: number
@@ -107,8 +109,10 @@ export class ThreeSystem {
         return mesh;
     }
     createWaypoint(waypoint: SystemWaypoint) {
-        const texure = this.threeHelper.textureLoader.load(munkki);
-        const ball = new WaypointObject(this, waypoint, 1.5, {map: texure})
+        // TODO: The displacement looks horrible :DDD
+        const texure = this.threeHelper.textureLoader.load(moon);
+        const displacement = this.threeHelper.textureLoader.load(moonDisplacement);
+        const ball = new WaypointObject(this, waypoint, 1.5, {map: texure, displacementMap: displacement, displacementScale: 0.5})
         
         const label = this.threeHelper.addLabel(ball, waypoint.symbol)
         

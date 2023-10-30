@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import { ExtendedMesh } from './ExtendedMesh';
 import { randFloat, randInt } from 'three/src/math/MathUtils';
 import type { ThreeSystem } from '../ThreeSystem';
+import moon from "$lib/images/moon.jpg"
+import moonDisplacement from "$lib/images/moon_displacement.jpg"
 
 export class WaypointObject extends ExtendedMesh {
     system: ThreeSystem;
