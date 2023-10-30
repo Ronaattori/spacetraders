@@ -1,4 +1,4 @@
-import { EquirectangularReflectionMapping, Vector3, Scene, type Texture, Mesh, BufferGeometry, MeshBasicMaterial, BufferAttribute, ConeGeometry, LineBasicMaterial, Line } from "three";
+import { EquirectangularReflectionMapping, Vector3, Scene, type Texture, Mesh, BufferGeometry, MeshBasicMaterial, BufferAttribute, ConeGeometry, LineBasicMaterial, Line, SphereGeometry, MeshStandardMaterial, PointLight, PointLightHelper } from "three";
 import type { Ship, System, SystemWaypoint, Waypoint } from "$lib/api-sdk"
 import type { ThreeHelper } from "./ThreeHelper";
 import munkki from '$lib/images/munkki.jpg'
@@ -7,6 +7,7 @@ import { ShipObject } from "./objects/ShipObject";
 import WaypointInfo from "$lib/components/WaypointInfo.svelte";
 import { api } from "$lib/api";
 import { notifications } from "$lib/stores";
+import { SunObject } from "./objects/SunObject";
 
 type SystemOptions = {
     scale?: number
@@ -46,6 +47,10 @@ export class ThreeSystem {
             this.threeHelper.scene.background = texture
             this.threeHelper.scene.environment = texture
         })
+        
+        // Create a sun
+        const sun = new SunObject(this, 4, {color: 0xffff00})
+        this.threeHelper.scene.add(sun)
 
         // Draw your ship
         this.ship = this.createShip(this.shipData)

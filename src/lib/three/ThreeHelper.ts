@@ -6,6 +6,8 @@ import { MapControls } from 'three/addons/controls/MapControls'
 import { ExtendedMesh } from "./objects/ExtendedMesh";
 import type { ComponentType } from "svelte";
 import Tooltip from "$lib/components/Tooltip.svelte";
+import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer'
+import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass'
 
 export class ThreeHelper {
     scene: Scene;
@@ -16,6 +18,7 @@ export class ThreeHelper {
     css2dRenderer;
     textureLoader = new TextureLoader();
     raycaster = new Raycaster();
+    effectComposer;
     
     hovered: Record<string, ExtendedMesh | Object3D> = {}
     
@@ -37,6 +40,11 @@ export class ThreeHelper {
         labelRenderer.domElement.style.top = '0px';
         labelRenderer.domElement.style.pointerEvents = 'none';
         this.css2dRenderer = labelRenderer
+        
+        // Prepare the postprocessing composer
+        // this.effectComposer = new EffectComposer(this.renderer)
+        // const renderPass = new RenderPass(this.scene, this.camera)
+        // this.effectComposer.addPass(renderPass)
 
         // Camera movement handling
         const controls = new MapControls(camera, this.renderer.domElement)
@@ -52,6 +60,7 @@ export class ThreeHelper {
         }
 
         this.renderer.render( this.scene, this.camera );
+        // this.effectComposer.render()
         this.css2dRenderer.render( this.scene, this.camera );
     }
 
