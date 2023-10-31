@@ -1,4 +1,4 @@
-declare module "three/examples/jsm/postprocessing/RenderPass" {
+declare module "three/addons/postprocessing/RenderPass" {
     import * as THREE from "three";
     import type { Pass } from "./Pass";
 

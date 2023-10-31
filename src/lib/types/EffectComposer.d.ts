@@ -1,4 +1,4 @@
-declare module "three/examples/jsm/postprocessing/EffectComposer" {
+declare module "three/addons/postprocessing/EffectComposer" {
     import * as THREE from "three"
     class EffectComposer {
         passes: Array

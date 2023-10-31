@@ -4,6 +4,11 @@
     import type { ThreeContext } from "./contexts";
     // @ts-ignore
     import { MapControls } from 'three/addons/controls/MapControls'
+    import { EffectComposer } from 'three/addons/postprocessing/EffectComposer';
+    import { RenderPass } from 'three/addons/postprocessing/RenderPass';
+    // @ts-ignore
+    import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader'
+    import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
 
     let container: HTMLElement;
 
@@ -11,19 +16,24 @@
     const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
     const pointer = new THREE.Vector2( 0.5, 0.5);
     const textureLoader = new THREE.TextureLoader();
-    let renderer: THREE.WebGLRenderer;
+    const renderer = new THREE.WebGLRenderer();
+    const effectComposer = new EffectComposer(renderer)
+    effectComposer.addPass(new RenderPass(scene ,camera))
+    effectComposer.addPass(new ShaderPass(GammaCorrectionShader))
 
     setContext<ThreeContext>("three", {
         scene: scene,
         camera: camera,
         pointer: pointer,
         textureLoader: textureLoader,
+        effectComposer: effectComposer,
     })
 
     onMount(() => {
-        renderer = new THREE.WebGLRenderer({canvas: container});
+        container.replaceWith(renderer.domElement);
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize( window.innerWidth, window.innerHeight );
+        effectComposer.setSize( window.innerWidth, window.innerHeight );
         renderer.shadowMap.enabled = true;
 
         // Create a skybox. Start it early since it takes a while
@@ -56,7 +66,8 @@
 
     function animate() {
         requestAnimationFrame( animate );
-        renderer.render( scene, camera );
+        // renderer.render( scene, camera );
+        effectComposer.render()
     }
 
     function onResize() {

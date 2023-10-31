@@ -10,9 +10,12 @@
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import { IconNavigationExclamation } from "@tabler/icons-svelte";
     import { onMount } from "svelte";
+    import ThreeShip from "$lib/components/three/ThreeShip.svelte";
    
     let selectedShip: Ship;
     let system: System;
+    
+    $: shipsInSystem = $myAgent.ships.filter(ship => ship.nav.systemSymbol == system?.symbol);
 
     // Auto select the first ship if its available and we have nothing else picked
     $: ($myAgent.ships.length > 0 && selectedShip == undefined) && (selectedShip = $myAgent.ships[0]);
@@ -25,7 +28,6 @@
 
     onMount(async () => {
     })
-
 </script>
 
 
@@ -35,8 +37,15 @@
     {#if system}
         <ThreeSystem system={system}>
             <ThreeSun meshParamenters={{color: 0xffff00, emissive: 0xffff00}}/>
-            {#each system.waypoints as waypoint}
-                <ThreeWaypoint systemWaypoint={waypoint}></ThreeWaypoint>
+            {#each system.waypoints as waypoint (waypoint.symbol)}
+                <ThreeWaypoint systemWaypoint={waypoint} />
+            {/each}
+            {#each shipsInSystem as ship (ship.symbol)}
+                <ThreeShip 
+                    ship={ship}
+                    selected={ship == selectedShip}
+                    meshParameters={{color: 0xff0000}}
+                />
             {/each}
         </ThreeSystem>
         <!-- <Ship bind:this={ship}/> -->
