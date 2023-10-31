@@ -53,8 +53,19 @@ export const $Waypoint = {
             },
             isRequired: true,
         },
+        modifiers: {
+            type: 'array',
+            contains: {
+                type: 'WaypointModifier',
+            },
+        },
         chart: {
             type: 'Chart',
+        },
+        isUnderConstruction: {
+            type: 'boolean',
+            description: `True if the waypoint is under construction.`,
+            isRequired: true,
         },
     },
 } as const;

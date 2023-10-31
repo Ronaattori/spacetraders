@@ -4,19 +4,11 @@
 /* eslint-disable */
 export const $JumpGate = {
     properties: {
-        jumpRange: {
-            type: 'number',
-            description: `The maximum jump range of the gate.`,
-            isRequired: true,
-        },
-        factionSymbol: {
-            type: 'string',
-            description: `The symbol of the faction that owns the gate.`,
-        },
-        connectedSystems: {
+        connections: {
             type: 'array',
             contains: {
-                type: 'ConnectedSystem',
+                type: 'string',
+                description: `The symbol of the waypoint that has a corresponding gate.`,
             },
             isRequired: true,
         },

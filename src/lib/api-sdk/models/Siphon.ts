@@ -1,0 +1,21 @@
+/* generated using openapi-typescript-codegen -- do no edit */
+/* istanbul ignore file */
+/* tslint:disable */
+/* eslint-disable */
+
+import type { SiphonYield } from './SiphonYield';
+
+/**
+ * Siphon details.
+ */
+export type Siphon = {
+    /**
+     * Symbol of the ship that executed the siphon.
+     */
+    shipSymbol: string;
+    /**
+     * Yields from the siphon operation.
+     */
+    yield: SiphonYield;
+};
+

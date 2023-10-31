@@ -21,6 +21,7 @@ import type { ShipNav } from '../models/ShipNav';
 import type { ShipNavFlightMode } from '../models/ShipNavFlightMode';
 import type { ShipType } from '../models/ShipType';
 import type { ShipyardTransaction } from '../models/ShipyardTransaction';
+import type { Siphon } from '../models/Siphon';
 import type { Survey } from '../models/Survey';
 import type { TradeSymbol } from '../models/TradeSymbol';
 import type { Waypoint } from '../models/Waypoint';
@@ -373,6 +374,33 @@ export class FleetService {
     }
 
     /**
+     * Siphon Resources
+     * Siphon gases, such as hydrocarbon, from gas giants.
+     *
+     * The ship must be in orbit to be able to siphon and must have siphon mounts and a gas processor installed.
+     * @param shipSymbol The ship symbol.
+     * @returns any Siphon successful.
+     * @throws ApiError
+     */
+    public siphonResources(
+        shipSymbol: string,
+    ): CancelablePromise<{
+        data: {
+            cooldown: Cooldown;
+            siphon: Siphon;
+            cargo: ShipCargo;
+        };
+    }> {
+        return this.httpRequest.request({
+            method: 'POST',
+            url: '/my/ships/{shipSymbol}/siphon',
+            path: {
+                'shipSymbol': shipSymbol,
+            },
+        });
+    }
+
+    /**
      * Extract Resources with Survey
      * Use a survey when extracting resources from a waypoint. This endpoint requires a survey as the payload, which allows your ship to extract specific yields.
      *
@@ -438,9 +466,9 @@ export class FleetService {
 
     /**
      * Jump Ship
-     * Jump your ship instantly to a target system. The ship must be in orbit to use this function. When used while in orbit of a Jump Gate waypoint, any ship can use this command, jumping to the target system's Jump Gate waypoint.
+     * Jump your ship instantly to a target connected waypoint. The ship must be in orbit to execute a jump.
      *
-     * When used elsewhere, jumping requires the ship to have a `Jump Drive` module installed and consumes a unit of antimatter from the ship's cargo. The command will fail if there is no antimatter to consume. When jumping via the `Jump Drive` module, the ship ends up at its largest source of energy in the system, such as a gas planet or a jump gate.
+     * A unit of antimatter is purchased and consumed from the market when jumping. The price of antimatter is determined by the market and is subject to change. A ship can only jump to connected waypoints
      * @param shipSymbol The ship symbol.
      * @param requestBody
      * @returns any Jump successful.
@@ -450,14 +478,15 @@ export class FleetService {
         shipSymbol: string,
         requestBody?: {
             /**
-             * The system symbol to jump to.
+             * The symbol of the waypoint to jump to. The destination must be a connected waypoint.
              */
-            systemSymbol: string;
+            waypointSymbol: string;
         },
     ): CancelablePromise<{
         data: {
-            cooldown: Cooldown;
             nav: ShipNav;
+            cooldown: Cooldown;
+            transaction: MarketTransaction;
         };
     }> {
         return this.httpRequest.request({
@@ -849,7 +878,7 @@ export class FleetService {
      *
      * Once a contract is negotiated, it is added to the list of contracts offered to the agent, which the agent can then accept.
      *
-     * The ship must be present at a faction's HQ waypoint to negotiate a contract with that faction.
+     * The ship must be present at any waypoint with a faction present to negotiate a contract with that faction.
      * @param shipSymbol The ship's symbol.
      * @returns any Successfully negotiated a new contract.
      * @throws ApiError

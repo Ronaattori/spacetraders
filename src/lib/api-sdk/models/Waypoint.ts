@@ -5,6 +5,7 @@
 
 import type { Chart } from './Chart';
 import type { WaypointFaction } from './WaypointFaction';
+import type { WaypointModifier } from './WaypointModifier';
 import type { WaypointOrbital } from './WaypointOrbital';
 import type { WaypointTrait } from './WaypointTrait';
 import type { WaypointType } from './WaypointType';
@@ -43,6 +44,14 @@ export type Waypoint = {
      * The traits of the waypoint.
      */
     traits: Array<WaypointTrait>;
+    /**
+     * The modifiers of the waypoint.
+     */
+    modifiers?: Array<WaypointModifier>;
     chart?: Chart;
+    /**
+     * True if the waypoint is under construction.
+     */
+    isUnderConstruction: boolean;
 };
 

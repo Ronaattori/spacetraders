@@ -3,19 +3,24 @@
 /* tslint:disable */
 /* eslint-disable */
 
+import type { ActivityLevel } from './ActivityLevel';
+import type { SupplyLevel } from './SupplyLevel';
+
 export type MarketTradeGood = {
     /**
      * The symbol of the trade good.
      */
     symbol: string;
     /**
-     * The typical volume flowing through the market for this type of good. The larger the trade volume, the more stable prices will be.
+     * The type of trade good (export, import, or exchange).
+     */
+    type: MarketTradeGood.type;
+    /**
+     * This is the maximum number of units that can be purchased or sold at this market in a single trade for this good. Trade volume also gives an indication of price volatility. A market with a low trade volume will have large price swings, while high trade volume will be more resilient to price changes.
      */
     tradeVolume: number;
-    /**
-     * A rough estimate of the total supply of this good in the marketplace.
-     */
-    supply: MarketTradeGood.supply;
+    supply: SupplyLevel;
+    activity?: ActivityLevel;
     /**
      * The price at which this good can be purchased from the market.
      */
@@ -29,13 +34,12 @@ export type MarketTradeGood = {
 export namespace MarketTradeGood {
 
     /**
-     * A rough estimate of the total supply of this good in the marketplace.
+     * The type of trade good (export, import, or exchange).
      */
-    export enum supply {
-        SCARCE = 'SCARCE',
-        LIMITED = 'LIMITED',
-        MODERATE = 'MODERATE',
-        ABUNDANT = 'ABUNDANT',
+    export enum type {
+        EXPORT = 'EXPORT',
+        IMPORT = 'IMPORT',
+        EXCHANGE = 'EXCHANGE',
     }
 
 

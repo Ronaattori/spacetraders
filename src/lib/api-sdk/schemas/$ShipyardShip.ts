@@ -15,6 +15,13 @@ export const $ShipyardShip = {
             type: 'string',
             isRequired: true,
         },
+        supply: {
+            type: 'SupplyLevel',
+            isRequired: true,
+        },
+        activity: {
+            type: 'ActivityLevel',
+        },
         purchasePrice: {
             type: 'number',
             isRequired: true,
