@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as THREE from "three";
-    import { getContext } from "svelte";
+    import { getContext, onMount } from "svelte";
     import type { ThreeContext } from "$lib/components/three/contexts";
 
     export let position = new THREE.Vector3(0, 0, 0);
@@ -15,13 +15,22 @@
 
     const three = getContext<ThreeContext>("three")
     
-    const geometry = new THREE.SphereGeometry(radius, 32, 32)
-    const material = new THREE.MeshBasicMaterial(meshParamenters);
-    const mesh = new THREE.Mesh(geometry, material)
-    mesh.position.set(position.x, position.y, position.z)
-    three.scene.add(mesh)
+    onMount(() => {
+        const geometry = new THREE.SphereGeometry(radius, 32, 32)
+        const material = new THREE.MeshBasicMaterial(meshParamenters);
+        const mesh = new THREE.Mesh(geometry, material)
+        mesh.position.set(position.x, position.y, position.z)
+        three.scene.add(mesh)
 
-    const pointLight = new THREE.PointLight(0xffff99, intensity, distance, decay)
-    three.scene.add(pointLight)
+        const pointLight = new THREE.PointLight(0xffff99, intensity, distance, decay)
+        three.scene.add(pointLight)
+        return () => {
+            geometry.dispose();
+            material.dispose();
+            three.scene.remove(mesh);
+            three.scene.remove(pointLight);
+        }
+
+    })
 
 </script>
