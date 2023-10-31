@@ -19,6 +19,8 @@
         const geometry = new THREE.SphereGeometry(radius, 32, 32)
         const material = new THREE.MeshStandardMaterial(meshParamenters);
         mesh = new THREE.Mesh(geometry, material)
+        mesh.castShadow = true
+        mesh.receiveShadow = true
         
         // Set the position and possibly make it orbit around that point
         mesh.position.set(systemWaypoint.x, 0, systemWaypoint.y)

@@ -34,7 +34,7 @@
 <ThreeCanvas>
     {#if system}
         <ThreeSystem system={system}>
-            <ThreeSun meshParamenters={{color: 0xffff00}}/>
+            <ThreeSun meshParamenters={{color: 0xffff00, emissive: 0xffff00}}/>
             {#each system.waypoints as waypoint}
                 <ThreeWaypoint systemWaypoint={waypoint}></ThreeWaypoint>
             {/each}

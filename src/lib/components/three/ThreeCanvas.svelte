@@ -23,6 +23,7 @@
         renderer = new THREE.WebGLRenderer({canvas: container});
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize( window.innerWidth, window.innerHeight );
+        renderer.shadowMap.enabled = true;
 
         // Create a skybox. Start it early since it takes a while
         textureLoader.load("/src/lib/images/skybox.png", (texture) => {

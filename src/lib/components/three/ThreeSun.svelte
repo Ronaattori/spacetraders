@@ -9,7 +9,7 @@
     export let distance = 0;
     export let decay = 0.4;
 
-    export let meshParamenters: THREE.MeshBasicMaterialParameters = {}
+    export let meshParamenters: THREE.MeshStandardMaterialParameters = {}
 
     export let radius = 4;
 
@@ -17,12 +17,13 @@
     
     onMount(() => {
         const geometry = new THREE.SphereGeometry(radius, 32, 32)
-        const material = new THREE.MeshBasicMaterial(meshParamenters);
+        const material = new THREE.MeshStandardMaterial(meshParamenters);
         const mesh = new THREE.Mesh(geometry, material)
         mesh.position.set(position.x, position.y, position.z)
         three.scene.add(mesh)
 
         const pointLight = new THREE.PointLight(0xffff99, intensity, distance, decay)
+        pointLight.castShadow = true
         three.scene.add(pointLight)
         return () => {
             geometry.dispose();
