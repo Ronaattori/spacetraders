@@ -1,18 +1,18 @@
 <script lang="ts">
     import { api } from "$lib/api";
-    import type { Ship, System } from "$lib/api-sdk";
+    import type { Ship, System, SystemWaypoint } from "$lib/api-sdk";
     import ShipSelector from "$lib/components/ShipSelector.svelte";
-    import Canvas from "$lib/components/three/Canvas.svelte";
-    import Sun from "$lib/components/three/Sun.svelte";
-    import SystemWaypoint from "$lib/components/three/SystemWaypoint.svelte";
-    import Waypoint from "$lib/components/three/SystemWaypoint.svelte";
+    import ThreeCanvas from "$lib/components/three/ThreeCanvas.svelte";
+    import ThreeSun from "$lib/components/three/ThreeSun.svelte";
+    import ThreeSystemWaypoint from "$lib/components/three/ThreeSystemWaypoint.svelte";
+    import ThreeWaypoint from "$lib/components/three/ThreeSystemWaypoint.svelte";
     import { myAgent } from "$lib/stores";
+    import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import { IconNavigationExclamation } from "@tabler/icons-svelte";
     import { onMount } from "svelte";
-    import { Vector3 } from "three";
    
-   let selectedShip: Ship;
-   let system: System;
+    let selectedShip: Ship;
+    let system: System;
 
     // Auto select the first ship if its available and we have nothing else picked
     $: ($myAgent.ships.length > 0 && selectedShip == undefined) && (selectedShip = $myAgent.ships[0]);
@@ -31,14 +31,16 @@
 
 <ShipSelector bind:selectedShip/>
 
-<Canvas>
+<ThreeCanvas>
     {#if system}
-        <Sun meshParamenters={{color: 0xffff00}}/>
-        {#each system.waypoints as waypoint}
-            <SystemWaypoint SystemWaypoint={waypoint}/> 
-        {/each}
+        <ThreeSystem system={system}>
+            <ThreeSun meshParamenters={{color: 0xffff00}}/>
+            {#each system.waypoints as waypoint}
+                <ThreeWaypoint systemWaypoint={waypoint}></ThreeWaypoint>
+            {/each}
+        </ThreeSystem>
         <!-- <Ship bind:this={ship}/> -->
         <!-- Tällee voi sit callaa ship.navigateTo() -->
         <!-- ja Shipin sisäl export function navigateTo(star) -->
     {/if}
-</Canvas>
+</ThreeCanvas>
