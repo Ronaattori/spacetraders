@@ -27,6 +27,8 @@
 
     export let radius = 1.5;
     export let meshParameters: THREE.MeshStandardMaterialParameters = {}
+    
+    let orbit = true;
 
     const three = getContext<ThreeContext>("three")
     const system = getContext<SystemContext>("system");
@@ -43,12 +45,13 @@
         const geometry = new THREE.SphereGeometry(radius, 32, 32)
         const material = new THREE.MeshStandardMaterial({...meshParameters, map: texture});
         mesh = new THREE.Mesh(geometry, material)
+        mesh.name = systemWaypoint.symbol
         mesh.castShadow = true
         mesh.receiveShadow = true
         
         // Set the position and possibly make it orbit around that point
         mesh.position.set(systemWaypoint.x, 0, systemWaypoint.y)
-        if (systemWaypoint.orbits) orbit();
+        if (systemWaypoint.orbits) addOrbit();
         
         three.scene.add(mesh)
         return () => {
@@ -59,18 +62,29 @@
     })
 
     // TODO: Add a for waypoints to know about other orbiting waypoints
-    function orbit() {
+    function addOrbit() {
         const x = mesh.position.x;
         const z = mesh.position.z
         let speed = randFloat(0.001, 0.003)
         let i = randInt(0, 200);
 
         mesh.onBeforeRender = (...args) => {
+            if (!orbit) return;
             i += speed
             mesh.position.x = x + 5 * Math.cos(i)
             mesh.position.z = z + 5 * Math.sin(i)
         }
    }
-
+    // TODO: what is this ??? :(
+    // let intersected = three.intersected
+    // let handled = true;
+    // $: if (mesh && $intersected.includes(mesh)) {
+    //     orbit = false
+    //     console.log("mouseover!", mesh.name)
+    //     handled = false;
+    // } else if (!handled) {
+    //     console.log("mouseout", mesh?.name)
+    //     handled = true;
+    // }
 
 </script>

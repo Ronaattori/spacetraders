@@ -9,17 +9,21 @@
     // @ts-ignore
     import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader'
     import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
+    import { writable } from "svelte/store";
+
 
     let container: HTMLElement;
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 10000 );
     const pointer = new THREE.Vector2( 0.5, 0.5);
+    const raycaster = new THREE.Raycaster()
     const textureLoader = new THREE.TextureLoader();
     const renderer = new THREE.WebGLRenderer();
     const effectComposer = new EffectComposer(renderer)
     effectComposer.addPass(new RenderPass(scene ,camera))
     effectComposer.addPass(new ShaderPass(GammaCorrectionShader))
+    const intersected = writable<THREE.Object3D[]>([]) 
 
     setContext<ThreeContext>("three", {
         scene: scene,
@@ -27,6 +31,7 @@
         pointer: pointer,
         textureLoader: textureLoader,
         effectComposer: effectComposer,
+        intersected: intersected,
     })
 
     onMount(() => {
@@ -45,7 +50,7 @@
         
         // Attach event listeners
         window.addEventListener("resize", onResize);
-        // window.addEventListener("pointermove", this.onPointerMove);
+        window.addEventListener("pointermove", onPointerMove);
         // window.addEventListener("click", this.onClick);
 
 
@@ -60,7 +65,10 @@
         // And clean up after ourselves when the component is removed
         return () => {
             window.removeEventListener("resize", onResize);
+            window.removeEventListener("pointermove", onPointerMove);
             controls.dispose();
+            renderer.dispose()
+            effectComposer.dispose()
         }
     });
 
@@ -73,6 +81,40 @@
     function onResize() {
         // this.css2dRenderer.setSize( window.innerWidth, window.innerHeight );
         renderer.setSize( window.innerWidth, window.innerHeight );
+    }
+
+    let hovered: Record<string, THREE.Object3D> = {}
+    function onPointerMove(e: MouseEvent) {
+        // // Update our pointers position
+        const bounds = renderer.domElement.getBoundingClientRect()
+        const wid = ((e.clientX - bounds.left) / window.innerWidth) * 2 - 1;
+        const hei = -((e.clientY - bounds.top) / window.innerHeight) * 2 + 1;
+        pointer.set(wid, hei)
+        if (e.target != renderer.domElement) return;
+
+        // Check what objects are currently under our cursor
+        raycaster.setFromCamera(pointer, camera)
+        const intersects = raycaster.intersectObjects(scene.children, true)
+        
+        // If a previously mouseovered item isn't mouseovered anymore 
+        for (const key of Object.keys(hovered)) {
+            const hit = intersects.find(hit => hit.object.name == key)
+            if (hit) continue;
+            const obj = scene.getObjectByName(key);
+            if (!obj) throw `Object with name ${key} not found!`
+            $intersected.splice($intersected.indexOf(obj), 1)
+            delete hovered[key]
+        }
+        
+        for (const hit of intersects) {
+            const name = hit.object.name
+            // Mark an object as hovered and run its onPointerEnters
+            if (!hovered[name]) {
+                const mesh = hit.object
+                hovered[name] = mesh
+                $intersected = [...$intersected, mesh]
+            }
+        }
     }
 
 </script>
