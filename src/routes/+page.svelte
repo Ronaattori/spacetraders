@@ -34,6 +34,11 @@
         camera.position.set(0, 50, -50)
         
         threeHelper.animate();
+
+        // And clean up after ourselves when the component is removed
+        return () => {
+            
+        }
     })  
 
 </script>
