@@ -16,7 +16,8 @@
     setContext<ThreeContext>("three", {
         scene: scene,
         camera: camera,
-        pointer: pointer
+        pointer: pointer,
+        textureLoader: textureLoader,
     })
 
     onMount(() => {

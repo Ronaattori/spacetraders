@@ -1,14 +1,32 @@
+<script context="module" lang="ts">
+    const textures: Map<WaypointType, THREE.Texture | string> = new Map([
+        [WaypointType.PLANET, '/src/lib/images/moon.jpg'],
+        [WaypointType.GAS_GIANT, '/src/lib/images/moon.jpg'],
+        [WaypointType.MOON, '/src/lib/images/moon.jpg'],
+        [WaypointType.ORBITAL_STATION, '/src/lib/images/moon.jpg'],
+        [WaypointType.JUMP_GATE, '/src/lib/images/moon.jpg'],
+        [WaypointType.ASTEROID_FIELD, '/src/lib/images/moon.jpg'],
+        [WaypointType.ASTEROID, '/src/lib/images/moon.jpg'],
+        [WaypointType.ENGINEERED_ASTEROID, '/src/lib/images/moon.jpg'],
+        [WaypointType.ASTEROID_BASE, '/src/lib/images/moon.jpg'],
+        [WaypointType.NEBULA, '/src/lib/images/moon.jpg'],
+        [WaypointType.DEBRIS_FIELD, '/src/lib/images/moon.jpg'],
+        [WaypointType.GRAVITY_WELL, '/src/lib/images/moon.jpg'],
+        [WaypointType.ARTIFICIAL_GRAVITY_WELL, '/src/lib/images/moon.jpg'],
+        [WaypointType.FUEL_STATION, '/src/lib/images/moon.jpg'],
+    ]);
+</script>
 <script lang="ts">
     import * as THREE from "three";
     import { getContext, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
-    import type { SystemWaypoint } from "$lib/api-sdk";
+    import { WaypointType, type SystemWaypoint } from "$lib/api-sdk";
     import { randFloat, randInt } from "three/src/math/MathUtils";
 
     export let systemWaypoint: SystemWaypoint; 
 
     export let radius = 1.5;
-    export let meshParamenters: THREE.MeshStandardMaterialParameters = {}
+    export let meshParameters: THREE.MeshStandardMaterialParameters = {}
 
     const three = getContext<ThreeContext>("three")
     const system = getContext<SystemContext>("system");
@@ -16,8 +34,14 @@
     let mesh: THREE.Mesh;
     
     onMount(() =>  {
+        const type = systemWaypoint.type;
+        let texture = textures.get(type)
+        if (typeof texture == "string") {
+            texture = three.textureLoader.load(texture);
+            textures.set(type, texture)
+        }
         const geometry = new THREE.SphereGeometry(radius, 32, 32)
-        const material = new THREE.MeshStandardMaterial(meshParamenters);
+        const material = new THREE.MeshStandardMaterial({...meshParameters, map: texture});
         mesh = new THREE.Mesh(geometry, material)
         mesh.castShadow = true
         mesh.receiveShadow = true
