@@ -66,8 +66,9 @@
             window.removeEventListener("resize", onResize);
             window.removeEventListener("pointermove", onPointerMove);
             controls.dispose();
-            renderer.dispose()
-            effectComposer.dispose()
+            renderer.dispose();
+            effectComposer.dispose();
+            renderer.domElement.remove();
         }
     });
 
