@@ -5,15 +5,16 @@
     import ThreeCanvas from "$lib/components/three/ThreeCanvas.svelte";
     import ThreeSun from "$lib/components/three/ThreeSun.svelte";
     import ThreeSystemWaypoint from "$lib/components/three/ThreeSystemWaypoint.svelte";
-    import ThreeWaypoint from "$lib/components/three/ThreeSystemWaypoint.svelte";
     import { myAgent } from "$lib/stores";
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
-    import { IconNavigationExclamation } from "@tabler/icons-svelte";
     import { onMount } from "svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
    
     let selectedShip: Ship;
     let system: System;
+    
+    let shipComponents: ThreeShip[] = [];
+    $: selectedShipComponent = shipComponents.find(component => component.ship == selectedShip)
     
     $: shipsInSystem = $myAgent.ships.filter(ship => ship.nav.systemSymbol == system?.symbol);
 
@@ -38,12 +39,14 @@
         <ThreeSystem system={system}>
             <ThreeSun meshParamenters={{color: 0xffff00, emissive: 0xffff00}}/>
             {#each system.waypoints as waypoint (waypoint.symbol)}
-                <ThreeWaypoint
+                <ThreeSystemWaypoint
                     systemWaypoint={waypoint}
+                    on:click={() => selectedShipComponent?.navigateTo(waypoint)}
                 />
             {/each}
-            {#each shipsInSystem as ship (ship.symbol)}
+            {#each shipsInSystem as ship, i (ship.symbol)}
                 <ThreeShip 
+                    bind:this={shipComponents[i]}
                     ship={ship}
                     selected={ship == selectedShip}
                     meshParameters={{color: 0xff0000}}

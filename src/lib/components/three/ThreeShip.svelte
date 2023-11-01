@@ -1,10 +1,13 @@
 <script lang="ts">
     import * as THREE from "three";
-    import { createEventDispatcher, getContext, onMount } from "svelte";
+    import { SvelteComponent, createEventDispatcher, getContext, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
-    import type { Ship } from "$lib/api-sdk";
+    import type { Ship, SystemWaypoint } from "$lib/api-sdk";
     import { OutlinePass } from 'three/addons/postprocessing/OutlinePass';
     import { ExtendedMesh } from "./ExtendedMesh";
+    import { api } from "$lib/api";
+    import { tweened } from "svelte/motion";
+    import { notifications } from "$lib/stores";
 
     export let ship: Ship;
     export let selected = false;
@@ -56,4 +59,33 @@
 
     })
 
+    function millisecondsUntilArrival(arrival: Date) {
+        const time = Math.round((arrival.getTime() - new Date().getTime()));        
+        return time;
+    }
+
+    export async function navigateTo(waypoint: SystemWaypoint) {
+        // this.system.threeHelper.drawLine(this.position, waypoint.position)
+
+        const res = await api.fleet.navigateShip(ship.symbol, {waypointSymbol: waypoint.symbol});
+        ship = Object.assign(ship, res.data)
+
+        const arrival = new Date(res.data.nav.route.arrival);
+        const duration = millisecondsUntilArrival(arrival)
+        notifications.success(`Ship ${ship.symbol} will arrive at ${waypoint.symbol} in ${duration/1000}s`)
+
+        const x = tweened(mesh.position.x, {duration: duration})
+        const z = tweened(mesh.position.z, {duration: duration})
+        x.subscribe(pos => mesh.position.x = pos)
+        z.subscribe(pos => mesh.position.z = pos)
+        x.set(waypoint.x)
+        z.set(waypoint.y)
+        setTimeout(() => {
+            notifications.success(`Ship ${ship.symbol} succesfully arrived at ${waypoint.symbol}`)
+        }, duration);
+    }
+
 </script>
+
+<!-- Allow access to passed props from outside this component -->
+<svelte:options accessors/>

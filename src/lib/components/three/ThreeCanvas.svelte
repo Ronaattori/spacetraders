@@ -50,8 +50,7 @@
         // Attach event listeners
         window.addEventListener("resize", onResize);
         window.addEventListener("pointermove", onPointerMove);
-        // window.addEventListener("click", this.onClick);
-
+        window.addEventListener("click", onClick);
 
         // Camera movement handling
         const controls = new MapControls(camera, renderer.domElement)
@@ -84,6 +83,11 @@
     }
 
     let hovered: Record<string, THREE.Object3D> = {}
+    function onClick(e: MouseEvent) {
+        for (const hit of Object.values(hovered)) {
+            if (hit instanceof ExtendedMesh) hit.click.trigger();
+        }
+    }
     function onPointerMove(e: MouseEvent) {
         // // Update our pointers position
         const bounds = renderer.domElement.getBoundingClientRect()

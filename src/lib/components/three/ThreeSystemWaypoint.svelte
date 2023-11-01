@@ -64,6 +64,7 @@
             dispatch("pointerout");
             orbit = true;
         })
+        mesh.click.subscribe(_ => dispatch("click"));
 
         three.scene.add(mesh)
         return () => {
