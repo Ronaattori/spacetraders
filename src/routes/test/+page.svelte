@@ -5,7 +5,7 @@
     import ThreeCanvas from "$lib/components/three/ThreeCanvas.svelte";
     import ThreeSun from "$lib/components/three/ThreeSun.svelte";
     import ThreeSystemWaypoint from "$lib/components/three/ThreeSystemWaypoint.svelte";
-    import { myAgent } from "$lib/stores";
+    import { myAgent, notifications } from "$lib/stores";
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import { onMount } from "svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
@@ -27,8 +27,10 @@
         });
     }
 
-    onMount(async () => {
-    })
+    async function navigateShip(ship: Ship, toWaypoint: SystemWaypoint) {
+        const res = await api.fleet.navigateShip(ship.symbol, {waypointSymbol: toWaypoint.symbol})
+        selectedShip = Object.assign(selectedShip, res.data)
+    }
 </script>
 
 
@@ -41,7 +43,7 @@
             {#each system.waypoints as waypoint (waypoint.symbol)}
                 <ThreeSystemWaypoint
                     systemWaypoint={waypoint}
-                    on:click={() => selectedShipComponent?.navigateTo(waypoint)}
+                    on:click={() => navigateShip(selectedShip, waypoint)}
                 />
             {/each}
             {#each shipsInSystem as ship, i (ship.symbol)}

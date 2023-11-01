@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as THREE from "three";
-    import { SvelteComponent, createEventDispatcher, getContext, onMount } from "svelte";
+    import { SvelteComponent, createEventDispatcher, getContext, onDestroy, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
     import type { Ship, SystemWaypoint } from "$lib/api-sdk";
     import { OutlinePass } from 'three/addons/postprocessing/OutlinePass';
@@ -15,15 +15,34 @@
     export let meshParameters: THREE.MeshStandardMaterialParameters = {}
     const dispatch = createEventDispatcher()
 
+    // Get contexts
     const three = getContext<ThreeContext>("three")
     const system = getContext<SystemContext>("system");
-    let mesh: ExtendedMesh;
+
+    // Create the actual object
+    const geometry = new THREE.ConeGeometry(2, 5, 32);
+    const material = new THREE.MeshStandardMaterial(meshParameters);
+    const mesh = new ExtendedMesh(geometry, material);
+    mesh.name = ship.symbol
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    const initial = system.system.waypoints.find(wp => wp.symbol == ship.nav.waypointSymbol)
+    const x = initial ? initial.x : 0;
+    const z = initial ? initial.y : 0;
+    mesh.position.set(x, 0, z)
+    three.scene.add(mesh)
     
-    $: currentWaypoint = system.system.waypoints.find(wp => wp.symbol == ship.nav.waypointSymbol) ?? system.system.waypoints[0];
+    // Attach event listeners
+    mesh.pointerenter.subscribe(_ => {
+        dispatch("pointerenter");
+    })
+    mesh.pointerout.subscribe(_ => {
+        dispatch("pointerout");
+    })
 
     // Highlight the currently selected ship
     let outlinePass: OutlinePass;
-    $: if (selected && mesh) {
+    $: if (selected) {
         outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), three.scene, three.camera);
         outlinePass.selectedObjects = [mesh];
         outlinePass.edgeThickness = 1
@@ -32,31 +51,18 @@
     } else {
         three.effectComposer.removePass(outlinePass)
     }
+
+    // Navigate to a new waypoint when the ship nav data changes
+    let currentWaypoint = system.system.waypoints.find(wp => wp.symbol == ship.nav.waypointSymbol);
+    $: if (currentWaypoint && currentWaypoint.symbol != ship.nav.waypointSymbol) {
+        currentWaypoint = system.system.waypoints.find(wp => wp.symbol == ship.nav.waypointSymbol);
+        if (currentWaypoint) navigateTo(currentWaypoint);
+    }
     
-    onMount(() => {
-        const geometry = new THREE.ConeGeometry(2, 5, 32);
-        const material = new THREE.MeshStandardMaterial(meshParameters);
-        mesh = new ExtendedMesh(geometry, material);
-        mesh.name = ship.symbol
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-        mesh.position.set(currentWaypoint.x, 0, currentWaypoint.y)
-        
-        // Attach event listeners
-        mesh.pointerenter.subscribe(_ => {
-            dispatch("pointerenter");
-        })
-        mesh.pointerout.subscribe(_ => {
-            dispatch("pointerout");
-        })
-
-        three.scene.add(mesh)
-        return () => {
-            geometry.dispose();
-            material.dispose();
-            three.scene.remove(mesh);
-        }
-
+    onDestroy(() => {
+        geometry.dispose();
+        material.dispose();
+        three.scene.remove(mesh);
     })
 
     function millisecondsUntilArrival(arrival: Date) {
@@ -67,10 +73,7 @@
     export async function navigateTo(waypoint: SystemWaypoint) {
         // this.system.threeHelper.drawLine(this.position, waypoint.position)
 
-        const res = await api.fleet.navigateShip(ship.symbol, {waypointSymbol: waypoint.symbol});
-        ship = Object.assign(ship, res.data)
-
-        const arrival = new Date(res.data.nav.route.arrival);
+        const arrival = new Date(ship.nav.route.arrival);
         const duration = millisecondsUntilArrival(arrival)
         notifications.success(`Ship ${ship.symbol} will arrive at ${waypoint.symbol} in ${duration/1000}s`)
 
@@ -80,11 +83,12 @@
         z.subscribe(pos => mesh.position.z = pos)
         x.set(waypoint.x)
         z.set(waypoint.y)
+        notifications.success(`Started moving ship ${ship.symbol}`)
+
         setTimeout(() => {
             notifications.success(`Ship ${ship.symbol} succesfully arrived at ${waypoint.symbol}`)
         }, duration);
     }
-
 </script>
 
 <!-- Allow access to passed props from outside this component -->
