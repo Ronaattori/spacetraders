@@ -18,7 +18,7 @@
 </script>
 <script lang="ts">
     import * as THREE from "three";
-    import { createEventDispatcher, getContext, onMount } from "svelte";
+    import { createEventDispatcher, getContext, onDestroy, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
     import { WaypointType, type SystemWaypoint } from "$lib/api-sdk";
     import { randFloat, randInt } from "three/src/math/MathUtils";
@@ -31,47 +31,46 @@
     export let meshParameters: THREE.MeshStandardMaterialParameters = {}
     const dispatch = createEventDispatcher()
     
+    // Component specific reactive values
     let orbit = true;
 
+    // Get contexts
     const three = getContext<ThreeContext>("three")
     const system = getContext<SystemContext>("system");
-    let mesh: ExtendedMesh;
     
-    onMount(() =>  {
-        const type = systemWaypoint.type;
-        let texture = textures.get(type)
-        if (typeof texture == "string") {
-            texture = three.textureLoader.load(texture);
-            textures.set(type, texture)
-        }
-        const geometry = new THREE.SphereGeometry(radius, 32, 32)
-        const material = new THREE.MeshStandardMaterial({...meshParameters, map: texture});
-        mesh = new ExtendedMesh(geometry, material)
-        mesh.name = systemWaypoint.symbol
-        mesh.castShadow = true;
-        mesh.receiveShadow = true;
-
-        // Set the position and possibly make it orbit around that point
-        mesh.position.set(systemWaypoint.x, 0, systemWaypoint.y)
-        if (systemWaypoint.orbits) addOrbit();
+    // Create the actual object
+    const type = systemWaypoint.type;
+    let texture = textures.get(type)
+    if (typeof texture == "string") {
+        texture = three.textureLoader.load(texture);
+        textures.set(type, texture)
+    }
+    const geometry = new THREE.SphereGeometry(radius, 32, 32)
+    const material = new THREE.MeshStandardMaterial({...meshParameters, map: texture});
+    const mesh = new ExtendedMesh(geometry, material)
+    mesh.name = systemWaypoint.symbol
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+    // Set the position and possibly make it orbit around that point
+    mesh.position.set(systemWaypoint.x, 0, systemWaypoint.y)
+    if (systemWaypoint.orbits) addOrbit();
+    three.scene.add(mesh)
         
-        // Attach event listeners
-        mesh.pointerenter.subscribe(_ => {
-            dispatch("pointerenter");
-            orbit = false;
-        })
-        mesh.pointerout.subscribe(_ => {
-            dispatch("pointerout");
-            orbit = true;
-        })
-        mesh.click.subscribe(_ => dispatch("click"));
+    // Attach event listeners
+    mesh.pointerenter.subscribe(_ => {
+        dispatch("pointerenter");
+        orbit = false;
+    })
+    mesh.pointerout.subscribe(_ => {
+        dispatch("pointerout");
+        orbit = true;
+    })
+    mesh.click.subscribe(_ => dispatch("click"));
 
-        three.scene.add(mesh)
-        return () => {
-            geometry.dispose();
-            material.dispose();
-            three.scene.remove(mesh);
-        }
+    onDestroy(() => {
+        geometry.dispose();
+        material.dispose();
+        three.scene.remove(mesh);
     })
 
     // TODO: Add a for waypoints to know about other orbiting waypoints
