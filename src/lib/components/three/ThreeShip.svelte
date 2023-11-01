@@ -4,6 +4,7 @@
     import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
     import type { Ship } from "$lib/api-sdk";
     import { OutlinePass } from 'three/addons/postprocessing/OutlinePass';
+    import { ExtendedMesh } from "./ExtendedMesh";
 
     export let ship: Ship;
     export let selected = false;
@@ -12,8 +13,7 @@
 
     const three = getContext<ThreeContext>("three")
     const system = getContext<SystemContext>("system");
-    
-    let mesh: THREE.Mesh;
+    let mesh: ExtendedMesh;
     
     $: currentWaypoint = system.system.waypoints.find(wp => wp.symbol == ship.nav.waypointSymbol) ?? system.system.waypoints[0];
 
@@ -32,7 +32,7 @@
     onMount(() => {
         const geometry = new THREE.ConeGeometry(2, 5, 32);
         const material = new THREE.MeshStandardMaterial(meshParameters);
-        mesh = new THREE.Mesh(geometry, material);
+        mesh = new ExtendedMesh(geometry, material);
         mesh.name = ship.symbol
         mesh.castShadow = true;
         mesh.receiveShadow = true;

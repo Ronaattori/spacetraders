@@ -22,6 +22,8 @@
     import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
     import { WaypointType, type SystemWaypoint } from "$lib/api-sdk";
     import { randFloat, randInt } from "three/src/math/MathUtils";
+    import { ExtendedMesh } from "./ExtendedMesh";
+    import type { Writable } from "svelte/store";
 
     export let systemWaypoint: SystemWaypoint; 
 
@@ -32,8 +34,7 @@
 
     const three = getContext<ThreeContext>("three")
     const system = getContext<SystemContext>("system");
-    
-    let mesh: THREE.Mesh;
+    let mesh: ExtendedMesh;
     
     onMount(() =>  {
         const type = systemWaypoint.type;
@@ -44,15 +45,23 @@
         }
         const geometry = new THREE.SphereGeometry(radius, 32, 32)
         const material = new THREE.MeshStandardMaterial({...meshParameters, map: texture});
-        mesh = new THREE.Mesh(geometry, material)
+        mesh = new ExtendedMesh(geometry, material)
         mesh.name = systemWaypoint.symbol
-        mesh.castShadow = true
-        mesh.receiveShadow = true
-        
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+
         // Set the position and possibly make it orbit around that point
         mesh.position.set(systemWaypoint.x, 0, systemWaypoint.y)
         if (systemWaypoint.orbits) addOrbit();
         
+        // Attach event listeners
+        mesh.pointerenter.subscribe(_ => {
+            orbit = false;
+        })
+        mesh.pointerout.subscribe(_ => {
+            orbit = true;
+        })
+
         three.scene.add(mesh)
         return () => {
             geometry.dispose();
@@ -75,16 +84,4 @@
             mesh.position.z = z + 5 * Math.sin(i)
         }
    }
-    // TODO: what is this ??? :(
-    // let intersected = three.intersected
-    // let handled = true;
-    // $: if (mesh && $intersected.includes(mesh)) {
-    //     orbit = false
-    //     console.log("mouseover!", mesh.name)
-    //     handled = false;
-    // } else if (!handled) {
-    //     console.log("mouseout", mesh?.name)
-    //     handled = true;
-    // }
-
 </script>

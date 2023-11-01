@@ -2,6 +2,7 @@
     import * as THREE from "three";
     import { getContext, onMount } from "svelte";
     import type { ThreeContext } from "$lib/components/three/contexts";
+    import { ExtendedMesh } from "./ExtendedMesh";
 
     export let position = new THREE.Vector3(0, 0, 0);
 
@@ -14,11 +15,12 @@
     export let radius = 4;
 
     const three = getContext<ThreeContext>("three")
+    let mesh:  ExtendedMesh;
     
     onMount(() => {
         const geometry = new THREE.SphereGeometry(radius, 32, 32)
         const material = new THREE.MeshStandardMaterial(meshParamenters);
-        const mesh = new THREE.Mesh(geometry, material)
+        mesh = new ExtendedMesh(geometry, material)
         mesh.position.set(position.x, position.y, position.z)
         three.scene.add(mesh)
 

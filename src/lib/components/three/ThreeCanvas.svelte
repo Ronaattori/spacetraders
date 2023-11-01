@@ -10,6 +10,7 @@
     import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader'
     import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
     import { writable } from "svelte/store";
+    import { ExtendedMesh } from "./ExtendedMesh";
 
 
     let container: HTMLElement;
@@ -23,7 +24,6 @@
     const effectComposer = new EffectComposer(renderer)
     effectComposer.addPass(new RenderPass(scene ,camera))
     effectComposer.addPass(new ShaderPass(GammaCorrectionShader))
-    const intersected = writable<THREE.Object3D[]>([]) 
 
     setContext<ThreeContext>("three", {
         scene: scene,
@@ -31,7 +31,6 @@
         pointer: pointer,
         textureLoader: textureLoader,
         effectComposer: effectComposer,
-        intersected: intersected,
     })
 
     onMount(() => {
@@ -102,7 +101,7 @@
             if (hit) continue;
             const obj = scene.getObjectByName(key);
             if (!obj) throw `Object with name ${key} not found!`
-            $intersected.splice($intersected.indexOf(obj), 1)
+            if (obj instanceof ExtendedMesh) obj.pointerout.trigger()
             delete hovered[key]
         }
         
@@ -112,7 +111,7 @@
             if (!hovered[name]) {
                 const mesh = hit.object
                 hovered[name] = mesh
-                $intersected = [...$intersected, mesh]
+                if (mesh instanceof ExtendedMesh) mesh.pointerenter.trigger()
             }
         }
     }
