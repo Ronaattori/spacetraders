@@ -51,8 +51,5 @@
                 />
             {/each}
         </ThreeSystem>
-        <!-- <Ship bind:this={ship}/> -->
-        <!-- Tällee voi sit callaa ship.navigateTo() -->
-        <!-- ja Shipin sisäl export function navigateTo(star) -->
     {/if}
 </ThreeCanvas>
