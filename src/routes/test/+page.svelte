@@ -38,7 +38,9 @@
         <ThreeSystem system={system}>
             <ThreeSun meshParamenters={{color: 0xffff00, emissive: 0xffff00}}/>
             {#each system.waypoints as waypoint (waypoint.symbol)}
-                <ThreeWaypoint systemWaypoint={waypoint} />
+                <ThreeWaypoint
+                    systemWaypoint={waypoint}
+                />
             {/each}
             {#each shipsInSystem as ship (ship.symbol)}
                 <ThreeShip 

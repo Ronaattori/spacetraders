@@ -1,6 +1,6 @@
 <script lang="ts">
     import * as THREE from "three";
-    import { getContext, onMount } from "svelte";
+    import { createEventDispatcher, getContext, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
     import type { Ship } from "$lib/api-sdk";
     import { OutlinePass } from 'three/addons/postprocessing/OutlinePass';
@@ -10,6 +10,7 @@
     export let selected = false;
 
     export let meshParameters: THREE.MeshStandardMaterialParameters = {}
+    const dispatch = createEventDispatcher()
 
     const three = getContext<ThreeContext>("three")
     const system = getContext<SystemContext>("system");
@@ -37,8 +38,16 @@
         mesh.castShadow = true;
         mesh.receiveShadow = true;
         mesh.position.set(currentWaypoint.x, 0, currentWaypoint.y)
-        three.scene.add(mesh)
+        
+        // Attach event listeners
+        mesh.pointerenter.subscribe(_ => {
+            dispatch("pointerenter");
+        })
+        mesh.pointerout.subscribe(_ => {
+            dispatch("pointerout");
+        })
 
+        three.scene.add(mesh)
         return () => {
             geometry.dispose();
             material.dispose();

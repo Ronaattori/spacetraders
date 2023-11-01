@@ -18,7 +18,7 @@
 </script>
 <script lang="ts">
     import * as THREE from "three";
-    import { getContext, onMount } from "svelte";
+    import { createEventDispatcher, getContext, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
     import { WaypointType, type SystemWaypoint } from "$lib/api-sdk";
     import { randFloat, randInt } from "three/src/math/MathUtils";
@@ -29,6 +29,7 @@
 
     export let radius = 1.5;
     export let meshParameters: THREE.MeshStandardMaterialParameters = {}
+    const dispatch = createEventDispatcher()
     
     let orbit = true;
 
@@ -56,9 +57,11 @@
         
         // Attach event listeners
         mesh.pointerenter.subscribe(_ => {
+            dispatch("pointerenter");
             orbit = false;
         })
         mesh.pointerout.subscribe(_ => {
+            dispatch("pointerout");
             orbit = true;
         })
 
