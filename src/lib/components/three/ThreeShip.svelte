@@ -42,14 +42,18 @@
 
     // Highlight the currently selected ship
     let outlinePass: OutlinePass;
-    $: if (selected) {
-        outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), three.scene, three.camera);
-        outlinePass.selectedObjects = [mesh];
-        outlinePass.edgeThickness = 1
-        outlinePass.edgeGlow = 5
-        three.effectComposer.addPass(outlinePass)
-    } else {
-        three.effectComposer.removePass(outlinePass)
+    $: toggleOutline(selected)
+    function toggleOutline(selected: boolean) {
+        if (selected) {
+            console.log("adding outlinewtf")
+            outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), three.scene, three.camera);
+            outlinePass.selectedObjects = [mesh];
+            outlinePass.edgeThickness = 1
+            outlinePass.edgeGlow = 5
+            three.effectComposer.addPass(outlinePass)
+        } else {
+            three.effectComposer.removePass(outlinePass)
+        }
     }
 
     // Navigate to a new waypoint when the ship nav data changes
