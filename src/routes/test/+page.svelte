@@ -17,12 +17,10 @@
     let ships = $myAgent.ships;
     $: selectedShip, ships = $myAgent.ships
     // And also select the first ship of the list, when known
-    const unsub = myAgent.subscribe(val => {
-        if (val.ships.length > 0) {
-            selectedShip = val.ships[0]
-            unsub()
-        }
-    })
+    $: if (ships.length > 0 && !selectedShip) selectFirst(ships)
+    function selectFirst(ships: Ship[]) {
+        selectedShip = ships[0]
+    }
     
     $: shipsInSystem = ships.filter(ship => ship.nav.systemSymbol == system?.symbol);
 
