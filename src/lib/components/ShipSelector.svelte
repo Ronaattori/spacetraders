@@ -17,9 +17,10 @@
                     </button>
                     <div class="d-flex flex-column">
                         <span>Fuel:
-                            <div class="progress">
-                                <progress class="progress" value={ship.fuel.current} max={ship.fuel.capacity} />
-                            </div>
+                            <progress class="progress" value={ship.fuel.current} max={ship.fuel.capacity} />
+                        </span>
+                        <span>Cargo:
+                            <progress class="progress" value={ship.cargo.units} max={ship.cargo.capacity} />
                         </span>
                     </div>
                 </div>
