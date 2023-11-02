@@ -68,6 +68,8 @@
         orbit = true;
     })
     mesh.click.subscribe(_ => dispatch("click"));
+    
+    mesh.setTooltip("pabaa")
 
     onDestroy(() => {
         geometry.dispose();

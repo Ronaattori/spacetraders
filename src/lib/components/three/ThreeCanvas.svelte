@@ -40,7 +40,8 @@
     })
 
     onMount(() => {
-        container.replaceWith(renderer.domElement);
+        container.append(renderer.domElement);
+        container.append(css2dRenderer.domElement);
         renderer.setPixelRatio(window.devicePixelRatio);
         renderer.setSize( window.innerWidth, window.innerHeight );
         effectComposer.setSize( window.innerWidth, window.innerHeight );
@@ -130,6 +131,6 @@
 
 </script>
 
-<canvas bind:this={container}>
+<div bind:this={container}>
     <slot/>
-</canvas>
+</div>

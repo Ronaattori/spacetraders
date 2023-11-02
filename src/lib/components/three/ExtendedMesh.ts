@@ -3,6 +3,9 @@ import { writable } from 'svelte/store';
 import * as THREE from 'three';
 import type { ThreeContext } from './contexts';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass';
+import type { ComponentType } from 'svelte';
+import Tooltip from '../Tooltip.svelte';
+import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer';
 
 // Create a store whichs subscribe skips the initial value
 // We only need it to send signals to subscribers
@@ -39,7 +42,7 @@ export class ExtendedMesh extends THREE.Mesh {
         this.glow.subscribe(x => this.setGlow(x))
     }
 
-    setGlow(amount: number | null) {
+    private setGlow(amount: number | null) {
         if (amount) {
             this.outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), this.context.scene, this.context.camera);
             this.outlinePass.selectedObjects = [this];
@@ -49,5 +52,24 @@ export class ExtendedMesh extends THREE.Mesh {
         } else {
             this.context.effectComposer.removePass(this.outlinePass)
         }
+    }
+    setTooltip(content: string | {component: ComponentType, props: any}) {
+        let element = document.createElement("div");
+        if (typeof content == "string") {
+            element.innerText = content;
+        } else {
+            const component = new Tooltip({
+                target: element,
+                props: {
+                    content: content
+                }
+            });
+        }
+        let tooltip: CSS2DObject
+        this.pointerenter.subscribe(_ => {
+            tooltip = new CSS2DObject(element);
+            this.add(tooltip);
+        })
+        this.pointerout.subscribe(_ => tooltip?.removeFromParent());
     }
 }
