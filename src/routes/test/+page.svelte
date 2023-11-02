@@ -9,14 +9,19 @@
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import { onMount } from "svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
-   
-    let selectedShip: Ship;
-    let system: System;
-    
-    $: shipsInSystem = $myAgent.ships.filter(ship => ship.nav.systemSymbol == system?.symbol);
 
-    // Auto select the first ship if its available and we have nothing else picked
-    $: ($myAgent.ships.length > 0 && selectedShip == undefined) && (selectedShip = $myAgent.ships[0]);
+    let system: System;
+    let selectedShip: Ship;
+    
+    // Keep ship information up to date
+    let ships = $myAgent.ships;
+    $: selectedShip, ships = $myAgent.ships
+    
+    $: shipsInSystem = ships.filter(ship => ship.nav.systemSymbol == system?.symbol);
+
+    onMount(() => {
+        selectedShip = ships[0];
+    })
 
     $: if (selectedShip) {
         api.systems.getSystem(selectedShip.nav.systemSymbol).then(res => {
@@ -31,7 +36,7 @@
 </script>
 
 
-<ShipSelector bind:selectedShip/>
+<ShipSelector ships={ships} bind:selectedShip/>
 
 <ThreeCanvas>
     {#if system}

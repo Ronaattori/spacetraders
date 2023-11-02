@@ -45,7 +45,6 @@
     $: toggleOutline(selected)
     function toggleOutline(selected: boolean) {
         if (selected) {
-            console.log("adding outlinewtf")
             outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), three.scene, three.camera);
             outlinePass.selectedObjects = [mesh];
             outlinePass.edgeThickness = 1
