@@ -11,6 +11,7 @@
     import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
     import { writable } from "svelte/store";
     import { ExtendedMesh } from "./ExtendedMesh";
+    import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer";
 
 
     let container: HTMLElement;
@@ -24,6 +25,11 @@
     const effectComposer = new EffectComposer(renderer)
     effectComposer.addPass(new RenderPass(scene ,camera))
     effectComposer.addPass(new ShaderPass(GammaCorrectionShader))
+    const css2dRenderer = new CSS2DRenderer()
+    css2dRenderer.setSize(window.innerWidth, window.innerHeight)
+    css2dRenderer.domElement.style.position = 'absolute';
+    css2dRenderer.domElement.style.top = '0px';
+    css2dRenderer.domElement.style.pointerEvents = 'none';
 
     setContext<ThreeContext>("three", {
         scene: scene,
@@ -75,6 +81,7 @@
         requestAnimationFrame( animate );
         // renderer.render( scene, camera );
         effectComposer.render()
+        css2dRenderer.render(scene, camera)
     }
 
     function onResize() {
