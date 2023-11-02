@@ -54,8 +54,8 @@
 
         // Camera movement handling
         const controls = new MapControls(camera, renderer.domElement)
-        controls.enableDamping = true;
-        camera.position.set(0, 50, -50)
+        camera.position.set(0, 30, 100)
+        camera.lookAt(new THREE.Vector3(0, 0, 0))
 
         animate();
 

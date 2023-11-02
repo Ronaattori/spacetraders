@@ -17,10 +17,8 @@
     let ships = $myAgent.ships;
     $: selectedShip, ships = $myAgent.ships
     // And also select the first ship of the list, when known
+    const selectFirst = (ships: Ship[]) => selectedShip = ships[0];
     $: if (ships.length > 0 && !selectedShip) selectFirst(ships)
-    function selectFirst(ships: Ship[]) {
-        selectedShip = ships[0]
-    }
     
     $: shipsInSystem = ships.filter(ship => ship.nav.systemSymbol == system?.symbol);
 
