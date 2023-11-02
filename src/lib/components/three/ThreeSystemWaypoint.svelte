@@ -47,7 +47,7 @@
     }
     const geometry = new THREE.SphereGeometry(radius, 32, 32)
     const material = new THREE.MeshStandardMaterial({...meshParameters, map: texture});
-    const mesh = new ExtendedMesh(geometry, material)
+    const mesh = new ExtendedMesh(geometry, material, three)
     mesh.name = systemWaypoint.symbol
     mesh.castShadow = true;
     mesh.receiveShadow = true;

@@ -21,7 +21,7 @@
     onMount(() => {
         const geometry = new THREE.SphereGeometry(radius, 32, 32)
         const material = new THREE.MeshStandardMaterial(meshParamenters);
-        mesh = new ExtendedMesh(geometry, material)
+        mesh = new ExtendedMesh(geometry, material, three)
         mesh.position.set(position.x, position.y, position.z)
         three.scene.add(mesh)
 

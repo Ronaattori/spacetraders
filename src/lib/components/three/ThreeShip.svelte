@@ -22,7 +22,7 @@
     // Create the actual object
     const geometry = new THREE.ConeGeometry(2, 5, 32);
     const material = new THREE.MeshStandardMaterial(meshParameters);
-    const mesh = new ExtendedMesh(geometry, material);
+    const mesh = new ExtendedMesh(geometry, material, three);
     mesh.name = ship.symbol
     mesh.castShadow = true;
     mesh.receiveShadow = true;
@@ -41,19 +41,7 @@
     })
 
     // Highlight the currently selected ship
-    let outlinePass: OutlinePass;
-    $: toggleOutline(selected)
-    function toggleOutline(selected: boolean) {
-        if (selected) {
-            outlinePass = new OutlinePass(new THREE.Vector2(window.innerWidth, window.innerHeight), three.scene, three.camera);
-            outlinePass.selectedObjects = [mesh];
-            outlinePass.edgeThickness = 1
-            outlinePass.edgeGlow = 5
-            three.effectComposer.addPass(outlinePass)
-        } else {
-            three.effectComposer.removePass(outlinePass)
-        }
-    }
+    $: mesh.glow.set(selected ? 4 : null)
 
     // Navigate to a new waypoint when the ship nav data changes
     let currentWaypoint = system.system.waypoints.find(wp => wp.symbol == ship.nav.waypointSymbol);
