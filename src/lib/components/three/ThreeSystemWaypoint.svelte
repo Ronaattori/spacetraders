@@ -59,10 +59,12 @@
     // Attach event listeners
     mesh.pointerenter.subscribe(_ => {
         dispatch("pointerenter");
+        mesh.glow.set(1)
         orbit = false;
     })
     mesh.pointerout.subscribe(_ => {
         dispatch("pointerout");
+        mesh.glow.set(null)
         orbit = true;
     })
     mesh.click.subscribe(_ => dispatch("click"));
