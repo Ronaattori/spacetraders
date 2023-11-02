@@ -16,12 +16,15 @@
     // Keep ship information up to date
     let ships = $myAgent.ships;
     $: selectedShip, ships = $myAgent.ships
+    // And also select the first ship of the list, when known
+    const unsub = myAgent.subscribe(val => {
+        if (val.ships.length > 0) {
+            selectedShip = val.ships[0]
+            unsub()
+        }
+    })
     
     $: shipsInSystem = ships.filter(ship => ship.nav.systemSymbol == system?.symbol);
-
-    onMount(() => {
-        selectedShip = ships[0];
-    })
 
     $: if (selectedShip) {
         api.systems.getSystem(selectedShip.nav.systemSymbol).then(res => {
