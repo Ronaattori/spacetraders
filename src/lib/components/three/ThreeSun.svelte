@@ -1,8 +1,8 @@
 <script lang="ts">
     import * as THREE from "three";
     import { createEventDispatcher, getContext, onMount } from "svelte";
-    import type { ThreeContext } from "$lib/components/three/contexts";
-    import { ExtendedMesh } from "./ExtendedMesh";
+    import type { ThreeContext } from "$lib/three/contexts";
+    import { ExtendedMesh } from "$lib/three/ExtendedMesh";
 
     export let position = new THREE.Vector3(0, 0, 0);
 

@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as THREE from "three";
     import { setContext } from "svelte";
-    import type { SystemContext } from "$lib/components/three/contexts";
+    import type { SystemContext } from "$lib/three/contexts";
     import type { System } from "$lib/api-sdk";
 
     ///

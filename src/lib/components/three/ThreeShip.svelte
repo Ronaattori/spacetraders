@@ -1,10 +1,10 @@
 <script lang="ts">
     import * as THREE from "three";
     import { SvelteComponent, createEventDispatcher, getContext, onDestroy, onMount } from "svelte";
-    import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
+    import type { SystemContext, ThreeContext } from "$lib/three/contexts";
     import type { Ship, SystemWaypoint } from "$lib/api-sdk";
     import { OutlinePass } from 'three/addons/postprocessing/OutlinePass';
-    import { ExtendedMesh } from "./ExtendedMesh";
+    import { ExtendedMesh } from "$lib/three/ExtendedMesh";
     import { api } from "$lib/api";
     import { tweened } from "svelte/motion";
     import { notifications } from "$lib/stores";

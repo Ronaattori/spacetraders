@@ -1,58 +1,59 @@
 <script lang="ts">
-    import { ThreeHelper } from "$lib/three/ThreeHelper";
-    import { onMount } from "svelte";
-    import { BoxGeometry, Material, Mesh, MeshBasicMaterial, PerspectiveCamera, Raycaster, Scene, Vector2, WebGLRenderer, type ColorRepresentation } from "three";
     import { api } from "$lib/api";
-    import { myAgent } from "$lib/stores";
-    import type { Ship } from "$lib/api-sdk";
-    import { ThreeSystem } from "$lib/three/ThreeSystem";
+    import type { Ship, System, SystemWaypoint } from "$lib/api-sdk";
+    import ShipSelector from "$lib/components/ShipSelector.svelte";
+    import ThreeCanvas from "$lib/components/three/ThreeCanvas.svelte";
+    import ThreeSun from "$lib/components/three/ThreeSun.svelte";
+    import ThreeSystemWaypoint from "$lib/components/three/ThreeSystemWaypoint.svelte";
+    import { myAgent, notifications } from "$lib/stores";
+    import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
+    import { onMount } from "svelte";
+    import ThreeShip from "$lib/components/three/ThreeShip.svelte";
 
-
-    let container:HTMLElement; 
+    let system: System;
     let selectedShip: Ship;
-    const pointer = new Vector2( 0.5, 0.5);
+    
+    // Keep ship information up to date
+    let ships = $myAgent.ships;
+    $: selectedShip, ships = $myAgent.ships
+    // And also select the first ship of the list, when known
+    const selectFirst = (ships: Ship[]) => selectedShip = ships[0];
+    $: if (ships.length > 0 && !selectedShip) selectFirst(ships)
+    
+    $: shipsInSystem = ships.filter(ship => ship.nav.systemSymbol == system?.symbol);
 
-    const scene = new Scene();
-    const camera = new PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
-    const threeHelper = new ThreeHelper(scene, camera, pointer);
-
-
-    async function selectShip(ship: Ship) {
-        selectedShip = ship;
-        const system = (await api.systems.getSystem(ship.nav.systemSymbol)).data
-        const sys = new ThreeSystem(system, ship, threeHelper, {scale: 0.6});
+    $: if (selectedShip) {
+        api.systems.getSystem(selectedShip.nav.systemSymbol).then(res => {
+            system = res.data;
+        });
     }
 
-    onMount(async () => {
-        if ($myAgent.ships.length > 0) {
-            selectShip($myAgent.ships[0])
-        }
-
-        container.appendChild(threeHelper.renderer.domElement);
-        container.appendChild(threeHelper.css2dRenderer.domElement);
-       
-        camera.position.set(0, 50, -50)
-        
-        threeHelper.animate();
-
-        // And clean up after ourselves when the component is removed
-        return () => {
-            
-        }
-    })  
-
+    async function navigateShip(ship: Ship, toWaypoint: SystemWaypoint) {
+        const res = await api.fleet.navigateShip(ship.symbol, {waypointSymbol: toWaypoint.symbol})
+        selectedShip = Object.assign(selectedShip, res.data)
+    }
 </script>
 
-<div>
-   Select ship:
-   {#each $myAgent.ships as ship (ship.symbol)}
-        <button class="btn {selectedShip == ship ? "btn-primary" : ""}" 
-        on:click={() => selectShip(ship)}>
-            {ship.symbol}
-        </button>
-   {/each} 
-</div>
 
-<div bind:this={container}>
+<ShipSelector ships={ships} bind:selectedShip/>
 
-</div>
+<ThreeCanvas>
+    {#if system}
+        <ThreeSystem system={system}>
+            <ThreeSun meshParamenters={{color: 0xffff00, emissive: 0xffff00}}/>
+            {#each system.waypoints as waypoint (waypoint.symbol)}
+                <ThreeSystemWaypoint
+                    systemWaypoint={waypoint}
+                    on:click={() => navigateShip(selectedShip, waypoint)}
+                />
+            {/each}
+            {#each shipsInSystem as ship, i (ship.symbol)}
+                <ThreeShip 
+                    ship={ship}
+                    selected={ship == selectedShip}
+                    meshParameters={{color: 0xff0000}}
+                />
+            {/each}
+        </ThreeSystem>
+    {/if}
+</ThreeCanvas>

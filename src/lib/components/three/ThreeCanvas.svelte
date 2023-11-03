@@ -1,7 +1,7 @@
 <script lang="ts">
     import * as THREE from "three";
     import { onMount, setContext } from "svelte";
-    import type { ThreeContext } from "./contexts";
+    import type { ThreeContext } from "$lib/three/contexts";
     // @ts-ignore
     import { MapControls } from 'three/addons/controls/MapControls'
     import { EffectComposer } from 'three/addons/postprocessing/EffectComposer';
@@ -10,7 +10,7 @@
     import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader'
     import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
     import { writable } from "svelte/store";
-    import { ExtendedMesh } from "./ExtendedMesh";
+    import { ExtendedMesh } from "$lib/three/ExtendedMesh";
     import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer";
 
 

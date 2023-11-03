@@ -19,10 +19,10 @@
 <script lang="ts">
     import * as THREE from "three";
     import { createEventDispatcher, getContext, onDestroy, onMount } from "svelte";
-    import type { SystemContext, ThreeContext } from "$lib/components/three/contexts";
+    import type { SystemContext, ThreeContext } from "$lib/three/contexts";
     import { WaypointType, type SystemWaypoint } from "$lib/api-sdk";
     import { randFloat, randInt } from "three/src/math/MathUtils";
-    import { ExtendedMesh } from "./ExtendedMesh";
+    import { ExtendedMesh } from "$lib/three/ExtendedMesh";
     import type { Writable } from "svelte/store";
 
     export let systemWaypoint: SystemWaypoint; 

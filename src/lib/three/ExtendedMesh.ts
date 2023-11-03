@@ -4,7 +4,7 @@ import * as THREE from 'three';
 import type { ThreeContext } from './contexts';
 import { OutlinePass } from 'three/addons/postprocessing/OutlinePass';
 import type { ComponentType } from 'svelte';
-import Tooltip from '../Tooltip.svelte';
+import Tooltip from '$lib/components/Tooltip.svelte';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer';
 
 // Create a store whichs subscribe skips the initial value
