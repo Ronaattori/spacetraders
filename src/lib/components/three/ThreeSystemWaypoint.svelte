@@ -73,7 +73,6 @@
     // Set the tooltip when we get waypoint data
     let tooltip = false;
     $: if(waypoint && !tooltip) {
-        console.log("running")
         tooltip = true
         mesh.setTooltip({component: WaypointInfo, props: {waypoint: waypoint}});
     }

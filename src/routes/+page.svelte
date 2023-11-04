@@ -15,6 +15,9 @@
     $: shipsInSystem = (selectedShip && system) ? ships.filter(ship => ship.nav.systemSymbol == system.symbol) : [];
     let waypoints: Map<string, Waypoint> = new Map();
     
+    // Trigger a refresh on ships when selectedShip changes
+    $: selectedShip, ships = ships;
+    
     // Select the first ship if nothing else is specified
     const selectFirst = (ships: Ship[]) => selectedShip = ships[0];
     $: if (ships.length > 0 && !selectedShip) selectFirst(ships)
@@ -31,7 +34,7 @@
         });
         system = newSys;
     }
-    // Update data when ship changes
+    // Update pretty much everything when ship changes
     let prevShip: Ship;
     $: if (selectedShip != prevShip) {
         prevShip = selectedShip;
