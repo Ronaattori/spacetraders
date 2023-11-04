@@ -10,9 +10,10 @@
     
     onMount(async () => {
       const res = await api.agents.getMyAgent();
-      $myAgent = {...$myAgent, ...res.data};
+      const agentData = {...$myAgent, ...res.data};
       const ships = (await api.fleet.getMyShips()).data;
-      $myAgent.ships = ships
+      agentData.ships = ships;
+      $myAgent = Object.assign($myAgent, agentData)
     })
 </script>
 

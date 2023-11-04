@@ -9,24 +9,22 @@
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import { onMount } from "svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
-
-    let system: System;
-    let selectedShip: Ship;
     
-    // Keep ship information up to date
-    let ships = $myAgent.ships;
-    $: selectedShip, ships = $myAgent.ships
-    // And also select the first ship of the list, when known
+    $: ships = $myAgent.ships;
+    let selectedShip: Ship;
+    let system: System;
+    $: shipsInSystem = (selectedShip && system) ? ships.filter(ship => ship.nav.systemSymbol == system.symbol) : [];
+    
+    // Select the first ship if nothing else is specified
     const selectFirst = (ships: Ship[]) => selectedShip = ships[0];
     $: if (ships.length > 0 && !selectedShip) selectFirst(ships)
     
-    $: shipsInSystem = ships.filter(ship => ship.nav.systemSymbol == system?.symbol);
-
-    $: if (selectedShip) {
-        api.systems.getSystem(selectedShip.nav.systemSymbol).then(res => {
-            system = res.data;
-        });
+    // System is picked depending on the selected ships location
+    const getSystem = async (ship: Ship) => {
+        console.log("getting sstem")
+        system = (await api.systems.getSystem(ship.nav.systemSymbol)).data;
     }
+    $: if (selectedShip) getSystem(selectedShip)
 
     async function navigateShip(ship: Ship, toWaypoint: SystemWaypoint) {
         const res = await api.fleet.navigateShip(ship.symbol, {waypointSymbol: toWaypoint.symbol})
