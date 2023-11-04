@@ -21,8 +21,8 @@
     
     // System is picked depending on the selected ships location
     async function getSystem (ship: Ship) {
+        if (system?.symbol == ship.nav.systemSymbol) return;
         const newSys = (await api.systems.getSystem(ship.nav.systemSymbol)).data;
-        if (system?.symbol == newSys.symbol) return;
         getWaypoints(newSys).then(wps => waypoints = wps); 
         system = newSys;
     }
