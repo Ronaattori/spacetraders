@@ -5,7 +5,7 @@
     import ThreeCanvas from "$lib/components/three/ThreeCanvas.svelte";
     import ThreeSun from "$lib/components/three/ThreeSun.svelte";
     import ThreeSystemWaypoint from "$lib/components/three/ThreeSystemWaypoint.svelte";
-    import { myAgent } from "$lib/stores";
+    import { myAgent, notifications } from "$lib/stores";
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
     
@@ -13,33 +13,42 @@
     let selectedShip: Ship;
     let system: System;
     $: shipsInSystem = (selectedShip && system) ? ships.filter(ship => ship.nav.systemSymbol == system.symbol) : [];
-    let waypoints: Waypoint[] = [];
+    let waypoints: Map<string, Waypoint> = new Map();
     
     // Select the first ship if nothing else is specified
     const selectFirst = (ships: Ship[]) => selectedShip = ships[0];
     $: if (ships.length > 0 && !selectedShip) selectFirst(ships)
     
-    // System is picked depending on the selected ships location
+    // Update the system and it's related data when the system changes
     async function getSystem (ship: Ship) {
         if (system?.symbol == ship.nav.systemSymbol) return;
         const newSys = (await api.systems.getSystem(ship.nav.systemSymbol)).data;
-        getWaypoints(newSys).then(wps => waypoints = wps); 
+        notifications.info("Starting to fetch waypoints...")
+        getWaypoints(newSys).then(wps => {
+            wps.map(wp => waypoints.set(wp.symbol, wp));
+            waypoints = waypoints;
+            notifications.success("Waypoint fetching done!")
+        });
         system = newSys;
     }
-    $: if (selectedShip) {
+    // Update data when ship changes
+    let prevShip: Ship;
+    $: if (selectedShip != prevShip) {
+        prevShip = selectedShip;
         getSystem(selectedShip)
     }
     
     // Fetch all Waypoints in the given system
     async function getWaypoints(system: System, page = 1) {
-        let waypoints: Waypoint[] = [];
+        let wps: Waypoint[] = [];
         let pageSize = 20;
         const res = (await api.systems.getSystemWaypoints(system.symbol, page, pageSize)).data;
+        wps = wps.concat(res)
         if (res.length == pageSize) {
             const more = (await getWaypoints(system , page+1));
-            waypoints = waypoints.concat(more);
+            wps = wps.concat(more)
         }
-        return waypoints;
+        return wps;
     }
 
     async function navigateShip(ship: Ship, toWaypoint: SystemWaypoint) {
@@ -57,6 +66,7 @@
             {#each system.waypoints as waypoint (waypoint.symbol)}
                 <ThreeSystemWaypoint
                     systemWaypoint={waypoint}
+                    waypoint={waypoints.get(waypoint.symbol)}
                     on:click={() => navigateShip(selectedShip, waypoint)}
                 />
             {/each}

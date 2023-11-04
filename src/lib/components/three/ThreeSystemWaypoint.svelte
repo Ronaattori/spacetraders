@@ -20,12 +20,13 @@
     import * as THREE from "three";
     import { createEventDispatcher, getContext, onDestroy, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/three/contexts";
-    import { WaypointType, type SystemWaypoint } from "$lib/api-sdk";
+    import { WaypointType, type SystemWaypoint, type System, type Waypoint } from "$lib/api-sdk";
     import { randFloat, randInt } from "three/src/math/MathUtils";
     import { ExtendedMesh } from "$lib/three/ExtendedMesh";
-    import type { Writable } from "svelte/store";
+    import WaypointInfo from "../WaypointInfo.svelte";
 
     export let systemWaypoint: SystemWaypoint; 
+    export let waypoint: Waypoint | undefined; 
 
     export let radius = 1.5;
     export let meshParameters: THREE.MeshStandardMaterialParameters = {}
@@ -69,7 +70,13 @@
     })
     mesh.click.subscribe(_ => dispatch("click"));
     
-    mesh.setTooltip("pabaa")
+    // Set the tooltip when we get waypoint data
+    let tooltip = false;
+    $: if(waypoint && !tooltip) {
+        console.log("running")
+        tooltip = true
+        mesh.setTooltip({component: WaypointInfo, props: {waypoint: waypoint}});
+    }
 
     onDestroy(() => {
         geometry.dispose();
