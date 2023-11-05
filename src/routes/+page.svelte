@@ -61,10 +61,8 @@
     }
     async function extractResources(ship: Ship) {
         const res = await api.fleet.extractResources(ship.symbol);
-        console.log(ship)
         ship.cooldown = res.data.cooldown
         ship.cargo = res.data.cargo
-        console.log(ship)
         ships = ships;
     }
 </script>

@@ -24,7 +24,7 @@
     const renderer = new THREE.WebGLRenderer();
     const effectComposer = new EffectComposer(renderer)
     effectComposer.addPass(new RenderPass(scene ,camera))
-    effectComposer.addPass(new ShaderPass(GammaCorrectionShader))
+    // effectComposer.addPass(new ShaderPass(GammaCorrectionShader))
     const css2dRenderer = new CSS2DRenderer()
     css2dRenderer.setSize(window.innerWidth, window.innerHeight)
     css2dRenderer.domElement.style.position = 'absolute';
@@ -53,6 +53,10 @@
             scene.background = texture
             scene.environment = texture
         })
+        
+        // Create some minor ambient light
+        const light = new THREE.HemisphereLight(undefined, undefined, 1.5)
+        scene.add(light)
         
         // Attach event listeners
         window.addEventListener("resize", onResize);
