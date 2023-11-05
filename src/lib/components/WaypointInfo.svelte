@@ -7,5 +7,6 @@
 
 <div>
   <p>Symbol: {waypoint.symbol}</p>
+  <p>Type: {waypoint.type}</p>
   <p>Traits: {JSON.stringify(waypoint.traits.map(x => x.name))}</p>
 </div>

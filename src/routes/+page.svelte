@@ -54,13 +54,26 @@
         return wps;
     }
 
+    // Various things you can tell your ships to do
     async function navigateShip(ship: Ship, toWaypoint: SystemWaypoint) {
         const res = await api.fleet.navigateShip(ship.symbol, {waypointSymbol: toWaypoint.symbol})
         selectedShip = Object.assign(selectedShip, res.data)
     }
+    async function extractResources(ship: Ship) {
+        const res = await api.fleet.extractResources(ship.symbol);
+        console.log(ship)
+        ship.cooldown = res.data.cooldown
+        ship.cargo = res.data.cargo
+        console.log(ship)
+        ships = ships;
+    }
 </script>
 
-<ShipSelector ships={ships} bind:selectedShip/>
+<ShipSelector
+    bind:selectedShip
+    ships={ships}
+    on:extract={(e) => extractResources(e.detail.ship)}
+/>
 
 <ThreeCanvas>
     {#if system}
