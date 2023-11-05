@@ -8,6 +8,7 @@
     import { myAgent, notifications } from "$lib/stores";
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
+    import Window from "$lib/components/Window.svelte";
     
     $: ships = $myAgent.ships;
     let selectedShip: Ship;
