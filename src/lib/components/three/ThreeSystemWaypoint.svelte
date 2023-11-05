@@ -54,8 +54,21 @@
     mesh.receiveShadow = true;
     // Set the position and possibly make it orbit around that point
     mesh.position.set(systemWaypoint.x, 0, systemWaypoint.y)
-    if (systemWaypoint.orbits) addOrbit();
     three.scene.add(mesh)
+
+    // Run all functions in the array on render
+    const runOnRender: Array<() => void> = []
+    mesh.onBeforeRender = () => {
+        runOnRender.forEach(func => func())        
+    }
+
+    // Animate waypoints
+    const spin = () => {
+        mesh.rotation.x += 0.0004
+        mesh.rotation.y += 0.0004
+    }
+    runOnRender.push(spin)
+    if (systemWaypoint.orbits) addOrbit();
         
     // Attach event listeners
     mesh.pointerenter.subscribe(_ => {
@@ -90,11 +103,12 @@
         let speed = randFloat(0.001, 0.003)
         let i = randInt(0, 200);
 
-        mesh.onBeforeRender = (...args) => {
+        const func = () => {
             if (!orbit) return;
             i += speed
             mesh.position.x = x + 5 * Math.cos(i)
             mesh.position.z = z + 5 * Math.sin(i)
         }
+        runOnRender.push(func)
    }
 </script>
