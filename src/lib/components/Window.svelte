@@ -3,7 +3,8 @@
 </script>
 
 <script lang="ts">
-    import { onMount } from "svelte";
+    import { IconCross, IconX } from "@tabler/icons-svelte";
+import { onMount } from "svelte";
     import { convertArray } from "three/src/animation/AnimationUtils";
 
     export let title: string;
@@ -40,10 +41,10 @@
         <div class="card-header d-flex" bind:this={header}>
             <h3 class="card-title">{title}</h3>
             <span style="margin-left: auto;" on:click={() => container.remove()}>
-                X
+                <IconX />
             </span>
         </div>
-        <div class="card-body">
+        <div>
             <slot />
         </div>
     </div>

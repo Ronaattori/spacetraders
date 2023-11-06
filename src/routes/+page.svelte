@@ -1,6 +1,6 @@
 <script lang="ts">
     import { api } from "$lib/api";
-    import type { Ship, System, SystemWaypoint, Waypoint } from "$lib/api-sdk";
+    import type { WaypointTrait, Ship, System, SystemWaypoint, Waypoint } from "$lib/api-sdk";
     import ShipSelector from "$lib/components/ShipSelector.svelte";
     import ThreeCanvas from "$lib/components/three/ThreeCanvas.svelte";
     import ThreeSun from "$lib/components/three/ThreeSun.svelte";
@@ -8,7 +8,6 @@
     import { myAgent, notifications } from "$lib/stores";
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
-    import Window from "$lib/components/Window.svelte";
     
     $: ships = $myAgent.ships;
     let selectedShip: Ship;
