@@ -30,6 +30,7 @@ export class ExtendedMesh extends THREE.Mesh {
     pointerenter = createEventHandler()
     pointerout = createEventHandler()
     click = createEventHandler()
+    contextmenu = createEventHandler()
     resize = createEventHandler()
     
     glow = writable<number | null>();

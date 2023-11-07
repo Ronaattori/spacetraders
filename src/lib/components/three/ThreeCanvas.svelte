@@ -62,6 +62,7 @@
         window.addEventListener("resize", onResize);
         window.addEventListener("pointermove", onPointerMove);
         window.addEventListener("click", onClick);
+        window.addEventListener("contextmenu", onContextmenu);
 
         // Camera movement handling
         const controls = new MapControls(camera, renderer.domElement)
@@ -75,6 +76,8 @@
         return () => {
             window.removeEventListener("resize", onResize);
             window.removeEventListener("pointermove", onPointerMove);
+            window.removeEventListener("click", onClick);
+            window.removeEventListener("contextmenu", onContextmenu);
             controls.dispose();
             renderer.dispose();
             effectComposer.dispose();
@@ -98,6 +101,11 @@
     function onClick(e: MouseEvent) {
         for (const hit of Object.values(hovered)) {
             if (hit instanceof ExtendedMesh) hit.click.trigger();
+        }
+    }
+    function onContextmenu(e: MouseEvent) {
+        for (const hit of Object.values(hovered)) {
+            if (hit instanceof ExtendedMesh) hit.contextmenu.trigger();
         }
     }
     function onPointerMove(e: MouseEvent) {

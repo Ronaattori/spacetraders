@@ -82,6 +82,7 @@
                     systemWaypoint={waypoint}
                     waypoint={waypoints.get(waypoint.symbol)}
                     on:click={() => navigateShip(selectedShip, waypoint)}
+                    on:contextmenu={() => console.log("contextmenu")}
                 />
             {/each}
             {#each shipsInSystem as ship, i (ship.symbol)}

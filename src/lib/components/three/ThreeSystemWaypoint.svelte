@@ -82,6 +82,7 @@
         orbit = true;
     })
     mesh.click.subscribe(_ => dispatch("click"));
+    mesh.contextmenu.subscribe(_ => dispatch("contextmenu"));
     
     // Set the tooltip when we get waypoint data
     let tooltip = false;
