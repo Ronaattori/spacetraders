@@ -4,6 +4,7 @@ import { WaypointTrait, type Ship, type Shipyard, type Waypoint } from "./api-sd
 import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer";
 import ShipyardWindow from "./components/ShipyardWindow.svelte";
 import { api } from "./api";
+import MarketplaceWindow from "./components/MarketplaceWindow.svelte";
 
 type CtxElement = {
     label: string,
@@ -66,6 +67,14 @@ export class Contextmenu {
                         onClick: async () => {
                             const shipyard = (await api.systems.getShipyard(waypoint.systemSymbol, waypoint.symbol)).data;
                             new ShipyardWindow({target: document.body, props: {shipyard: shipyard}})
+                        }
+                    })
+                case (WaypointTrait.symbol.MARKETPLACE):
+                    this.add({
+                        label: "Open Marketplace shop",
+                        onClick: async () => {
+                            const marketplace = (await api.systems.getMarket(waypoint.systemSymbol, waypoint.symbol)).data;
+                            new MarketplaceWindow({target: document.body, props: {marketplace: marketplace}})
                         }
                     })
             }

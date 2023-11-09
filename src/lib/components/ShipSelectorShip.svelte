@@ -42,6 +42,7 @@
                 </button>
             </div>
         </div>
+        <span> Ship role: {ship.registration.role} </span>
         <span> Current waypoint: {ship.nav.waypointSymbol} </span>
         <div class="d-flex flex-column">
             <span>Fuel:
