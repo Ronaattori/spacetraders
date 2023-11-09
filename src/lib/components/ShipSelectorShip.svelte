@@ -42,6 +42,7 @@
                 </button>
             </div>
         </div>
+        <span> Current waypoint: {ship.nav.waypointSymbol} </span>
         <div class="d-flex flex-column">
             <span>Fuel:
                 <progress class="progress" value={ship.fuel.current} max={ship.fuel.capacity} />
