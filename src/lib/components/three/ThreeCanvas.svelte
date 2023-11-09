@@ -25,7 +25,7 @@
     const renderer = new THREE.WebGLRenderer();
     const effectComposer = new EffectComposer(renderer)
     effectComposer.addPass(new RenderPass(scene ,camera))
-    // effectComposer.addPass(new RenderPixelatedPass(3, scene, camera))
+    // effectComposer.addPass(new RenderPixelatedPass(5, scene, camera))
     // effectComposer.addPass(new ShaderPass(GammaCorrectionShader))
     const css2dRenderer = new CSS2DRenderer()
     css2dRenderer.setSize(window.innerWidth, window.innerHeight)
