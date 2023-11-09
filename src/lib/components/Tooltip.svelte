@@ -17,7 +17,7 @@
     }
 </script>
 
-<div class="card position-absolute shadow" bind:this={tooltip} style="z-index: 999">
+<div class="card position-absolute shadow" bind:this={tooltip}>
   <div class="card-body">
     <div class="card-secondary">
         {#if typeof content == "string"}

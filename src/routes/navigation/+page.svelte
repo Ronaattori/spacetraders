@@ -3,9 +3,11 @@
     import { ShipNavStatus, type Ship, type Waypoint } from "$lib/api-sdk";
     import ShipInfo from "$lib/components/ShipInfo.svelte";
     import Table from "$lib/components/Table.svelte";
+    import { Contextmenu } from "$lib/contextmenu";
     import { createTimer } from "$lib/lib";
     import { myAgent, notifications } from "$lib/stores";
     import { tooltip } from "$lib/use";
+    import { IconTarget } from "@tabler/icons-svelte";
     import { onMount } from "svelte";
     import type { Writable } from "svelte/store";
 
