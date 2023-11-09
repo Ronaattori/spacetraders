@@ -24,6 +24,8 @@
     import { randFloat, randInt } from "three/src/math/MathUtils";
     import { ExtendedMesh } from "$lib/three/ExtendedMesh";
     import WaypointInfo from "../WaypointInfo.svelte";
+    import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer";
+    import { Contextmenu } from "$lib/contextmenu";
 
     export let systemWaypoint: SystemWaypoint; 
     export let waypoint: Waypoint | undefined; 
@@ -82,7 +84,13 @@
         orbit = true;
     })
     mesh.click.subscribe(_ => dispatch("click"));
-    mesh.contextmenu.subscribe(_ => dispatch("contextmenu"));
+    mesh.contextmenu.subscribe(_ => {
+        dispatch("contextmenu")
+        // const container = new CSS2DObject();
+        // mesh.add(container)
+        const ctx = new Contextmenu(mesh)
+        if (waypoint) ctx.createWaypointButtons(waypoint)
+    });
     
     // Set the tooltip when we get waypoint data
     let tooltip = false;

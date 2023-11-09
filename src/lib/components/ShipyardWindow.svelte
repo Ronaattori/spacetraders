@@ -28,7 +28,7 @@
                 </tr>
             {/each}
         {:else}
-            <tr> <td>No ships</td> </tr>
+            <tr> <td>Move a ship into the Shipyard to see what's for sale</td> </tr>
         {/if}
     </Table>
 </Window>

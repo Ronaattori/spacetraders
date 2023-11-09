@@ -8,6 +8,7 @@
     import { myAgent, notifications } from "$lib/stores";
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
+    import { Contextmenu } from "$lib/contextmenu";
     
     $: ships = $myAgent.ships;
     let selectedShip: Ship;
@@ -53,7 +54,7 @@
         }
         return wps;
     }
-
+    
     // Various things you can tell your ships to do
     async function navigateShip(ship: Ship, toWaypoint: SystemWaypoint) {
         const res = await api.fleet.navigateShip(ship.symbol, {waypointSymbol: toWaypoint.symbol})

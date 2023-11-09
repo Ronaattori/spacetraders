@@ -3,9 +3,8 @@
 </script>
 
 <script lang="ts">
-    import { IconCross, IconX } from "@tabler/icons-svelte";
-import { onMount } from "svelte";
-    import { convertArray } from "three/src/animation/AnimationUtils";
+    import { IconX } from "@tabler/icons-svelte";
+    import { onMount } from "svelte";
 
     export let title: string;
     
@@ -13,6 +12,10 @@ import { onMount } from "svelte";
     let container: HTMLElement;
     
     onMount(() => {
+        // Open windows in the middle of the screen
+        container.style.left = "50%";
+        container.style.top = "50%";
+
         // Enable window dragging from the header
         let moving = false;
         let prevX: number

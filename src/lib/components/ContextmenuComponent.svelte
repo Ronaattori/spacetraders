@@ -14,8 +14,10 @@
   
   $: if(buttons) addClasses(buttons)
   function addClasses(buttons: HTMLElement) {
-    for (const button of buttons.children) {
+    for (const elem of buttons.children) {
+      const button = elem as HTMLElement;
       button.classList.add("dropdown-item");
+      button.style.pointerEvents = "all"
     }
   }
 
