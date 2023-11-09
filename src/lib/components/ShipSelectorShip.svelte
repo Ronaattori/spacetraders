@@ -4,6 +4,7 @@
     import { createTimer } from "$lib/lib";
     import { notifications } from "$lib/stores";
     import { createEventDispatcher } from "svelte";
+    import ShipCargoWindow from "./ShipCargoWindow.svelte";
 
     export let ship: Ship;
     export let selected: boolean;
@@ -26,10 +27,15 @@
 </script> 
 <div class="card mb-2">
     <div class="card-body d-flex flex-column gap-2">
-    <button class="btn {selected ? "btn-primary" : ""}" 
-        on:click={() => dispatch("select", ship)}>
-            Select: {ship.symbol}
-        </button>
+        <div class="d-flex gap-2">
+            <button class="btn {selected ? "btn-primary" : ""}" 
+            on:click={() => dispatch("select", ship)}>
+                Select: {ship.symbol}
+            </button>
+            <button class="btn" on:click={() => new ShipCargoWindow({target: document.body, props: {ship: ship}})}>
+                Inventory
+            </button>
+        </div>
         <div class="d-flex gap-2">
             <div>
                 <button class="btn" on:click={toggleOrbit} >
