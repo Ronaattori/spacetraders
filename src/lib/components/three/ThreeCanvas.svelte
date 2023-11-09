@@ -6,6 +6,7 @@
     import { MapControls } from 'three/addons/controls/MapControls'
     import { EffectComposer } from 'three/addons/postprocessing/EffectComposer';
     import { RenderPass } from 'three/addons/postprocessing/RenderPass';
+    import { RenderPixelatedPass } from "three/examples/jsm/postprocessing/RenderPixelatedPass";
     // @ts-ignore
     import { GammaCorrectionShader } from 'three/addons/shaders/GammaCorrectionShader'
     import { ShaderPass } from "three/examples/jsm/postprocessing/ShaderPass";
@@ -24,6 +25,7 @@
     const renderer = new THREE.WebGLRenderer();
     const effectComposer = new EffectComposer(renderer)
     effectComposer.addPass(new RenderPass(scene ,camera))
+    // effectComposer.addPass(new RenderPixelatedPass(3, scene, camera))
     // effectComposer.addPass(new ShaderPass(GammaCorrectionShader))
     const css2dRenderer = new CSS2DRenderer()
     css2dRenderer.setSize(window.innerWidth, window.innerHeight)
