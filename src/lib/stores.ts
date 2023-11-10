@@ -1,5 +1,6 @@
 import { writable } from "svelte/store";
 import type { Agent, Contract, Ship } from "./api-sdk";
+import type { ComponentType } from "svelte";
 
 type NotificationLevel =  "info" | "success" | "warning" | "error"
 export interface Notification {
@@ -53,3 +54,30 @@ export const myAgent = writable<MyAgent>({
     acceptedContracts: [],
     ships: [],
 });
+
+type CustomWindow = {
+    title: string,
+    component: ComponentType,
+    props: object
+}
+function createWindowsStore() {
+    const { subscribe, set, update} = writable<CustomWindow[]>([]);
+    return {
+        subscribe,
+        add: (title: string, component: ComponentType, props: object) => {
+            const newWindow = {
+                component,
+                props,
+                title
+            }
+            update(curr => curr = [...curr, newWindow])
+        },
+        remove: (window: CustomWindow) => {
+            update(curr => {
+                curr.splice(curr.indexOf(window), 1)
+                return curr
+            })
+        }
+    }
+}
+export const windows = createWindowsStore()

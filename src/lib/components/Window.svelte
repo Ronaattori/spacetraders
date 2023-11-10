@@ -4,12 +4,13 @@
 
 <script lang="ts">
     import { IconX } from "@tabler/icons-svelte";
-    import { onMount } from "svelte";
+    import { createEventDispatcher, onMount } from "svelte";
 
     export let title: string;
     
     let header: HTMLElement;
     let container: HTMLElement;
+    const dispatch = createEventDispatcher();
     
     onMount(() => {
         // Open windows in the middle of the screen
@@ -43,7 +44,7 @@
     <div class="card">
         <div class="card-header d-flex" bind:this={header}>
             <h3 class="card-title">{title}</h3>
-            <span style="margin-left: auto;" on:click={() => container.remove()}>
+            <span style="margin-left: auto;" on:click={() => dispatch("close")}>
                 <IconX />
             </span>
         </div>

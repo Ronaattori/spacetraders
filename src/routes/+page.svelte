@@ -5,10 +5,11 @@
     import ThreeCanvas from "$lib/components/three/ThreeCanvas.svelte";
     import ThreeSun from "$lib/components/three/ThreeSun.svelte";
     import ThreeSystemWaypoint from "$lib/components/three/ThreeSystemWaypoint.svelte";
-    import { myAgent, notifications } from "$lib/stores";
+    import { myAgent, notifications, windows } from "$lib/stores";
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
     import { Contextmenu } from "$lib/contextmenu";
+    import Window from "$lib/components/Window.svelte";
     
     $: ships = $myAgent.ships;
     let selectedShip: Ship;
@@ -67,6 +68,12 @@
         ships = ships;
     }
 </script>
+
+{#each $windows as window}
+    <Window title={window.title} on:close={() => windows.remove(window)}>
+        <svelte:component this={window.component} {...window.props} />
+    </Window>
+{/each}
 
 <ShipSelector
     bind:selectedShip

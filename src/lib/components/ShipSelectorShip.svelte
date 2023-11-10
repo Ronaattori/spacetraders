@@ -2,7 +2,7 @@
     import { api } from "$lib/api";
     import { ShipNavStatus, type Ship } from "$lib/api-sdk";
     import { createTimer } from "$lib/lib";
-    import { notifications } from "$lib/stores";
+    import { notifications, windows } from "$lib/stores";
     import { createEventDispatcher } from "svelte";
     import ShipCargoWindow from "./ShipCargoWindow.svelte";
 
@@ -32,7 +32,7 @@
             on:click={() => dispatch("select", ship)}>
                 Select: {ship.symbol}
             </button>
-            <button class="btn" on:click={() => new ShipCargoWindow({target: document.body, props: {ship: ship}})}>
+            <button class="btn" on:click={() => windows.add("Ship inventory", ShipCargoWindow, {ship})}>
                 Inventory
             </button>
         </div>

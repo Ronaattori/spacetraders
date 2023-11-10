@@ -20,27 +20,25 @@
     }
 
 </script>
-<Window title="Shipyard">
-    <Table columns={["Name", "Price", "Type", ""]}>
-        {#if shipyard.ships}
-            {#each shipyard.ships as ship}
-                <tr>
-                    <td>{ship.name}</td>
-                    <td>{ship.purchasePrice}</td>
-                    <td>{ship.type}</td>
-                    <td>
-                        <button class="btn" 
-                        use:tooltip={{component: ShipyardShipInfo, props: {ship: ship}}}>
-                            Full info
-                        </button>
-                        <button class="btn" on:click={() => buyShip(ship.type)}>
-                            Buy
-                        </button>
-                    </td>
-                </tr>
-            {/each}
-        {:else}
-            <tr> <td>Move a ship into the Shipyard to see what's for sale</td> </tr>
-        {/if}
-    </Table>
-</Window>
+<Table columns={["Name", "Price", "Type", ""]}>
+    {#if shipyard.ships}
+        {#each shipyard.ships as ship}
+            <tr>
+                <td>{ship.name}</td>
+                <td>{ship.purchasePrice}</td>
+                <td>{ship.type}</td>
+                <td>
+                    <button class="btn" 
+                    use:tooltip={{component: ShipyardShipInfo, props: {ship: ship}}}>
+                        Full info
+                    </button>
+                    <button class="btn" on:click={() => buyShip(ship.type)}>
+                        Buy
+                    </button>
+                </td>
+            </tr>
+        {/each}
+    {:else}
+        <tr> <td>Move a ship into the Shipyard to see what's for sale</td> </tr>
+    {/if}
+</Table>
