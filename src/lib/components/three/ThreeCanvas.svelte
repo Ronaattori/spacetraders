@@ -95,7 +95,7 @@
     }
 
     function onResize() {
-        // this.css2dRenderer.setSize( window.innerWidth, window.innerHeight );
+        css2dRenderer.setSize( window.innerWidth, window.innerHeight );
         renderer.setSize( window.innerWidth, window.innerHeight );
     }
 
