@@ -5,6 +5,7 @@
 <script lang="ts">
     import { IconX } from "@tabler/icons-svelte";
     import { createEventDispatcher, onMount } from "svelte";
+    import Card from "./Card.svelte";
 
     export let title: string;
     
@@ -40,16 +41,16 @@
     }) 
 </script>
 
-<div class="position-fixed" style="z-index: {z++};" bind:this={container}>
-    <div class="card">
-        <div class="card-header d-flex" bind:this={header}>
-            <h3 class="card-title">{title}</h3>
-            <span style="margin-left: auto;" on:click={() => dispatch("close")}>
+<div class="fixed" style="z-index: {z++};" bind:this={container}>
+    <Card>
+        <div slot="header" class="flex" bind:this={header}>
+            <h3>{title}</h3>
+            <span class="ml-auto" on:click={() => dispatch("close")}>
                 <IconX />
             </span>
         </div>
         <div>
             <slot />
         </div>
-    </div>
+    </Card>
 </div>
