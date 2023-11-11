@@ -31,7 +31,7 @@
 <Card>
     <div class="flex flex-col gap-2">
         <div class="flex gap-2">
-            <Button class={selected ? "bg-white" : "bg-blue-400"}
+            <Button class={selected ? "bg-primary" : ""}
             on:click={() => dispatch("select", ship)}>
                 Select: {ship.symbol}
             </Button>

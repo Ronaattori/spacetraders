@@ -2,6 +2,7 @@
     import { tooltip, type TooltipOptions } from "$lib/use";
     import { onMount } from "svelte";
 
+    export let color = "bg-white" 
 
     let _class: string = ""
     export { _class as class}
@@ -17,7 +18,7 @@
     })
 </script>
 
-<button class="rounded-sm bg-blue-400 {_class}"
+<button class="rounded-md shadow-md p-2 border-2 hover:brightness-90 {color} {_class}"
 bind:this={button}
 on:click>
     <slot />

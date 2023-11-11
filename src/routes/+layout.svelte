@@ -9,7 +9,6 @@
     import Dropdown from '$lib/components/Dropdown.svelte';
     import { IconCheck, IconChecklist, IconLogin, IconLogout, IconPlus } from '@tabler/icons-svelte';
     import Card from "$lib/components/Card.svelte";
-    import NavbarItems from "$lib/components/ItemList.svelte";
     import ItemList from "$lib/components/ItemList.svelte";
     import Button from "$lib/components/Button.svelte";
     import Link from "$lib/components/Link.svelte";
@@ -25,10 +24,10 @@
 
 <Notifications notifications={notifications}/>
 
-<div class="flex">
+<div class="flex font-mono">
   <Navbar>
     <div slot="header"> 
-      <Card class="bg-white">
+      <Card>
         <h1 slot="header">
           <Link href="/">
             <img src={img} width="110" height="32" alt="Home">
