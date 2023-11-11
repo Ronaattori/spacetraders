@@ -2,12 +2,14 @@
 
 </script>
 
-<aside class="navbar navbar-vertical navbar-expand-sm navbar-dark">
-  <div class="container-fluid">
-    <button class="navbar-toggler" type="button">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <slot name="header"/>
-    <slot/>
+<aside class="h-screen w-1/12 flex flex-col p-2 bg-slate-400">
+  <slot name="header"/>
+  <div class="mt-6">
+    <slot />
   </div>
+  {#if $$slots.footer}
+    <div class="footer mt-auto">
+      <slot name="footer"/>
+    </div>
+  {/if}
 </aside>

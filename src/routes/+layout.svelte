@@ -8,6 +8,10 @@
     import Navbar from "$lib/components/Navbar.svelte";
     import Dropdown from '$lib/components/Dropdown.svelte';
     import { IconCheck, IconChecklist, IconLogin, IconLogout, IconPlus } from '@tabler/icons-svelte';
+    import Card from "$lib/components/Card.svelte";
+    import NavbarItems from "$lib/components/ItemList.svelte";
+    import ItemList from "$lib/components/ItemList.svelte";
+    import Button from "$lib/components/Button.svelte";
     
     onMount(async () => {
       const res = await api.agents.getMyAgent();
@@ -21,68 +25,73 @@
 <Notifications notifications={notifications}/>
 
 <Navbar>
-  <div slot="header" class="card text-dark m-2"> 
-    <div class="card-header">
-      <h1 class="navbar-brand navbar-brand-autodark text-dark">
+  <div slot="header"> 
+    <Card class="bg-white">
+      <h1 slot="header" class="navbar-brand navbar-brand-autodark text-dark">
         <a href="/">
           <img src={img} width="110" height="32" alt="Tabler">
         </a>
         Speis treiders
       </h1>
-    </div>
-    <span class="card-body">
-      {$myAgent.symbol ? `Logged in as ${$myAgent.symbol}` : "Not logged in..."}
-    </span>
+      <span>
+        {$myAgent.symbol ? `Logged in as ${$myAgent.symbol}` : "Not logged in..."}
+      </span>
+    </Card>
   </div>
-  <div class="collapse navbar-collapse" id="sidebar-menu">
-    <ul class="navbar-nav pt-lg-3">
-      <li class="nav-item">
-        <a class="nav-link" href="/">
-          <span class="nav-link-title">
-            Home
-          </span>
-        </a>
+  <ItemList>
+      <li>
+        <Button>
+          <a href="/">Home</a>
+        </Button>
       </li>
       <li>
         <Dropdown text="Navigation">
-          <a href="/navigation">
-            Navigation
-          </a>
+          <Button>
+            <a href="/navigation">
+              Navigation
+            </a>
+          </Button>
         </Dropdown>
+      </li>
+      <li>
         <Dropdown text="Shop">
           <a href="/shop">
             Shop
           </a>
         </Dropdown>
+      </li>
+      <li>
         <Dropdown text="Contract">
           <a href="/contract">
             <IconChecklist />
             List
           </a>
         </Dropdown>
+      </li>
+      <li>
         <Dropdown text="User">
-          <a href="/user/register">
+          <a href="/user/register" class="flex">
             <IconPlus />
             Register
           </a>
-          <a href="/user/login">
+          <a href="/user/login" class="flex">
             <IconLogin />
             Login
           </a>
-          <a href="#top" on:click={() => localStorage.removeItem("apiKey")}>
+          <a href="#top" class="flex" on:click={() => localStorage.removeItem("apiKey")}>
             <IconLogout />
             Logout
           </a>
         </Dropdown>
       </li>
-    </ul>
-    <ul class="card m-3 text-black text-nowrap">
-      <div class="card-body">
+  </ItemList>
+  <div slot="footer">
+    <Card>
         Accepted Contracts: {$myAgent.acceptedContracts.length}
-      </div>
-    </ul>
+    </Card>
   </div>
 </Navbar>
-<div class="page-wrapper">
+<slot />
+<!-- <div class="page-wrapper">
   <slot />
-</div>
+</div> -->
