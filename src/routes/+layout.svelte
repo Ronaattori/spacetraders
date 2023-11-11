@@ -82,15 +82,6 @@
     </ul>
   </div>
 </Navbar>
-  <div class="page-wrapper">
-    <header class="navbar navbar-light">
-      <div class="container-xl">
-        <div>
-          <span>Credits: {$myAgent.credits}</span>
-          <span class="border mx-2"/>
-          <span>Galactic bitches: {0}</span>
-        </div>
-      </div>
-    </header>
-    <slot/>
-  </div>
+<div class="page-wrapper">
+  <slot />
+</div>

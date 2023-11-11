@@ -25,7 +25,7 @@
     }
 
 </script> 
-<div class="card mb-2">
+<div class="card">
     <div class="card-body d-flex flex-column gap-2">
         <div class="d-flex gap-2">
             <button class="btn {selected ? "btn-primary" : ""}" 

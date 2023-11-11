@@ -73,4 +73,9 @@ export class ExtendedMesh extends THREE.Mesh {
         })
         this.pointerout.subscribe(_ => tooltip?.removeFromParent());
     }
+    getSize() {
+        const boundingBox = new THREE.Box3().setFromObject(this)
+        const size = new THREE.Vector3()
+        return boundingBox.getSize(size);
+    }
 }
