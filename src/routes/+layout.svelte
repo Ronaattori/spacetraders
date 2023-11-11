@@ -24,74 +24,76 @@
 
 <Notifications notifications={notifications}/>
 
-<Navbar>
-  <div slot="header"> 
-    <Card class="bg-white">
-      <h1 slot="header" class="navbar-brand navbar-brand-autodark text-dark">
-        <a href="/">
-          <img src={img} width="110" height="32" alt="Tabler">
-        </a>
-        Speis treiders
-      </h1>
-      <span>
-        {$myAgent.symbol ? `Logged in as ${$myAgent.symbol}` : "Not logged in..."}
-      </span>
-    </Card>
-  </div>
-  <ItemList>
-      <li>
-        <Button>
-          <a href="/">Home</a>
-        </Button>
-      </li>
-      <li>
-        <Dropdown text="Navigation">
+<div class="flex">
+  <Navbar>
+    <div slot="header"> 
+      <Card class="bg-white">
+        <h1 slot="header" class="navbar-brand navbar-brand-autodark text-dark">
+          <a href="/">
+            <img src={img} width="110" height="32" alt="Tabler">
+          </a>
+          Speis treiders
+        </h1>
+        <span>
+          {$myAgent.symbol ? `Logged in as ${$myAgent.symbol}` : "Not logged in..."}
+        </span>
+      </Card>
+    </div>
+    <ItemList>
+        <li>
           <Button>
-            <a href="/navigation">
-              Navigation
-            </a>
+            <a href="/">Home</a>
           </Button>
-        </Dropdown>
-      </li>
-      <li>
-        <Dropdown text="Shop">
-          <a href="/shop">
-            Shop
-          </a>
-        </Dropdown>
-      </li>
-      <li>
-        <Dropdown text="Contract">
-          <a href="/contract">
-            <IconChecklist />
-            List
-          </a>
-        </Dropdown>
-      </li>
-      <li>
-        <Dropdown text="User">
-          <a href="/user/register" class="flex">
-            <IconPlus />
-            Register
-          </a>
-          <a href="/user/login" class="flex">
-            <IconLogin />
-            Login
-          </a>
-          <a href="#top" class="flex" on:click={() => localStorage.removeItem("apiKey")}>
-            <IconLogout />
-            Logout
-          </a>
-        </Dropdown>
-      </li>
-  </ItemList>
-  <div slot="footer">
-    <Card>
-        Accepted Contracts: {$myAgent.acceptedContracts.length}
-    </Card>
-  </div>
-</Navbar>
-<slot />
+        </li>
+        <li>
+          <Dropdown text="Navigation">
+            <Button>
+              <a href="/navigation">
+                Navigation
+              </a>
+            </Button>
+          </Dropdown>
+        </li>
+        <li>
+          <Dropdown text="Shop">
+            <a href="/shop">
+              Shop
+            </a>
+          </Dropdown>
+        </li>
+        <li>
+          <Dropdown text="Contract">
+            <a href="/contract">
+              <IconChecklist />
+              List
+            </a>
+          </Dropdown>
+        </li>
+        <li>
+          <Dropdown text="User">
+            <a href="/user/register" class="flex">
+              <IconPlus />
+              Register
+            </a>
+            <a href="/user/login" class="flex">
+              <IconLogin />
+              Login
+            </a>
+            <a href="#top" class="flex" on:click={() => localStorage.removeItem("apiKey")}>
+              <IconLogout />
+              Logout
+            </a>
+          </Dropdown>
+        </li>
+    </ItemList>
+    <div slot="footer">
+      <Card>
+          Accepted Contracts: {$myAgent.acceptedContracts.length}
+      </Card>
+    </div>
+  </Navbar>
+  <slot />
+</div>
 <!-- <div class="page-wrapper">
   <slot />
 </div> -->

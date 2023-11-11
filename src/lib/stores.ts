@@ -2,7 +2,7 @@ import { writable } from "svelte/store";
 import type { Agent, Contract, Ship } from "./api-sdk";
 import type { ComponentType } from "svelte";
 
-type NotificationLevel =  "info" | "success" | "warning" | "error"
+export type NotificationLevel =  "info" | "success" | "warning" | "error"
 export interface Notification {
     title?: string,
     message: string,

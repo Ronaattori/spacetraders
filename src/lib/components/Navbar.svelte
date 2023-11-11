@@ -2,7 +2,7 @@
 
 </script>
 
-<aside class="h-screen w-1/12 flex flex-col p-2 bg-slate-400">
+<aside class="h-screen basis-1/12 grow-0 shrink-0 flex flex-col p-2 bg-slate-400">
   <slot name="header"/>
   <div class="mt-6">
     <slot />
