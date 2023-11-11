@@ -28,7 +28,7 @@
   <Navbar>
     <div slot="header"> 
       <Card class="bg-white">
-        <h1 slot="header" class="navbar-brand navbar-brand-autodark text-dark">
+        <h1 slot="header">
           <a href="/">
             <img src={img} width="110" height="32" alt="Tabler">
           </a>
@@ -92,7 +92,9 @@
       </Card>
     </div>
   </Navbar>
-  <slot />
+  <div class="relative">
+    <slot />
+  </div>
 </div>
 <!-- <div class="page-wrapper">
   <slot />

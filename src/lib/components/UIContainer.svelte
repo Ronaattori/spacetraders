@@ -2,8 +2,6 @@
 
 </script>
 
-<div class="relative">
-    <div class="absolute w-full h-full">
-        <slot />
-    </div>
+<div class="absolute w-full h-full pointer-events-none">
+    <slot />
 </div>

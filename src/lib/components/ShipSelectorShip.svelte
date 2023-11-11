@@ -5,6 +5,8 @@
     import { notifications, windows } from "$lib/stores";
     import { createEventDispatcher } from "svelte";
     import ShipCargoWindow from "./ShipCargoWindow.svelte";
+    import Card from "./Card.svelte";
+    import Button from "./Button.svelte";
 
     export let ship: Ship;
     export let selected: boolean;
@@ -25,32 +27,28 @@
     }
 
 </script> 
-<div class="card">
-    <div class="card-body d-flex flex-column gap-2">
-        <div class="d-flex gap-2">
-            <button class="btn {selected ? "btn-primary" : ""}" 
+<Card>
+    <div class="flex flex-col gap-2">
+        <div class="flex gap-2">
+            <Button class={selected ? "bg-white" : "bg-blue-400"}
             on:click={() => dispatch("select", ship)}>
                 Select: {ship.symbol}
-            </button>
-            <button class="btn" on:click={() => windows.add("Ship inventory", ShipCargoWindow, {ship})}>
+            </Button>
+            <Button on:click={() => windows.add("Ship inventory", ShipCargoWindow, {ship})}>
                 Inventory
-            </button>
+            </Button>
         </div>
-        <div class="d-flex gap-2">
-            <div>
-                <button class="btn" on:click={toggleOrbit} >
-                    {ship.nav.status}
-                </button>
-            </div>
-            <div>
-                <button class="btn" on:click={() => dispatch("extract", {ship: ship})}>
-                    Extract resources | CD: {$cooldown ?? "0"}s
-                </button>
-            </div>
+        <div class="flex gap-2">
+            <Button on:click={toggleOrbit}>
+                {ship.nav.status}
+            </Button>
+            <Button on:click={() => dispatch("extract", {ship: ship})}>
+                Extract resources | CD: {$cooldown ?? "0"}s
+            </Button>
         </div>
         <span> Ship role: {ship.registration.role} </span>
         <span> Current waypoint: {ship.nav.waypointSymbol} </span>
-        <div class="d-flex flex-column">
+        <div class="flex flex-col">
             <span>Fuel:
                 <progress class="progress" value={ship.fuel.current} max={ship.fuel.capacity} />
             </span>
@@ -59,4 +57,4 @@
             </span>
         </div>
     </div>
-</div>
+</Card>

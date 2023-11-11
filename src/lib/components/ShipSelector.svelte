@@ -7,7 +7,7 @@
 
 </script> 
 
-<div class="d-flex flex-column gap-2 mt-2" style="max-width: fit-content;">
+<div class="flex flex-col gap-2 mt-2 max-w-fit">
    {#each ships as ship (ship.symbol)}
         <ShipSelectorShip 
             ship={ship}

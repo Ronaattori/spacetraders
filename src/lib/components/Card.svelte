@@ -3,7 +3,7 @@
     export { _class as class}
 </script>
 
-<div class="card m-2 p-2 rounded-sm {_class}">
+<div class="card m-2 p-2 rounded-sm bg-white {_class}">
     {#if $$slots.header}
         <div>
             <slot name="header" />
