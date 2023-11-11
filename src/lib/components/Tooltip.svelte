@@ -1,8 +1,9 @@
 <script lang="ts">
     import type { ComponentType } from "svelte";
     import Card from "./Card.svelte";
+    import type { TooltipOptions } from "$lib/use";
 
-    export let content: string | {component: ComponentType, props: any}
+    export let content: TooltipOptions
     export let anchorTo: HTMLElement | undefined = undefined;
     export let css2dObject = false;
     
@@ -19,8 +20,8 @@
 </script>
 
 
-<div bind:this={tooltip}>
-  <Card class={`shadow-sm ${css2dObject ? '' : 'absolute'}`}>
+<div bind:this={tooltip} class="{css2dObject ? '' : 'absolute'}">
+  <Card class=shadow-sm>
       {#if typeof content == "string"}
           {content} 
       {:else}

@@ -1,5 +1,6 @@
 <script lang="ts">
   import { createEventDispatcher, onMount, type ComponentType } from "svelte";
+    import Card from "./Card.svelte";
 
   export let buttons: HTMLElement
   export let container: HTMLElement;
@@ -24,8 +25,11 @@
 
 </script>
 
-<div class="card position-absolute shadow" style="z-index: 999" bind:this={container}>
-    <div class="card-secondary dropdown-menu show" bind:this={buttons} />
+<div style="z-index: 999" bind:this={container}>
+  <Card>
+      <div class="flex flex-col" bind:this={buttons}>
+      </div>
+  </Card>
 </div>
 
 <!-- Allow access to passed props from outside this component -->

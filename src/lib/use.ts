@@ -1,7 +1,9 @@
 import type { ComponentType } from "svelte"
 import Tooltip from "./components/Tooltip.svelte";
 
-export function tooltip(node: Node, content: string | {component: ComponentType, props: any}) {
+export type TooltipOptions = string | {component: ComponentType, props: any}
+export function tooltip(node: Node, content: TooltipOptions) {
+    if (content == undefined) return;
     let tooltip: Tooltip | null;
 
     function mouseEnter(e: Event) {

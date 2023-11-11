@@ -7,7 +7,7 @@
 
 </script>
 
-<div class="absolute bottom-20 right-10">
+<div class="absolute bottom-20 right-10 z-50">
     {#each $notifications as notification}
        <NotificationComponent notification={notification} />
     {/each}

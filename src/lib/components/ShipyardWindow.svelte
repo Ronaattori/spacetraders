@@ -6,6 +6,7 @@
     import Window from "$lib/components/Window.svelte";
     import { api } from "$lib/api";
     import { myAgent } from "$lib/stores";
+    import Button from "./Button.svelte";
 
     export let shipyard: Shipyard
     
@@ -28,13 +29,12 @@
                 <td>{ship.purchasePrice}</td>
                 <td>{ship.type}</td>
                 <td>
-                    <button class="btn" 
-                    use:tooltip={{component: ShipyardShipInfo, props: {ship: ship}}}>
+                    <Button tooltip={{component: ShipyardShipInfo, props: {ship}}}>
                         Full info
-                    </button>
-                    <button class="btn" on:click={() => buyShip(ship.type)}>
+                    </Button>
+                    <Button on:click={() => buyShip(ship.type)}>
                         Buy
-                    </button>
+                    </Button>
                 </td>
             </tr>
         {/each}

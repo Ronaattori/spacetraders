@@ -49,8 +49,6 @@
                 <IconX />
             </span>
         </div>
-        <div>
-            <slot />
-        </div>
+        <slot />
     </Card>
 </div>
