@@ -1,4 +1,5 @@
 <script lang="ts">
+    import "../app.css"
     import img from '$lib/images/munkki.jpg';
     import { onMount } from 'svelte';
     import { api } from '$lib/api';
