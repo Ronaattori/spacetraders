@@ -1,8 +1,7 @@
 <script lang="ts">
-    import { onMount } from "svelte";
-
     let container: HTMLElement
     
+    // Add pointer events to children of this component
     $: addPointerEvents(container);
     function addPointerEvents(element: HTMLElement) {
         if (!element) return; 
