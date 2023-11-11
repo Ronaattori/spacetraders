@@ -20,3 +20,10 @@ export function createTimer(end:Date) {
     }, 1000);
     return timer;
 }
+
+export function mapChildren(element: HTMLElement, run: (element: HTMLElement) => void) {
+    for (const _child of element.children) {
+        const child = _child as HTMLElement;
+        run(child);
+    }
+}

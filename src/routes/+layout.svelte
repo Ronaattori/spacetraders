@@ -12,6 +12,7 @@
     import ItemList from "$lib/components/ItemList.svelte";
     import Button from "$lib/components/Button.svelte";
     import Link from "$lib/components/Link.svelte";
+    import ListItem from "$lib/components/ListItem.svelte";
     
     onMount(async () => {
       const res = await api.agents.getMyAgent();
@@ -47,42 +48,52 @@
         </li>
         <li>
           <Dropdown text="Navigation">
-            <Button>
+            <ListItem>
               <Link href="/navigation">
                 Navigation
               </Link>
-            </Button>
+            </ListItem>
           </Dropdown>
         </li>
         <li>
           <Dropdown text="Shop">
-            <Link href="/shop">
-              Shop
-            </Link>
+            <ListItem>
+              <Link href="/shop">
+                Shop
+              </Link>
+            </ListItem>
           </Dropdown>
         </li>
         <li>
           <Dropdown text="Contract">
-            <Link href="/contract">
-              <IconChecklist />
-              List
-            </Link>
+            <ListItem>
+              <Link href="/contract">
+                <IconChecklist />
+                List
+              </Link>
+            </ListItem>
           </Dropdown>
         </li>
         <li>
           <Dropdown text="User">
-            <Link href="/user/register">
-              <IconPlus />
-              Register
-            </Link>
-            <Link href="/user/login">
-              <IconLogin />
-              Login
-            </Link>
-            <Link on:click={() => localStorage.removeItem("apiKey")}>
-              <IconLogout />
-              Logout
-            </Link>
+            <ListItem>
+              <Link href="/user/register">
+                <IconPlus />
+                Register
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link href="/user/login">
+                <IconLogin />
+                Login
+              </Link>
+            </ListItem>
+            <ListItem>
+              <Link on:click={() => localStorage.removeItem("apiKey")}>
+                <IconLogout />
+                Logout
+              </Link>
+            </ListItem>
           </Dropdown>
         </li>
     </ItemList>
