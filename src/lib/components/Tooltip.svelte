@@ -3,6 +3,7 @@
 
     export let content: string | {component: ComponentType, props: any}
     export let anchorTo: HTMLElement | undefined = undefined;
+    export let css2dObject = false;
     
     let tooltip: HTMLElement;
 
@@ -17,7 +18,7 @@
     }
 </script>
 
-<div class="card position-absolute shadow" bind:this={tooltip}>
+<div class="card shadow {css2dObject ? '' : 'position-absolute'}" bind:this={tooltip}>
   <div class="card-body">
     <div class="card-secondary">
         {#if typeof content == "string"}

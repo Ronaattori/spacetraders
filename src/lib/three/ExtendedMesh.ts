@@ -62,13 +62,15 @@ export class ExtendedMesh extends THREE.Mesh {
             const component = new Tooltip({
                 target: element,
                 props: {
-                    content: content
+                    content: content,
+                    css2dObject: true
                 }
             });
         }
         let tooltip: CSS2DObject
         this.pointerenter.subscribe(_ => {
             tooltip = new CSS2DObject(element);
+            tooltip.center.set(0.5, -0.2)
             this.add(tooltip);
         })
         this.pointerout.subscribe(_ => tooltip?.removeFromParent());
