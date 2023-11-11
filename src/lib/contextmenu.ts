@@ -70,6 +70,7 @@ export class Contextmenu {
                             windows.add("Shipyard", ShipyardWindow, {shipyard})
                         }
                     })
+                    break;
                 case (WaypointTrait.symbol.MARKETPLACE):
                     buttons.push({
                         label: "Open Marketplace shop",
@@ -78,6 +79,7 @@ export class Contextmenu {
                             windows.add("Marketplace", MarketplaceWindow, {marketplace})
                         }
                     })
+                    break;
             }
         }
         if (buttons.length == 0) return;

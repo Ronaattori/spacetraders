@@ -24,7 +24,6 @@
     ctxItems = [...ctxItems, ctxItem];
   }
 
-
 </script>
 
 <div bind:this={container}>
