@@ -42,7 +42,7 @@
     </div>
     <ItemList>
         <li>
-          <Button>
+          <Button class=w-full>
             <Link href="/">Home</Link>
           </Button>
         </li>

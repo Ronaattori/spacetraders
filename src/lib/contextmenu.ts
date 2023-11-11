@@ -48,15 +48,20 @@ export class Contextmenu {
     }
 
     add(element: CtxElement) {
-        const a = document.createElement("a")
-        a.href = "#"
-        a.innerText = element.label
-        a.onclick = (e) => {
+        // const a = document.createElement("a")
+        // a.href = "#"
+        // a.innerText = element.label
+        // a.onclick = (e) => {
+        //     e.stopPropagation()
+        //     element.onClick()
+        // }
+        // this.contextmenu.buttons.append(a)
+        // this.contextmenu.buttons = this.contextmenu.buttons
+        const onClick = (e: MouseEvent) => {
             e.stopPropagation()
             element.onClick()
         }
-        this.contextmenu.buttons.append(a)
-        this.contextmenu.buttons = this.contextmenu.buttons
+        this.contextmenu.add({label: element.label, onClick})
     }
     
     createWaypointButtons(waypoint: Waypoint) {

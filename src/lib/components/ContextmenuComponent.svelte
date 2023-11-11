@@ -1,9 +1,16 @@
 <script lang="ts">
   import { createEventDispatcher, onMount } from "svelte";
     import Card from "./Card.svelte";
+    import ListItem from "./ListItem.svelte";
 
   export let buttons: HTMLElement
   export let container: HTMLElement;
+  
+  type CtxItem = {
+    label: string,
+    onClick: (e: MouseEvent) => void
+  }
+  let ctxItems: CtxItem[] = []
 
   const dispatch = createEventDispatcher();
   
@@ -13,12 +20,8 @@
     })
   })
   
-  $: if(buttons) addClasses(buttons)
-  function addClasses(buttons: HTMLElement) {
-    for (const elem of buttons.children) {
-      const button = elem as HTMLElement;
-      button.style.pointerEvents = "all"
-    }
+  export function add(ctxItem: CtxItem) {
+    ctxItems = [...ctxItems, ctxItem];
   }
 
 
@@ -26,7 +29,15 @@
 
 <div bind:this={container}>
   <Card>
-      <div class="flex flex-col" bind:this={buttons} />
+      <div class="flex flex-col" bind:this={buttons} >
+        {#each ctxItems as item}
+          <ListItem
+          class="pointer-events-auto cursor-pointer"
+          on:click={item.onClick}> 
+            {item.label}
+          </ListItem>
+        {/each}
+      </div>
   </Card>
 </div>
 
