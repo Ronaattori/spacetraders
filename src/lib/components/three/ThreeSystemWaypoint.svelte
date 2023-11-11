@@ -86,17 +86,14 @@
     mesh.click.subscribe(_ => dispatch("click"));
     mesh.contextmenu.subscribe(_ => {
         dispatch("contextmenu")
-        // const container = new CSS2DObject();
-        // mesh.add(container)
-        const ctx = new Contextmenu(mesh)
-        if (waypoint) ctx.createWaypointButtons(waypoint)
+        if (waypoint) Contextmenu.createFromWaypoint(mesh, waypoint);
     });
     
     // Set the tooltip when we get waypoint data
     let tooltip = false;
     $: if(waypoint && !tooltip) {
         tooltip = true
-        mesh.setTooltip({component: WaypointInfo, props: {waypoint: waypoint}});
+        mesh.setTooltip({component: WaypointInfo, props: {waypoint}});
     }
 
     onDestroy(() => {

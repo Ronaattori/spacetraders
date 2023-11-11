@@ -16,7 +16,7 @@ export class Contextmenu {
 
     css2dObject?: CSS2DObject
 
-    constructor(target: MouseEvent | HTMLElement | Object3D) {
+    constructor(target: MouseEvent | HTMLElement | Object3D, buttons?: CtxElement[]) {
         let near: HTMLElement;
         if (target instanceof MouseEvent) {
             target.preventDefault()
@@ -40,6 +40,9 @@ export class Contextmenu {
             container.style.left = near.offsetLeft.toString()
             container.style.top = near.offsetTop.toString()
         }
+        
+        // Add buttons if they were already provided
+        buttons?.forEach(button => this.add(button));
 
         this.contextmenu.$on("mouseleave", () => {
             this.contextmenu.$destroy();
@@ -48,15 +51,6 @@ export class Contextmenu {
     }
 
     add(element: CtxElement) {
-        // const a = document.createElement("a")
-        // a.href = "#"
-        // a.innerText = element.label
-        // a.onclick = (e) => {
-        //     e.stopPropagation()
-        //     element.onClick()
-        // }
-        // this.contextmenu.buttons.append(a)
-        // this.contextmenu.buttons = this.contextmenu.buttons
         const onClick = (e: MouseEvent) => {
             e.stopPropagation()
             element.onClick()
@@ -64,11 +58,12 @@ export class Contextmenu {
         this.contextmenu.add({label: element.label, onClick})
     }
     
-    createWaypointButtons(waypoint: Waypoint) {
+    static createFromWaypoint(mesh: Object3D, waypoint: Waypoint) {
+        const buttons: CtxElement[] = [];
         for (const trait of waypoint.traits) {
             switch (trait.symbol) {
                 case (WaypointTrait.symbol.SHIPYARD):
-                    this.add({
+                    buttons.push({
                         label: "Open Shipyard shop",
                         onClick: async () => {
                             const shipyard = (await api.systems.getShipyard(waypoint.systemSymbol, waypoint.symbol)).data;
@@ -76,7 +71,7 @@ export class Contextmenu {
                         }
                     })
                 case (WaypointTrait.symbol.MARKETPLACE):
-                    this.add({
+                    buttons.push({
                         label: "Open Marketplace shop",
                         onClick: async () => {
                             const marketplace = (await api.systems.getMarket(waypoint.systemSymbol, waypoint.symbol)).data;
@@ -85,9 +80,9 @@ export class Contextmenu {
                     })
             }
         }
-        this.add({
-            label: "testing",
-            onClick: () => {}
-        })
+        if (buttons.length == 0) return;
+        const ctx = new Contextmenu(mesh, buttons)
+        return ctx;
+
     }
 }
