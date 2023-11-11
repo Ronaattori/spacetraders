@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { createEventDispatcher, onMount, type ComponentType } from "svelte";
+  import { createEventDispatcher, onMount } from "svelte";
     import Card from "./Card.svelte";
 
   export let buttons: HTMLElement
@@ -17,7 +17,6 @@
   function addClasses(buttons: HTMLElement) {
     for (const elem of buttons.children) {
       const button = elem as HTMLElement;
-      button.classList.add("dropdown-item");
       button.style.pointerEvents = "all"
     }
   }
@@ -25,10 +24,9 @@
 
 </script>
 
-<div style="z-index: 999" bind:this={container}>
+<div bind:this={container}>
   <Card>
-      <div class="flex flex-col" bind:this={buttons}>
-      </div>
+      <div class="flex flex-col" bind:this={buttons} />
   </Card>
 </div>
 

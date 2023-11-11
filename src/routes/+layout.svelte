@@ -12,6 +12,7 @@
     import NavbarItems from "$lib/components/ItemList.svelte";
     import ItemList from "$lib/components/ItemList.svelte";
     import Button from "$lib/components/Button.svelte";
+    import Link from "$lib/components/Link.svelte";
     
     onMount(async () => {
       const res = await api.agents.getMyAgent();
@@ -29,9 +30,9 @@
     <div slot="header"> 
       <Card class="bg-white">
         <h1 slot="header">
-          <a href="/">
-            <img src={img} width="110" height="32" alt="Tabler">
-          </a>
+          <Link href="/">
+            <img src={img} width="110" height="32" alt="Home">
+          </Link>
           Speis treiders
         </h1>
         <span>
@@ -42,47 +43,47 @@
     <ItemList>
         <li>
           <Button>
-            <a href="/">Home</a>
+            <Link href="/">Home</Link>
           </Button>
         </li>
         <li>
           <Dropdown text="Navigation">
             <Button>
-              <a href="/navigation">
+              <Link href="/navigation">
                 Navigation
-              </a>
+              </Link>
             </Button>
           </Dropdown>
         </li>
         <li>
           <Dropdown text="Shop">
-            <a href="/shop">
+            <Link href="/shop">
               Shop
-            </a>
+            </Link>
           </Dropdown>
         </li>
         <li>
           <Dropdown text="Contract">
-            <a href="/contract">
+            <Link href="/contract">
               <IconChecklist />
               List
-            </a>
+            </Link>
           </Dropdown>
         </li>
         <li>
           <Dropdown text="User">
-            <a href="/user/register" class="flex">
+            <Link href="/user/register">
               <IconPlus />
               Register
-            </a>
-            <a href="/user/login" class="flex">
+            </Link>
+            <Link href="/user/login">
               <IconLogin />
               Login
-            </a>
-            <a href="#top" class="flex" on:click={() => localStorage.removeItem("apiKey")}>
+            </Link>
+            <Link on:click={() => localStorage.removeItem("apiKey")}>
               <IconLogout />
               Logout
-            </a>
+            </Link>
           </Dropdown>
         </li>
     </ItemList>
@@ -92,10 +93,9 @@
       </Card>
     </div>
   </Navbar>
-  <div class="relative">
+
+  <!-- TODO: Remove this div and offset UI elements to make Three render under the navbar -->
+  <div>
     <slot />
   </div>
 </div>
-<!-- <div class="page-wrapper">
-  <slot />
-</div> -->

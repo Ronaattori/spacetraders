@@ -1,5 +1,4 @@
 <script lang="ts">
-    import type { ComponentType } from "svelte";
     import Card from "./Card.svelte";
     import type { TooltipOptions } from "$lib/use";
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Ship, ShipType, Shipyard } from "$lib/api-sdk";
+    import type { Ship } from "$lib/api-sdk";
     import Table from "./Table.svelte";
 
     export let ship: Ship

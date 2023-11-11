@@ -1,6 +1,6 @@
 <script lang="ts">
     import { tooltip, type TooltipOptions } from "$lib/use";
-    import { createEventDispatcher, onMount } from "svelte";
+    import { onMount } from "svelte";
 
 
     let _class: string = ""
@@ -9,9 +9,6 @@
     export { _tooltip as tooltip}
     
     let button: HTMLButtonElement;
-
-    const dispatch = createEventDispatcher();
-
 
     onMount(() => {
         if (_tooltip != undefined) {

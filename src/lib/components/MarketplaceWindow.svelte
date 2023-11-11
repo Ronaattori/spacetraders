@@ -1,5 +1,5 @@
 <script lang="ts">
-    import type { Market, ShipType, Shipyard } from "$lib/api-sdk";
+    import type { Market } from "$lib/api-sdk";
     import Table from "./Table.svelte";
 
     export let marketplace: Market

@@ -7,6 +7,7 @@
     import ShipCargoWindow from "./ShipCargoWindow.svelte";
     import Card from "./Card.svelte";
     import Button from "./Button.svelte";
+    import ItemList from "./ItemList.svelte";
 
     export let ship: Ship;
     export let selected: boolean;
@@ -48,13 +49,13 @@
         </div>
         <span> Ship role: {ship.registration.role} </span>
         <span> Current waypoint: {ship.nav.waypointSymbol} </span>
-        <div class="flex flex-col">
+        <ItemList>
             <span>Fuel:
                 <progress class="progress" value={ship.fuel.current} max={ship.fuel.capacity} />
             </span>
             <span>Cargo:
                 <progress class="progress" value={ship.cargo.units} max={ship.cargo.capacity} />
             </span>
-        </div>
+        </ItemList>
     </div>
 </Card>

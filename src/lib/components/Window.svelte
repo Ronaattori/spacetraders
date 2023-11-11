@@ -1,5 +1,5 @@
 <script context="module" lang="ts">
-    let z = 10;
+
 </script>
 
 <script lang="ts">
@@ -11,41 +11,33 @@
     
     let header: HTMLElement;
     let container: HTMLElement;
+    let moving = false;
     const dispatch = createEventDispatcher();
     
     onMount(() => {
-        // Open windows in the middle of the screen
         container.style.left = "50%";
         container.style.top = "50%";
-
-        // Enable window dragging from the header
-        let moving = false;
-        let prevX: number
-        let prevY: number
-        header.onmousedown = (e) => {
-            e.preventDefault();
-            moving = true;
-            prevX = e.clientX
-            prevY = e.clientY
-        }
-        header.onmouseup = (e) => moving = false;
-        header.onmousemove = (e) => {
-            if (!moving) return;
-            const curX = prevX - e.clientX;
-            const curY = prevY - e.clientY;
-            container.style.top = `${(container.offsetTop  - curY)}px`
-            container.style.left = `${(container.offsetLeft  - curX)}px`
-            prevX = e.clientX
-            prevY = e.clientY
-        }
-    }) 
+    })
+    function onMouseMove(e: MouseEvent) {
+        if (!moving) return;
+        container.style.top = `${(container.offsetTop  + e.movementY)}px`
+        container.style.left = `${(container.offsetLeft  + e.movementX)}px`
+    }
 </script>
 
-<div class="fixed" style="z-index: {z++};" bind:this={container}>
+<svelte:window 
+on:mouseup={() => moving = false} 
+on:mousemove={onMouseMove}
+/>
+
+<div class="fixed" bind:this={container}>
     <Card>
-        <div slot="header" class="flex" bind:this={header}>
+        <!-- svelte-ignore a11y-no-static-element-interactions -->
+        <div slot="header" class="flex" bind:this={header}
+        on:mousedown={() => moving = true}>
             <h3>{title}</h3>
-            <span class="ml-auto" on:click={() => dispatch("close")}>
+            <!-- svelte-ignore a11y-click-events-have-key-events -->
+            <span class="ml-auto cursor-pointer" on:click={() => dispatch("close")}>
                 <IconX />
             </span>
         </div>

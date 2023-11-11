@@ -1,8 +1,8 @@
 <script lang="ts">
-    export let columns:Array<string>;
+    export let columns: string[];
 </script>
 
-<table class="table table-vcenter">
+<table>
   <thead>
     <tr>
         {#each columns as column}

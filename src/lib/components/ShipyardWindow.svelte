@@ -1,9 +1,7 @@
 <script lang="ts">
     import type { ShipType, Shipyard } from "$lib/api-sdk";
-    import { tooltip } from "$lib/use";
     import ShipyardShipInfo from "./ShipyardShipInfo.svelte";
     import Table from "./Table.svelte";
-    import Window from "$lib/components/Window.svelte";
     import { api } from "$lib/api";
     import { myAgent } from "$lib/stores";
     import Button from "./Button.svelte";

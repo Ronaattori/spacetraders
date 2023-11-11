@@ -1,5 +1,6 @@
 <script lang="ts">
     import type { Ship } from "$lib/api-sdk";
+    import ItemList from "./ItemList.svelte";
     import ShipSelectorShip from "./ShipSelectorShip.svelte";
 
     export let ships: Ship[];
@@ -7,7 +8,7 @@
 
 </script> 
 
-<div class="flex flex-col gap-2 mt-2 max-w-fit">
+<ItemList class="max-w-fit mt-2">
    {#each ships as ship (ship.symbol)}
         <ShipSelectorShip 
             ship={ship}
@@ -16,4 +17,4 @@
             on:extract
         />
    {/each} 
-</div>
+</ItemList>

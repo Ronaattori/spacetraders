@@ -1,6 +1,5 @@
 <script lang="ts">
-    import type { Notification, NotificationLevel } from "$lib/stores";
-    import type { Writable } from "svelte/store";
+    import type { Notification } from "$lib/stores";
     import { slide } from "svelte/transition";
     import { IconAlertCircle, IconAlertTriangle, IconCheck, IconInfoCircle } from '@tabler/icons-svelte'
     import Card from "./Card.svelte";
@@ -19,19 +18,20 @@
         "warning": IconAlertTriangle,
         "error": IconAlertCircle,
     }
+    const color = colors[notification.level]
 
 </script>
 
 <div transition:slide={{duration: 200}}>
-    <Card class={colors[notification.level]}>
+    <Card class={`${color} w-96`}>
         <div class="flex gap-2">
             <svelte:component this={icons[notification.level]} size={30}/>
             <div>
                 {#if notification.title}
-                    <h4 class="alert-title">{notification.title}</h4>    
-                    <div class="text-secondary">{notification.message}</div>
+                    <h4>{notification.title}</h4>    
+                    <div>{notification.message}</div>
                 {:else}
-                    <h4 class="alert-title">{notification.message}</h4>    
+                    <h4>{notification.message}</h4>    
                 {/if}
             </div>
         </div>
