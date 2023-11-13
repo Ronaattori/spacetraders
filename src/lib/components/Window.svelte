@@ -35,7 +35,7 @@ on:mousemove={onMouseMove}
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div slot="header" class="flex" bind:this={header}
         on:mousedown={() => moving = true}>
-            <h3>{title}</h3>
+            <h3 class="pointer-events-none select-none">{title}</h3>
             <!-- svelte-ignore a11y-click-events-have-key-events -->
             <span class="ml-auto cursor-pointer" on:click={() => dispatch("close")}>
                 <IconX />

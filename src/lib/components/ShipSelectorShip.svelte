@@ -14,6 +14,9 @@
     const dispatch = createEventDispatcher();
     
     $: cooldown = ship.cooldown.expiration ? createTimer(new Date(ship.cooldown.expiration)): null
+
+    $: arrivingAt = new Date(ship.nav.route.arrival)
+    $: arrival = arrivingAt > new Date() ? createTimer(arrivingAt): null
     
     async function toggleOrbit() {
         if (ship.nav.status == ShipNavStatus.DOCKED) {
@@ -41,7 +44,7 @@
         </div>
         <div class="flex gap-2">
             <Button on:click={toggleOrbit}>
-                {ship.nav.status}
+                {ship.nav.status} {$arrival ? ` | ${$arrival}s` : ""}
             </Button>
             <Button on:click={() => dispatch("extract", {ship: ship})}>
                 Extract resources | CD: {$cooldown ?? "0"}s
