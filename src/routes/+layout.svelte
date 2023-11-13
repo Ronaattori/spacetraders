@@ -40,6 +40,7 @@
         </span>
       </Card>
     </div>
+
     <ItemList>
         <li>
           <Button class=w-full>
@@ -97,6 +98,7 @@
           </Dropdown>
         </li>
     </ItemList>
+
     <div slot="footer">
       <Card>
           Accepted Contracts: {$myAgent.acceptedContracts.length}
