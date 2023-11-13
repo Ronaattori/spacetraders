@@ -14,7 +14,6 @@
             ship={ship}
             selected={ship == selectedShip}
             on:select={() => selectedShip = ship}
-            on:extract
         />
    {/each} 
 </ItemList>

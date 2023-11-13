@@ -20,6 +20,7 @@
 
 <button class="rounded-md shadow-md p-2 border-2 hover:brightness-90 {color} {_class}"
 bind:this={button}
+on:contextmenu|preventDefault
 on:click>
     <slot />
 </button>

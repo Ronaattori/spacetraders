@@ -2,15 +2,18 @@
     import { api } from "$lib/api";
     import { ShipNavStatus, type Ship } from "$lib/api-sdk";
     import { createTimer } from "$lib/lib";
-    import { notifications, windows } from "$lib/stores";
+    import { myAgent, notifications, windows } from "$lib/stores";
     import { createEventDispatcher } from "svelte";
     import ShipCargoWindow from "./ShipCargoWindow.svelte";
     import Card from "./Card.svelte";
     import Button from "./Button.svelte";
     import ItemList from "./ItemList.svelte";
+    import { tooltip } from "$lib/use";
 
     export let ship: Ship;
     export let selected: boolean;
+    
+    let autoExtractEnabled = false;
     const dispatch = createEventDispatcher();
     
     $: cooldown = ship.cooldown.expiration ? createTimer(new Date(ship.cooldown.expiration)): null
@@ -27,6 +30,25 @@
             const res = await api.fleet.dockShip(ship.symbol);
             notifications.success(`Ship ${ship.symbol} succesfully docked`)
             ship = Object.assign(ship, res.data)
+        }
+    }
+    async function extract() {
+        const res = await api.fleet.extractResources(ship.symbol);
+        ship.cooldown = res.data.cooldown
+        ship.cargo = res.data.cargo
+        $myAgent.ships = $myAgent.ships;
+        return res;
+    }
+    
+    $: if (autoExtractEnabled) autoExtract()
+    async function autoExtract() {
+        try {
+            const res = await extract()
+            setTimeout(() => {
+                if (autoExtractEnabled) autoExtract()               
+            }, (res.data.cooldown.remainingSeconds + 1) * 1000);
+        } catch {
+            autoExtractEnabled = false;
         }
     }
 
@@ -46,7 +68,11 @@
             <Button on:click={toggleOrbit}>
                 {ship.nav.status} {$arrival ? ` | ${$arrival}s` : ""}
             </Button>
-            <Button on:click={() => dispatch("extract", {ship: ship})}>
+            <Button 
+            color={autoExtractEnabled ? "bg-highlight" : "bg-white"}
+            tooltip={"Right click to enable auto-extract"}
+            on:contextmenu={() => autoExtractEnabled = !autoExtractEnabled}
+            on:click={extract}>
                 Extract resources | CD: {$cooldown ?? "0"}s
             </Button>
         </div>

@@ -18,7 +18,10 @@ class AxiosHttpRequest extends BaseHttpRequest {
       return new CancelablePromise<T>(async (resolve, reject, onCancel) => {
         return __request(this.config, options)
         .then((x:any) => resolve(x))
-        .catch(this.onError);
+        .catch(e => {
+          this.onError(e)
+          reject(e)
+        });
       })
     }
     onError(error:ApiError) {
@@ -27,6 +30,7 @@ class AxiosHttpRequest extends BaseHttpRequest {
       } catch {
         notifications.error(error.toString());        
       }
+      return error
     }
 }
   
