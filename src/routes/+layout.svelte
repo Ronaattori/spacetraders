@@ -41,63 +41,51 @@
       </Card>
     </div>
 
-    <ItemList>
-        <li>
-          <Button class=w-full>
-            <Link href="/">Home</Link>
-          </Button>
-        </li>
-        <li>
-          <Dropdown text="Navigation">
-            <ListItem>
-              <Link href="/navigation">
-                Navigation
-              </Link>
-            </ListItem>
-          </Dropdown>
-        </li>
-        <li>
-          <Dropdown text="Shop">
-            <ListItem>
-              <Link href="/shop">
-                Shop
-              </Link>
-            </ListItem>
-          </Dropdown>
-        </li>
-        <li>
-          <Dropdown text="Contract">
-            <ListItem>
-              <Link href="/contract">
-                <IconChecklist />
-                List
-              </Link>
-            </ListItem>
-          </Dropdown>
-        </li>
-        <li>
-          <Dropdown text="User">
-            <ListItem>
-              <Link href="/user/register">
-                <IconPlus />
-                Register
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link href="/user/login">
-                <IconLogin />
-                Login
-              </Link>
-            </ListItem>
-            <ListItem>
-              <Link on:click={() => localStorage.removeItem("apiKey")}>
-                <IconLogout />
-                Logout
-              </Link>
-            </ListItem>
-          </Dropdown>
-        </li>
-    </ItemList>
+    <Button class=w-full>
+      <Link href="/">Home</Link>
+    </Button>
+    <Dropdown text="Navigation">
+      <ListItem>
+        <Link href="/navigation">
+          Navigation
+        </Link>
+      </ListItem>
+    </Dropdown>
+    <Dropdown text="Shop">
+      <ListItem>
+        <Link href="/shop">
+          Shop
+        </Link>
+      </ListItem>
+    </Dropdown>
+    <Dropdown text="Contract">
+      <ListItem>
+        <Link href="/contract">
+          <IconChecklist />
+          List
+        </Link>
+      </ListItem>
+    </Dropdown>
+    <Dropdown text="User">
+      <ListItem>
+        <Link href="/user/register">
+          <IconPlus />
+          Register
+        </Link>
+      </ListItem>
+      <ListItem>
+        <Link href="/user/login">
+          <IconLogin />
+          Login
+        </Link>
+      </ListItem>
+      <ListItem>
+        <Link on:click={() => localStorage.removeItem("apiKey")}>
+          <IconLogout />
+          Logout
+        </Link>
+      </ListItem>
+    </Dropdown>
 
     <div slot="footer">
       <Card>
