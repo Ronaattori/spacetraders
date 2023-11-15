@@ -1,8 +1,7 @@
 <script lang="ts">
     import { tooltip, type TooltipOptions } from "$lib/use";
     import { onMount } from "svelte";
-
-    export let color = "bg-white" 
+    import { twMerge } from "tailwind-merge";
 
     let _tooltip: TooltipOptions | undefined = undefined
     export { _tooltip as tooltip}
@@ -18,7 +17,7 @@
 
 <button 
 {...$$restProps} 
-class="rounded-md shadow-md p-2 border-2 hover:brightness-90 {color} {$$props.class ?? ''}"
+class={twMerge("rounded-md shadow-md p-2 border-2 hover:brightness-90 bg-white", $$props.class)}
 bind:this={button}
 on:contextmenu|preventDefault
 on:click>

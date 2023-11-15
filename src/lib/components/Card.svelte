@@ -1,8 +1,9 @@
 <script lang="ts">
-    export let color = "bg-white" 
+    import { twMerge } from "tailwind-merge";
+
 </script>
 
-<div {...$$restProps} class="card m-2 p-2 rounded-sm divide-y-2 {color} {$$props.class ?? ''}">
+<div {...$$restProps} class={twMerge("card m-2 p-2 rounded-sm divide-y-2 bg-white", $$props.class)}>
     {#if $$slots.header}
         <div>
             <slot name="header" />

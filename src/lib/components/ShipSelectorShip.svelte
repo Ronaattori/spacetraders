@@ -53,10 +53,10 @@
     }
 
 </script> 
-<Card color="bg-secondary">
+<Card class="bg-secondary">
     <div class="flex flex-col gap-2">
         <div class="flex gap-2">
-            <Button color={selected ? "bg-primary" : "bg-white"}
+            <Button class={selected ? "bg-primary" : "bg-white"}
             on:click={() => dispatch("select", ship)}>
                 Select: {ship.symbol}
             </Button>
@@ -69,7 +69,7 @@
                 {ship.nav.status} {$arrival ? ` | ${$arrival}s` : ""}
             </Button>
             <Button 
-            color={autoExtractEnabled ? "bg-highlight" : "bg-white"}
+            class={autoExtractEnabled ? "bg-highlight" : "bg-white"}
             tooltip={"Right click to enable auto-extract"}
             on:contextmenu={() => autoExtractEnabled = !autoExtractEnabled}
             on:click={extract}>

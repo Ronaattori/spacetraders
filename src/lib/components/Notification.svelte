@@ -23,7 +23,7 @@
 </script>
 
 <div transition:slide={{duration: 200}}>
-    <Card class=w-96 color={color}>
+    <Card class="w-96 {color}">
         <div class="flex gap-2">
             <svelte:component this={icons[notification.level]} size={30}/>
             <div>
