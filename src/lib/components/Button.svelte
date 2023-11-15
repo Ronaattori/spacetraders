@@ -4,8 +4,6 @@
 
     export let color = "bg-white" 
 
-    let _class: string = ""
-    export { _class as class}
     let _tooltip: TooltipOptions | undefined = undefined
     export { _tooltip as tooltip}
     
@@ -18,7 +16,9 @@
     })
 </script>
 
-<button class="rounded-md shadow-md p-2 border-2 hover:brightness-90 {color} {_class}"
+<button 
+{...$$restProps} 
+class="rounded-md shadow-md p-2 border-2 hover:brightness-90 {color} {$$props.class ?? ''}"
 bind:this={button}
 on:contextmenu|preventDefault
 on:click>

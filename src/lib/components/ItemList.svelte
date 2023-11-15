@@ -1,8 +1,7 @@
 <script lang="ts">
-    let _class: string = ""
-    export { _class as class}
+
 </script>
 
-<ul class="{_class} flex flex-col gap-2">
+<ul {...$$restProps} class="flex flex-col gap-2 {$$props.class ?? ''}">
     <slot />
 </ul>
