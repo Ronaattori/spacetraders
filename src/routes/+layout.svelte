@@ -4,15 +4,15 @@
     import { onMount } from 'svelte';
     import { api } from '$lib/api';
     import { notifications, myAgent } from '$lib/stores';
-    import Notifications from '$lib/components/Notifications.svelte';
-    import Navbar from "$lib/components/Navbar.svelte";
-    import Dropdown from '$lib/components/Dropdown.svelte';
     import { IconCheck, IconChecklist, IconLogin, IconLogout, IconPlus } from '@tabler/icons-svelte';
-    import Card from "$lib/components/Card.svelte";
-    import ItemList from "$lib/components/ItemList.svelte";
-    import Button from "$lib/components/Button.svelte";
-    import Link from "$lib/components/Link.svelte";
-    import ListItem from "$lib/components/ListItem.svelte";
+    import Button from "$lib/components/common/Button.svelte";
+    import Navbar from "$lib/components/common/Navbar.svelte";
+    import Dropdown from "$lib/components/common/Dropdown.svelte";
+    import Card from "$lib/components/common/Card.svelte";
+    import ItemList from "$lib/components/common/ItemList.svelte";
+    import ListItem from "$lib/components/common/ListItem.svelte";
+    import Link from "$lib/components/common/Link.svelte";
+    import Notifications from "$lib/components/common/Notifications.svelte";
     
     onMount(async () => {
       const res = await api.agents.getMyAgent();

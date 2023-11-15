@@ -1,6 +1,5 @@
 <script lang="ts">
     import { slide } from "svelte/transition";
-    import Button from "./Button.svelte";
     import Card from "./Card.svelte";
     import { IconArrowDown } from "@tabler/icons-svelte";
 

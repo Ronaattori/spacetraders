@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Market } from "$lib/api-sdk";
-    import Table from "./Table.svelte";
+    import Table from "$lib/components/common/Table.svelte";
 
     export let marketplace: Market
 

@@ -1,10 +1,10 @@
 <script lang="ts">
     import type { ShipType, Shipyard } from "$lib/api-sdk";
-    import ShipyardShipInfo from "./ShipyardShipInfo.svelte";
-    import Table from "./Table.svelte";
     import { api } from "$lib/api";
     import { myAgent } from "$lib/stores";
-    import Button from "./Button.svelte";
+    import Button from "$lib/components/common/Button.svelte";
+    import Table from "$lib/components/common/Table.svelte";
+    import ShipyardShipInfo from "../tooltip/ShipyardShipInfo.svelte";
 
     export let shipyard: Shipyard
     

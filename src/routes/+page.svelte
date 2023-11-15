@@ -1,7 +1,7 @@
 <script lang="ts">
     import { api } from "$lib/api";
     import type { WaypointTrait, Ship, System, SystemWaypoint, Waypoint } from "$lib/api-sdk";
-    import ShipSelector from "$lib/components/ShipSelector.svelte";
+    import ShipSelector from "$lib/components/spacetraders/ui/ShipSelector.svelte";
     import ThreeCanvas from "$lib/components/three/ThreeCanvas.svelte";
     import ThreeSun from "$lib/components/three/ThreeSun.svelte";
     import ThreeSystemWaypoint from "$lib/components/three/ThreeSystemWaypoint.svelte";
@@ -9,9 +9,9 @@
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
     import { Contextmenu } from "$lib/contextmenu";
-    import Window from "$lib/components/Window.svelte";
-    import TopNavbar from "$lib/components/TopNavbar.svelte";
-    import UiContainer from "$lib/components/UIContainer.svelte";
+    import Window from "$lib/components/common/Window.svelte";
+    import TopNavbar from "$lib/components/common/TopNavbar.svelte";
+    import UiContainer from "$lib/components/spacetraders/ui/UIContainer.svelte";
     
     $: ships = $myAgent.ships;
     let selectedShip: Ship;

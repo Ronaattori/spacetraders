@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Ship } from "$lib/api-sdk";
-    import Table from "./Table.svelte";
+    import Table from "$lib/components/common/Table.svelte";
 
     export let ship: Ship
     

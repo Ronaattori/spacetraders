@@ -1,5 +1,5 @@
 import type { ComponentType } from "svelte"
-import Tooltip from "./components/Tooltip.svelte";
+import Tooltip from "./components/common/Tooltip.svelte";
 
 export type TooltipOptions = string | {component: ComponentType, props: any}
 export function tooltip(node: Node, content: TooltipOptions) {

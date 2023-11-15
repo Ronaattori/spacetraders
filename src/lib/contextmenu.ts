@@ -1,10 +1,10 @@
 import { Object3D } from "three";
-import ContextmenuComponent from "./components/ContextmenuComponent.svelte";
+import ContextmenuComponent from "./components/common/ContextmenuComponent.svelte";
 import { WaypointTrait, type Ship, type Shipyard, type Waypoint } from "./api-sdk";
 import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer";
-import ShipyardWindow from "./components/ShipyardWindow.svelte";
+import ShipyardWindow from "./components/spacetraders/window/ShipyardWindow.svelte";
 import { api } from "./api";
-import MarketplaceWindow from "./components/MarketplaceWindow.svelte";
+import MarketplaceWindow from "./components/spacetraders/window/MarketplaceWindow.svelte";
 import { windows } from "./stores";
 
 type CtxElement = {

@@ -2,11 +2,10 @@
     import { onMount } from 'svelte';
     import { api } from '$lib/api';
     import type { Contract } from '$lib/api-sdk';
-    import ContractInfo from '$lib/components/ContractInfo.svelte';
-    import Table from '$lib/components/Table.svelte';
+    import ContractInfo from '$lib/components/spacetraders/tooltip/ContractInfo.svelte';
+    import Table from '$lib/components/common/Table.svelte';
     import { notifications, myAgent } from '$lib/stores';
     import { tooltip } from '$lib/use';
-    import Dropdown from '$lib/components/Dropdown.svelte';
 
     let contracts:Array<Contract> = [];
     onMount(async () => {

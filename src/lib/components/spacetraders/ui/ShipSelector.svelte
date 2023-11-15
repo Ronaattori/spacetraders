@@ -1,6 +1,6 @@
 <script lang="ts">
     import type { Ship } from "$lib/api-sdk";
-    import ItemList from "./ItemList.svelte";
+    import ItemList from "$lib/components/common/ItemList.svelte";
     import ShipSelectorShip from "./ShipSelectorShip.svelte";
 
     export let ships: Ship[];

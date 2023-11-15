@@ -4,11 +4,11 @@
     import { createTimer } from "$lib/lib";
     import { myAgent, notifications, windows } from "$lib/stores";
     import { createEventDispatcher } from "svelte";
-    import ShipCargoWindow from "./ShipCargoWindow.svelte";
-    import Card from "./Card.svelte";
-    import Button from "./Button.svelte";
-    import ItemList from "./ItemList.svelte";
     import { tooltip } from "$lib/use";
+    import ShipCargoWindow from "../window/ShipCargoWindow.svelte";
+    import Card from "$lib/components/common/Card.svelte";
+    import Button from "$lib/components/common/Button.svelte";
+    import ItemList from "$lib/components/common/ItemList.svelte";
 
     export let ship: Ship;
     export let selected: boolean;

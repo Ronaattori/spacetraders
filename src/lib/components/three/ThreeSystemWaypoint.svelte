@@ -23,9 +23,9 @@
     import { WaypointType, type SystemWaypoint, type System, type Waypoint } from "$lib/api-sdk";
     import { randFloat, randInt } from "three/src/math/MathUtils";
     import { ExtendedMesh } from "$lib/three/ExtendedMesh";
-    import WaypointInfo from "../WaypointInfo.svelte";
     import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer";
     import { Contextmenu } from "$lib/contextmenu";
+    import WaypointInfo from "../spacetraders/tooltip/WaypointInfo.svelte";
 
     export let systemWaypoint: SystemWaypoint; 
     export let waypoint: Waypoint | undefined; 
