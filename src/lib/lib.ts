@@ -27,3 +27,14 @@ export function mapChildren(element: HTMLElement, run: (element: HTMLElement) =>
         run(child);
     }
 }
+
+export function getCookies(){
+    var cookie = document.cookie;
+    const cookies = cookie.split('; ');
+    const obj: Record<string, string> = {};
+    for (let i in cookies) {
+        const cur = cookies[i].split('=');
+        obj[cur[0]] = cur[1];
+    }
+    return obj;
+}

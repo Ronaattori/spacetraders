@@ -1,16 +1,18 @@
 <script lang="ts">
     import { tooltip, type TooltipOptions } from "$lib/use";
-    import { onMount } from "svelte";
+    import { onMount, type ComponentProps } from "svelte";
+    import type { HTMLButtonAttributes } from "svelte/elements";
     import { twMerge } from "tailwind-merge";
 
-    let _tooltip: TooltipOptions | undefined = undefined
-    export { _tooltip as tooltip}
-    
+    interface $$Props extends HTMLButtonAttributes {
+        tooltip?: TooltipOptions
+    }
+
     let button: HTMLButtonElement;
 
     onMount(() => {
-        if (_tooltip != undefined) {
-            tooltip(button, _tooltip)
+        if ($$props.tooltip != undefined) {
+            tooltip(button, $$props.tooltip)
         }
     })
 </script>

@@ -12,6 +12,7 @@
     import Window from "$lib/components/common/Window.svelte";
     import TopNavbar from "$lib/components/common/TopNavbar.svelte";
     import UiContainer from "$lib/components/spacetraders/ui/UIContainer.svelte";
+    import { onMount } from "svelte";
     
     let canvas: ThreeCanvas;
     
@@ -20,6 +21,15 @@
     let system: System;
     $: shipsInSystem = (selectedShip && system) ? ships.filter(ship => ship.nav.systemSymbol == system.symbol) : [];
     let waypoints: Map<string, Waypoint> = new Map();
+
+    // Fetch our first data
+    onMount(async () => {
+      const res = await api.agents.getMyAgent();
+      const agentData = {...$myAgent, ...res.data};
+      const ships = (await api.fleet.getMyShips()).data;
+      agentData.ships = ships;
+      $myAgent = Object.assign($myAgent, agentData)
+    })
     
     // Trigger a refresh on ships when selectedShip changes
     // And turn the camera to look at the selected ship

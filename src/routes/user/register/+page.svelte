@@ -1,39 +1,29 @@
 <script lang="ts">
-    import { api } from "$lib/api";
+    import { enhance } from "$app/forms";
     import { FactionSymbols } from "$lib/api-sdk";
+    import Button from "$lib/components/common/Button.svelte";
+    import Card from "$lib/components/common/Card.svelte";
+    import Input from "$lib/components/common/Input.svelte";
+    import ItemList from "$lib/components/common/ItemList.svelte";
 
-
-
-    let selectedFaction:FactionSymbols = FactionSymbols.COSMIC;
-    let username: string;
-    let apiKey: string = "";
-
-    async function register() {
-      const res = await api.default.register({
-        faction: selectedFaction,
-        symbol: username
-      });
-      apiKey = res.data.token;
-      localStorage.setItem("apiKey", apiKey);
-      window.location.replace("/");
-    }
+    let selectedFaction = FactionSymbols.COSMIC;
 </script>
 
-
-<h2>Register agent</h2>
-<form class="p-2" on:submit={register}>
-    <div class="mb-3">
-        <label class="form-label" for="faction">Faction:</label>
-        <select id="faction" class="form-select">
-          {#each Object.entries(FactionSymbols) as [k, v]}
-            <option on:select={() => selectedFaction = v}>{k}</option>
-          {/each}
-        </select>
-        <label class="form-label" for="username">Username</label>
-        <input id="username" type="text" class="form-control" placeholder="Agent username" maxlength=14 bind:value={username} />
-        <button class="btn btn-success m-2">Submit</button>
-    </div>
-</form>
-<h3>
-  Api key: {apiKey}
-</h3>
+<div class="bg-secondary w-screen h-screen flex justify-center items-center">
+    <Card>
+      <h2>Register an Agent</h2>
+      <form method="POST" action="/user?/register" use:enhance>
+        <ItemList>
+          <select name="faction" class="form-select" bind:value={selectedFaction}>
+            {#each Object.entries(FactionSymbols) as [k, v]}
+              <option value={v}>{k}</option>
+            {/each}
+          </select>
+          <Input name="symbol" maxlength={14} required placeholder="Agent name"/>
+          <Button>
+            Submit
+          </Button>
+        </ItemList>
+      </form>
+    </Card>
+</div>

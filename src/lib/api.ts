@@ -5,6 +5,8 @@ import axios from 'axios';
 import type { ApiRequestOptions } from "./api-sdk/core/ApiRequestOptions";
 import { request as __request } from "./api-sdk/core/request";
 import { notifications } from "./stores";
+import { browser } from "$app/environment";
+import { getCookies } from "./lib";
 
 // We need a custom class to catch errors nicely
 class AxiosHttpRequest extends BaseHttpRequest {
@@ -35,7 +37,12 @@ class AxiosHttpRequest extends BaseHttpRequest {
 }
   
 const client = new SpacetradersClient({
-  TOKEN: async () => localStorage.getItem("apiKey") ?? ""
+  TOKEN: async () => {
+    // The server should only call the api when registering. This doesn't need a key
+    if (!browser) return ""
+
+    return getCookies().apiKey ?? ""
+  }
 }, AxiosHttpRequest);
 
 export const api = client
