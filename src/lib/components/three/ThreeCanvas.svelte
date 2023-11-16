@@ -2,7 +2,6 @@
     import * as THREE from "three";
     import { onMount, setContext } from "svelte";
     import type { ThreeContext } from "$lib/three/contexts";
-    // @ts-ignore
     import { MapControls } from 'three/addons/controls/MapControls'
     import { EffectComposer } from 'three/addons/postprocessing/EffectComposer';
     import { RenderPass } from 'three/addons/postprocessing/RenderPass';
@@ -13,6 +12,8 @@
     import { writable } from "svelte/store";
     import { ExtendedMesh } from "$lib/three/ExtendedMesh";
     import { CSS2DRenderer } from "three/addons/renderers/CSS2DRenderer";
+    import { tweened } from "svelte/motion";
+    import { cubicInOut, sineInOut } from "svelte/easing";
 
 
     let container: HTMLElement;
@@ -32,6 +33,10 @@
     css2dRenderer.domElement.style.position = 'absolute';
     css2dRenderer.domElement.style.top = '0px';
     css2dRenderer.domElement.style.pointerEvents = 'none';
+    const controls = new MapControls(camera, renderer.domElement)
+    camera.position.set(0, 30, 100)
+    camera.lookAt(new THREE.Vector3(0, 0, 0))
+
 
     setContext<ThreeContext>("three", {
         scene: scene,
@@ -66,13 +71,7 @@
         window.addEventListener("click", onClick);
         window.addEventListener("contextmenu", onContextmenu);
 
-        // Camera movement handling
-        const controls = new MapControls(camera, renderer.domElement)
-        camera.position.set(0, 30, 100)
-        camera.lookAt(new THREE.Vector3(0, 0, 0))
-
         animate();
-
 
         // And clean up after ourselves when the component is removed
         return () => {
@@ -142,6 +141,27 @@
             }
         }
     }
+    
+    // And then exported functions to manipulate the scene
+
+    /**
+     * Smoothly turn the camera to look at the object that name matches symbol
+     * @param symbol name of the THREE.Object3D to look at
+     */
+    export function smoothLookAt(symbol: string) {
+        const obj = scene.getObjectByName(symbol)
+        if (!obj) return;
+        const cmr = tweened(controls.target, {
+            duration: 200,
+            easing: sineInOut
+        })
+        cmr.subscribe((cur) => {
+            controls.target.copy(cur)
+            controls.update()
+        })
+        cmr.set(obj.position)
+    }
+
 
 </script>
 

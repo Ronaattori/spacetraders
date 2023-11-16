@@ -13,6 +13,8 @@
     import TopNavbar from "$lib/components/common/TopNavbar.svelte";
     import UiContainer from "$lib/components/spacetraders/ui/UIContainer.svelte";
     
+    let canvas: ThreeCanvas;
+    
     $: ships = $myAgent.ships;
     let selectedShip: Ship;
     let system: System;
@@ -20,7 +22,12 @@
     let waypoints: Map<string, Waypoint> = new Map();
     
     // Trigger a refresh on ships when selectedShip changes
-    $: selectedShip, ships = ships;
+    // And turn the camera to look at the selected ship
+    $: selectedShip, onSelectedShipUpdate();
+    function onSelectedShipUpdate() {
+        ships = ships
+        if (canvas) canvas.smoothLookAt(selectedShip.symbol)
+    }
     
     // Select the first ship if nothing else is specified
     const selectFirst = (ships: Ship[]) => selectedShip = ships[0];
@@ -63,12 +70,6 @@
         const res = await api.fleet.navigateShip(ship.symbol, {waypointSymbol: toWaypoint.symbol})
         selectedShip = Object.assign(selectedShip, res.data)
     }
-    async function extractResources(ship: Ship) {
-        const res = await api.fleet.extractResources(ship.symbol);
-        ship.cooldown = res.data.cooldown
-        ship.cargo = res.data.cargo
-        ships = ships;
-    }
 </script>
 
 {#each $windows as window}
@@ -82,11 +83,10 @@
     <ShipSelector
         bind:selectedShip
         ships={ships}
-        on:extract={(e) => extractResources(e.detail.ship)}
     />
 </UiContainer>
 
-<ThreeCanvas>
+<ThreeCanvas bind:this={canvas}>
     {#if system}
         <ThreeSystem system={system}>
             <ThreeSun meshParamenters={{color: 0xffff00, emissive: 0xffff00}}/>
