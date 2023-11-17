@@ -39,6 +39,12 @@
         ship.nav = Object.assign(ship.nav, res.data)
         notifications.success(`${ship.symbol} flight mode set to ${mode}`)
     }
+    async function refuel() {
+        const res = await api.fleet.refuelShip(ship.symbol)
+        ship.fuel = res.data.fuel;
+        $myAgent = Object.assign($myAgent, res.data.agent)
+        notifications.success(`${ship.symbol} refueled`)
+    }
     async function extract() {
         const res = await api.fleet.extractResources(ship.symbol);
         ship.cooldown = res.data.cooldown
@@ -95,6 +101,9 @@
                 </option>
                 {/each}
             </select>
+            <Button on:click={refuel}>
+                Refuel
+            </Button>
         </div>
         <span> Ship role: {ship.registration.role} </span>
         <span> Current waypoint: {ship.nav.waypointSymbol} </span>
