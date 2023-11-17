@@ -32,12 +32,7 @@
     })
     
     // Trigger a refresh on ships when selectedShip changes
-    // And turn the camera to look at the selected ship
-    $: selectedShip, onSelectedShipUpdate();
-    function onSelectedShipUpdate() {
-        ships = ships
-        if (canvas) canvas.smoothLookAt(selectedShip.symbol)
-    }
+    $: selectedShip, ships = ships;
     
     // Select the first ship if nothing else is specified
     const selectFirst = (ships: Ship[]) => selectedShip = ships[0];
@@ -59,6 +54,7 @@
     let prevShip: Ship;
     $: if (selectedShip != prevShip) {
         prevShip = selectedShip;
+        if (canvas) canvas.smoothLookAt(selectedShip.symbol)
         getSystem(selectedShip)
     }
     
