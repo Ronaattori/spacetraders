@@ -1,6 +1,6 @@
 <script lang="ts">
     import { api } from "$lib/api";
-    import { ShipNavStatus, type Ship } from "$lib/api-sdk";
+    import { ShipNavStatus, type Ship, ShipNavFlightMode } from "$lib/api-sdk";
     import { createTimer } from "$lib/lib";
     import { myAgent, notifications, windows } from "$lib/stores";
     import { createEventDispatcher } from "svelte";
@@ -31,6 +31,13 @@
             notifications.success(`Ship ${ship.symbol} succesfully docked`)
             ship = Object.assign(ship, res.data)
         }
+    }
+    async function setFlightMode(mode: ShipNavFlightMode) {
+        const res = await api.fleet.patchShipNav(ship.symbol, {
+            flightMode: mode
+        });
+        ship.nav = Object.assign(ship.nav, res.data)
+        notifications.success(`${ship.symbol} flight mode set to ${mode}`)
     }
     async function extract() {
         const res = await api.fleet.extractResources(ship.symbol);
@@ -75,6 +82,19 @@
             on:click={extract}>
                 Extract resources | CD: {$cooldown ?? "0"}s
             </Button>
+        </div>
+        <div>
+            <select>
+                {#each Object.entries(ShipNavFlightMode) as [k, v]}
+                  <option 
+                  value={v}
+                  selected={ship.nav.flightMode == v}
+                  on:click={() => setFlightMode(v)}
+                  >
+                    {k}
+                </option>
+                {/each}
+            </select>
         </div>
         <span> Ship role: {ship.registration.role} </span>
         <span> Current waypoint: {ship.nav.waypointSymbol} </span>
