@@ -1,20 +1,69 @@
 <script context="module" lang="ts">
-    const textures: Map<WaypointType, THREE.Texture | string> = new Map([
-        [WaypointType.PLANET, '/src/lib/images/moon.jpg'],
-        [WaypointType.GAS_GIANT, '/src/lib/images/moon.jpg'],
-        [WaypointType.MOON, '/src/lib/images/moon.jpg'],
-        [WaypointType.ORBITAL_STATION, '/src/lib/images/moon.jpg'],
-        [WaypointType.JUMP_GATE, '/src/lib/images/moon.jpg'],
-        [WaypointType.ASTEROID_FIELD, '/src/lib/images/moon.jpg'],
-        [WaypointType.ASTEROID, '/src/lib/images/moon.jpg'],
-        [WaypointType.ENGINEERED_ASTEROID, '/src/lib/images/moon.jpg'],
-        [WaypointType.ASTEROID_BASE, '/src/lib/images/moon.jpg'],
-        [WaypointType.NEBULA, '/src/lib/images/moon.jpg'],
-        [WaypointType.DEBRIS_FIELD, '/src/lib/images/moon.jpg'],
-        [WaypointType.GRAVITY_WELL, '/src/lib/images/moon.jpg'],
-        [WaypointType.ARTIFICIAL_GRAVITY_WELL, '/src/lib/images/moon.jpg'],
-        [WaypointType.FUEL_STATION, '/src/lib/images/moon.jpg'],
-    ]);
+    interface WaypointMeshInstructions {
+        geometry: THREE.BufferGeometry | (new () => THREE.BufferGeometry),
+        material: THREE.MeshStandardMaterial | (new (parameters?: THREE.MeshStandardMaterialParameters) => THREE.MeshStandardMaterial),
+        texture?: THREE.Texture | string,
+        loaded?: boolean,
+    }
+    const instructions: Map<WaypointType, WaypointMeshInstructions> = new Map([
+        [WaypointType.PLANET, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.GAS_GIANT, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.MOON, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial,
+            texture: "/src/lib/images/moon.jpg"
+        }],
+        [WaypointType.ORBITAL_STATION, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.JUMP_GATE, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.ASTEROID_FIELD, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.ASTEROID, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.ENGINEERED_ASTEROID, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.ASTEROID_BASE, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.NEBULA, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.DEBRIS_FIELD, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.GRAVITY_WELL, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.ARTIFICIAL_GRAVITY_WELL, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+        [WaypointType.FUEL_STATION, {
+            geometry: THREE.SphereGeometry,
+            material: THREE.MeshStandardMaterial
+        }],
+    ])
 </script>
 <script lang="ts">
     import * as THREE from "three";
@@ -43,14 +92,24 @@
     
     // Create the actual object
     const type = systemWaypoint.type;
-    let texture = textures.get(type)
-    if (typeof texture == "string") {
-        texture = three.textureLoader.load(texture);
-        textures.set(type, texture)
+    let instruction = instructions.get(type)
+    // Load the materials, geometries...
+    // TODO: This is absolute spaghetti, but works for now...
+    // Typing also sucks since we have to use casting at the end :(
+    if (!instruction) throw `Waypoint of type ${type} is not supported!`
+    if (!instruction.loaded) {
+        let texture = undefined;
+        if (instruction.texture && !(instruction.texture instanceof THREE.Texture)) {
+            texture = three.textureLoader.load(instruction.texture);
+        }
+        if (!(instruction.geometry instanceof THREE.BufferGeometry)) instruction.geometry = new instruction.geometry()
+        if (!(instruction.material instanceof THREE.MeshStandardMaterial)) instruction.material = new instruction.material({...meshParameters, map: texture})
+        instruction.loaded = true
     }
-    const geometry = new THREE.SphereGeometry(radius, 32, 32)
-    const material = new THREE.MeshStandardMaterial({...meshParameters, map: texture});
+    const geometry = instruction.geometry as THREE.BufferGeometry
+    const material = instruction.material as THREE.MeshStandardMaterial
     const mesh = new ExtendedMesh(geometry, material, three)
+
     mesh.name = systemWaypoint.symbol
     mesh.castShadow = true;
     mesh.receiveShadow = true;
