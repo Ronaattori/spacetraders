@@ -166,8 +166,6 @@
     }
 
     onDestroy(() => {
-        geometry.dispose();
-        material.dispose();
         three.scene.remove(mesh);
     })
 
