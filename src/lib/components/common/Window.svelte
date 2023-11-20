@@ -31,7 +31,7 @@ on:mousemove={onMouseMove}
 />
 
 <div class="fixed" bind:this={container}>
-    <Card>
+    <Card class="backdrop-blur-md bg-white/80">
         <!-- svelte-ignore a11y-no-static-element-interactions -->
         <div slot="header" class="flex" bind:this={header}
         on:mousedown={() => moving = true}>
@@ -41,6 +41,8 @@ on:mousemove={onMouseMove}
                 <IconX />
             </span>
         </div>
-        <slot />
+        <div>
+            <slot />
+        </div>
     </Card>
 </div>
