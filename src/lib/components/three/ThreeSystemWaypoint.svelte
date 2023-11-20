@@ -1,11 +1,21 @@
 <script context="module" lang="ts">
     interface WaypointMeshInstructions {
-        geometry: THREE.BufferGeometry | (new () => THREE.BufferGeometry),
-        material: THREE.MeshStandardMaterial | (new (parameters?: THREE.MeshStandardMaterialParameters) => THREE.MeshStandardMaterial),
-        texture?: THREE.Texture | string,
-        loaded?: boolean,
+        geometry: new () => THREE.BufferGeometry,
+        material: new (parameters?: THREE.MeshStandardMaterialParameters) => THREE.MeshStandardMaterial,
+        texture?: string,
     }
-    const instructions: Map<WaypointType, WaypointMeshInstructions> = new Map([
+    class LoadedInstructions {
+        geometry: THREE.BufferGeometry
+        material: THREE.Material
+        texture?: THREE.Texture
+
+        constructor(geometry: THREE.BufferGeometry, material: THREE.Material, texture?: THREE.Texture) {
+            this.geometry = geometry
+            this.material = material        
+            this.texture = texture
+        }
+    }
+    const instructions: Map<WaypointType, WaypointMeshInstructions | LoadedInstructions> = new Map([
         [WaypointType.PLANET, {
             geometry: THREE.SphereGeometry,
             material: THREE.MeshStandardMaterial
@@ -97,18 +107,18 @@
     // TODO: This is absolute spaghetti, but works for now...
     // Typing also sucks since we have to use casting at the end :(
     if (!instruction) throw `Waypoint of type ${type} is not supported!`
-    if (!instruction.loaded) {
+    if (!(instruction instanceof LoadedInstructions)) {
         let texture = undefined;
-        if (instruction.texture && !(instruction.texture instanceof THREE.Texture)) {
+        if (instruction.texture) {
             texture = three.textureLoader.load(instruction.texture);
         }
-        if (!(instruction.geometry instanceof THREE.BufferGeometry)) instruction.geometry = new instruction.geometry()
-        if (!(instruction.material instanceof THREE.MeshStandardMaterial)) instruction.material = new instruction.material({...meshParameters, map: texture})
-        instruction.loaded = true
+        const geometry = new instruction.geometry()
+        const material = new instruction.material({...meshParameters, map: texture})
+        const loaded = new LoadedInstructions(geometry, material, texture);
+        instructions.set(type, loaded)
+        instruction = loaded
     }
-    const geometry = instruction.geometry as THREE.BufferGeometry
-    const material = instruction.material as THREE.MeshStandardMaterial
-    const mesh = new ExtendedMesh(geometry, material, three)
+    const mesh = new ExtendedMesh(instruction.geometry, instruction.material, three)
 
     mesh.name = systemWaypoint.symbol
     mesh.castShadow = true;
