@@ -2,7 +2,7 @@
     import * as THREE from "three";
     import { SvelteComponent, createEventDispatcher, getContext, onDestroy, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/three/contexts";
-    import type { Ship, SystemWaypoint } from "$lib/api-sdk";
+    import { ShipNavStatus, type Ship, type SystemWaypoint } from "$lib/api-sdk";
     import { OutlinePass } from 'three/addons/postprocessing/OutlinePass';
     import { ExtendedMesh } from "$lib/three/ExtendedMesh";
     import { api } from "$lib/api";
@@ -68,15 +68,17 @@
         const duration = millisecondsUntilArrival(arrival)
         notifications.success(`Ship ${ship.symbol} will arrive at ${waypoint.symbol} in ${duration/1000}s`)
 
-        const x = tweened(mesh.position.x, {duration: duration})
-        const z = tweened(mesh.position.z, {duration: duration})
-        x.subscribe(pos => mesh.position.x = pos)
-        z.subscribe(pos => mesh.position.z = pos)
-        x.set(waypoint.x)
-        z.set(waypoint.y)
+        const pos = tweened(mesh.position, {duration});
+        pos.subscribe(pos => mesh.position.copy(pos)) 
+        pos.set(new THREE.Vector3(
+            waypoint.x,
+            mesh.position.y,
+            waypoint.y 
+        ))
         notifications.success(`Started moving ship ${ship.symbol}`)
 
         setTimeout(() => {
+            ship.nav.status = ShipNavStatus.IN_ORBIT;
             notifications.success(`Ship ${ship.symbol} succesfully arrived at ${waypoint.symbol}`)
         }, duration);
     }

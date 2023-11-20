@@ -66,7 +66,7 @@
     }
 
 </script> 
-<Card class="bg-secondary">
+<Card class="backdrop-blur-md bg-background/80 shadow-lg">
     <div class="flex flex-col gap-2">
         <div class="flex gap-2">
             <Button class={selected ? "bg-primary" : "bg-white"}

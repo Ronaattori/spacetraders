@@ -78,7 +78,7 @@
     }
 </script>
 
-{#each $windows as window}
+{#each $windows as window (window.uuid)}
     <Window title={window.title} on:close={() => windows.remove(window)}>
         <svelte:component this={window.component} {...window.props} />
     </Window>
