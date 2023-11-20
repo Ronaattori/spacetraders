@@ -58,7 +58,8 @@ export const myAgent = writable<MyAgent>({
 type CustomWindow = {
     title: string,
     component: ComponentType,
-    props: object
+    props: object,
+    uuid: string
 }
 function createWindowsStore() {
     const { subscribe, set, update} = writable<CustomWindow[]>([]);
@@ -68,7 +69,8 @@ function createWindowsStore() {
             const newWindow = {
                 component,
                 props,
-                title
+                title,
+                uuid: crypto.randomUUID()
             }
             update(curr => curr = [...curr, newWindow])
         },
