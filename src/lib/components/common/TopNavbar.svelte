@@ -9,9 +9,6 @@
     <Button class="bg-slate-800 p-2 rounded-lg">
         Credits: {$myAgent.credits}
     </Button>
-    <Button class="bg-slate-800 p-2 rounded-lg">
-        Galactic bitches: {0}
-    </Button>
     <form class="ml-auto" method="POST" action="/user?/logout">
         <Button class="bg-highlight">
             Logout
