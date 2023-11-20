@@ -89,7 +89,6 @@
     export let systemWaypoint: SystemWaypoint; 
     export let waypoint: Waypoint | undefined; 
 
-    export let radius = 1.5;
     export let meshParameters: THREE.MeshStandardMaterialParameters = {}
     const dispatch = createEventDispatcher()
     
@@ -113,6 +112,7 @@
             texture = three.textureLoader.load(instruction.texture);
         }
         const geometry = new instruction.geometry()
+        geometry.scale(1.5, 1.5, 1.5)
         const material = new instruction.material({...meshParameters, map: texture})
         const loaded = new LoadedInstructions(geometry, material, texture);
         instructions.set(type, loaded)
