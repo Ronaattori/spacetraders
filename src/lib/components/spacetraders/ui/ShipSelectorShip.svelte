@@ -9,6 +9,7 @@
     import Card from "$lib/components/common/Card.svelte";
     import Button from "$lib/components/common/Button.svelte";
     import ItemList from "$lib/components/common/ItemList.svelte";
+    import type { InteractMenuItem } from "$lib/components/common/InteractMenu.svelte";
 
     export let ship: Ship;
     export let selected: boolean;

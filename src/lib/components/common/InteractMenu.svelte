@@ -1,28 +1,67 @@
+<script context="module" lang="ts">
+  export type InteractMenuItem = {
+      label: string,
+      onClick: (e: MouseEvent) => void
+  }
+  export type InteractMenuContentComponent = {component: ComponentType, props?: any}
+  export type InteractMenuContent = string | InteractMenuItem[] | InteractMenuContentComponent;
+</script>
 <script lang="ts">
-    import type { ComponentType } from "svelte";
-    import Card from "./Card.svelte";
-    import ListItem from "./ListItem.svelte";
+  import { SvelteComponent, type ComponentType, createEventDispatcher } from "svelte";
+  import Card from "./Card.svelte";
+  import ListItem from "./ListItem.svelte";
 
-    export let component: ComponentType | undefined = undefined
+  export let content: InteractMenuContent;
+  export let anchor: HTMLElement | undefined = undefined;
 
-    let show = true;
-    let buttons: HTMLElement;
+  const dispatch = createEventDispatcher();
+  let _show = false;
+  let buttons: HTMLElement;
+  let container: HTMLElement;
 
-    type CtxItem = {
-        label: string,
-        onClick: (e: MouseEvent) => void
-    }
-    let ctxItems: CtxItem[] = []
+  // Check if we were given an array of items
+  let items: InteractMenuItem[] = []
+  if (content instanceof Array) {
+    items = content;
+  }
+  
+  $: if (container && anchor) {
+      const height = anchor.offsetHeight;
+      const width = anchor.offsetWidth;
+      const rect = anchor.getBoundingClientRect();
+
+      container.style.top = `${rect.top + height}px`
+      container.style.left = `${rect.left}px`
+    
+  }
+
+  export function show() {
+    _show = true;
+  }
+  export function hide() {
+    _show = false;
+  }
+  export function domElement() {
+    return container;
+  }
+  export function add(item: InteractMenuItem) {
+    items = [...items, item];
+  }
+
 </script>
 
-{#if show}
-<div>
+{#if _show && content}
+<!-- svelte-ignore a11y-no-static-element-interactions -->
+<div bind:this={container}
+class="absolute"
+on:mouseleave={() => dispatch("mouseleave")}
+>
   <Card>
-    {#if component}
-        <svelte:component this={component} />
-    {:else} 
+    {#if typeof content == "string"}
+      {content}
+    {:else if (content instanceof Array)}
         <div class="flex flex-col" bind:this={buttons} >
-          {#each ctxItems as item}
+          {#each items as item}
             <ListItem
             class="pointer-events-auto cursor-pointer"
             on:click={item.onClick}> 
@@ -30,7 +69,12 @@
             </ListItem>
           {/each}
         </div>
+    {:else} 
+        <svelte:component this={content.component} {...content.props} />
     {/if}
   </Card>
 </div>
 {/if}
+
+<!-- Allow access to passed props from outside this component -->
+<!-- <svelte:options accessors/> -->

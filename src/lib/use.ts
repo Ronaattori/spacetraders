@@ -1,34 +1,41 @@
-import type { ComponentType } from "svelte"
-import Tooltip from "./components/common/Tooltip.svelte";
+import type { InteractMenuContent } from "./components/common/InteractMenu.svelte";
+import InteractMenu from "./components/common/InteractMenu.svelte";
 
-export type TooltipOptions = string | {component: ComponentType, props: any}
-export function tooltip(node: Node, content: TooltipOptions) {
-    if (content == undefined) return;
-    let tooltip: Tooltip | null;
+export function tooltip(node: Node, content: InteractMenuContent) {
+  const target = node as HTMLElement;
+  const component = new InteractMenu({
+    target: document.body,
+    props: {
+       content,
+       anchor: target
+    }        
+  });
+  target.addEventListener("mouseenter", component.show)
+  target.addEventListener("mouseleave", component.hide)
 
-    function mouseEnter(e: Event) {
-        if (!e.target) {
-            return
-        }
-        const element = e.target as HTMLElement;
-        tooltip = new Tooltip({
-            target: document.body,
-            props: {
-                content: content,
-                anchorTo: element
-            }
-        })
+  return {
+    destroy() {
+      target.removeEventListener("mouseenter", component.show)
+      target.removeEventListener("mouseleave", component.hide)
     }
-    function mouseLeave(e: Event) {
-        tooltip?.$destroy();
-    }
+  }
+}
 
-    node.addEventListener("mouseenter", mouseEnter);
-    node.addEventListener("mouseleave", mouseLeave);
-    return {
-        destroy() {
-            node.removeEventListener("mouseenter", mouseEnter);
-            node.removeEventListener("mouseleave", mouseLeave);
-        }
+export function dropdown(node: Node, content: InteractMenuContent) {
+  const target = node as HTMLElement;
+  const component = new InteractMenu({
+    target: document.body,
+    props: {
+       content,
+       anchor: target
     }
+  });
+
+  target.addEventListener("mouseenter", component.show)
+  component.$on("mouseleave", component.hide)
+  return {
+    destroy() {
+      target.removeEventListener("mouseenter", component.show)
+    }
+  }
 }

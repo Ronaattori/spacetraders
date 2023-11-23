@@ -1,14 +1,15 @@
 <script lang="ts">
-    import { tooltip, type TooltipOptions } from "$lib/use";
+    import { tooltip } from "$lib/use";
     import { onMount } from "svelte";
     import type { HTMLInputAttributes } from "svelte/elements";
     import { twMerge } from "tailwind-merge";
+    import type { InteractMenuContent } from "./InteractMenu.svelte";
 
     interface $$Props extends HTMLInputAttributes {
-        tooltip?: TooltipOptions
+        tooltip?: InteractMenuContent
     }
 
-    let _tooltip: TooltipOptions | undefined = undefined
+    let _tooltip: InteractMenuContent | undefined = undefined
     export { _tooltip as tooltip}
     
     let input: HTMLInputElement;
