@@ -27,7 +27,7 @@
                 <td>{ship.purchasePrice}</td>
                 <td>{ship.type}</td>
                 <td>
-                    <Button tooltip={{component: ShipyardShipInfo, props: {ship}}}>
+                    <Button useTooltip={{component: ShipyardShipInfo, props: {ship}}}>
                         Full info
                     </Button>
                     <Button on:click={() => buyShip(ship.type)}>

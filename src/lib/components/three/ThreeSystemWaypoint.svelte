@@ -79,12 +79,16 @@
     import * as THREE from "three";
     import { createEventDispatcher, getContext, onDestroy, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/three/contexts";
-    import { WaypointType, type SystemWaypoint, type System, type Waypoint } from "$lib/api-sdk";
+    import { WaypointType, type SystemWaypoint, type System, type Waypoint, WaypointTrait } from "$lib/api-sdk";
     import { randFloat, randInt } from "three/src/math/MathUtils";
     import { ExtendedMesh } from "$lib/three/ExtendedMesh";
     import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer";
-    import { Contextmenu } from "$lib/contextmenu";
     import WaypointInfo from "../spacetraders/tooltip/WaypointInfo.svelte";
+    import type { InteractMenuItem } from "../common/InteractMenu.svelte";
+    import { api } from "$lib/api";
+    import { windows } from "$lib/stores";
+    import ShipyardWindow from "../spacetraders/window/ShipyardWindow.svelte";
+    import MarketplaceWindow from "../spacetraders/window/MarketplaceWindow.svelte";
 
     export let systemWaypoint: SystemWaypoint; 
     export let waypoint: Waypoint | undefined; 
@@ -103,8 +107,6 @@
     const type = systemWaypoint.type;
     let instruction = instructions.get(type)
     // Load the materials, geometries...
-    // TODO: This is absolute spaghetti, but works for now...
-    // Typing also sucks since we have to use casting at the end :(
     if (!instruction) throw `Waypoint of type ${type} is not supported!`
     if (!(instruction instanceof LoadedInstructions)) {
         let texture = undefined;
@@ -155,8 +157,39 @@
     mesh.click.subscribe(_ => dispatch("click"));
     mesh.contextmenu.subscribe(_ => {
         dispatch("contextmenu")
-        if (waypoint) Contextmenu.createFromWaypoint(mesh, waypoint);
+        // if (waypoint) Contextmenu.createFromWaypoint(mesh, waypoint);
     });
+    
+    // Initialize a contextmenu for the mesh when we have required data to do so
+    let contextmenu = false;
+    $: if (waypoint && !contextmenu) initContext(waypoint);
+    function initContext(waypoint: Waypoint)  {
+        contextmenu = true;
+        const items: InteractMenuItem[] = [];
+        for (const trait of waypoint.traits) {
+            switch (trait.symbol) {
+                case (WaypointTrait.symbol.SHIPYARD):
+                    items.push({
+                        label: "Open Shipyard shop",
+                        onClick: async () => {
+                            const shipyard = (await api.systems.getShipyard(waypoint.systemSymbol, waypoint.symbol)).data;
+                            windows.add("Shipyard", ShipyardWindow, {shipyard})
+                        }
+                    })
+                    break;
+                case (WaypointTrait.symbol.MARKETPLACE):
+                    items.push({
+                        label: "Open Marketplace shop",
+                        onClick: async () => {
+                            const marketplace = (await api.systems.getMarket(waypoint.systemSymbol, waypoint.symbol)).data;
+                            windows.add("Marketplace", MarketplaceWindow, {marketplace})
+                        }
+                    })
+                    break;
+            }
+        }
+        mesh.setContextmenu(items);
+    }
     
     // Set the tooltip when we get waypoint data
     let tooltip = false;

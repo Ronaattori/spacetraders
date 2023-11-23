@@ -1,20 +1,22 @@
 <script lang="ts">
-    import { dropdown, tooltip } from "$lib/use";
+    import { contextmenu, dropdown, tooltip } from "$lib/use";
     import { onMount, type ComponentProps } from "svelte";
     import type { HTMLButtonAttributes } from "svelte/elements";
     import { twMerge } from "tailwind-merge";
     import type { InteractMenuContent } from "./InteractMenu.svelte";
 
     interface $$Props extends HTMLButtonAttributes {
-        tooltip?: InteractMenuContent
-        dropdown?: InteractMenuContent
+        useTooltip?: InteractMenuContent
+        useDropdown?: InteractMenuContent
+        useContextmenu?: InteractMenuContent
     }
 
     let button: HTMLButtonElement;
 
     onMount(() => {
-        if ($$props.tooltip) tooltip(button, $$props.tooltip);
-        if ($$props.dropdown) dropdown(button, $$props.dropdown);
+        if ($$props.useTooltip) tooltip(button, $$props.useTooltip);
+        if ($$props.useDropdown) dropdown(button, $$props.useDropdown);
+        if ($$props.useContextmenu) contextmenu(button, $$props.useContextmenu);
     })
 </script>
 

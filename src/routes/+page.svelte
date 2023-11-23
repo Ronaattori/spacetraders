@@ -8,7 +8,6 @@
     import { myAgent, notifications, windows } from "$lib/stores";
     import ThreeSystem from "$lib/components/three/ThreeSystem.svelte";
     import ThreeShip from "$lib/components/three/ThreeShip.svelte";
-    import { Contextmenu } from "$lib/contextmenu";
     import Window from "$lib/components/common/Window.svelte";
     import TopNavbar from "$lib/components/common/TopNavbar.svelte";
     import UiContainer from "$lib/components/spacetraders/ui/UIContainer.svelte";

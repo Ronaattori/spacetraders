@@ -39,3 +39,21 @@ export function dropdown(node: Node, content: InteractMenuContent) {
     }
   }
 }
+
+export function contextmenu(node: Node, content: InteractMenuContent) {
+  const target = node as HTMLElement;
+  const component = new InteractMenu({
+    target: document.body,
+    props: {
+       content,
+       anchor: target
+    }
+  });
+  target.addEventListener("contextmenu", component.show)
+  component.$on("mouseleave", component.hide)
+  return {
+    destroy() {
+      target.removeEventListener("contextmenu", component.show)
+    }
+  }
+}

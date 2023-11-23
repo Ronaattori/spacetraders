@@ -13,6 +13,7 @@
 
   export let content: InteractMenuContent;
   export let anchor: HTMLElement | undefined = undefined;
+  export let absolute = true;
 
   const dispatch = createEventDispatcher();
   let _show = false;
@@ -53,7 +54,7 @@
 {#if _show && content}
 <!-- svelte-ignore a11y-no-static-element-interactions -->
 <div bind:this={container}
-class="absolute"
+class="{absolute ? 'absolute' : ''}"
 on:mouseleave={() => dispatch("mouseleave")}
 >
   <Card>

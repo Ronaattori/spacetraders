@@ -84,7 +84,7 @@
             </Button>
             <Button 
             class={autoExtractEnabled ? "bg-highlight" : "bg-white"}
-            tooltip={"Right click to enable auto-extract"}
+            useTooltip={"Right click to enable auto-extract"}
             on:contextmenu={() => autoExtractEnabled = !autoExtractEnabled}
             on:click={extract}>
                 Extract resources | CD: {$cooldown ?? "0"}s

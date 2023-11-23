@@ -6,6 +6,7 @@ import { OutlinePass } from 'three/addons/postprocessing/OutlinePass';
 import type { ComponentType } from 'svelte';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer';
 import Tooltip from '$lib/components/common/Tooltip.svelte';
+import InteractMenu, { type InteractMenuContent } from '$lib/components/common/InteractMenu.svelte';
 
 // Create a store whichs subscribe skips the initial value
 // We only need it to send signals to subscribers
@@ -54,26 +55,62 @@ export class ExtendedMesh extends THREE.Mesh {
             this.context.effectComposer.removePass(this.outlinePass)
         }
     }
-    setTooltip(content: string | {component: ComponentType, props: any}) {
+    private createInteractMenu(content: InteractMenuContent) {
         let element = document.createElement("div");
+        let component: InteractMenu | undefined = undefined;
         if (typeof content == "string") {
             element.innerText = content;
         } else {
-            const component = new Tooltip({
+            component = new InteractMenu({
                 target: element,
                 props: {
-                    content: content,
-                    css2dObject: true
+                    content,
+                    absolute: false
                 }
             });
         }
         let tooltip: CSS2DObject
-        this.pointerenter.subscribe(_ => {
+        const create = () => {
             tooltip = new CSS2DObject(element);
+            component?.show()
             tooltip.center.set(0.5, -0.2)
             this.add(tooltip);
+        }
+        const destroy = () => {
+            component?.hide()
+            tooltip?.removeFromParent()
+        }
+        return {
+            create,
+            destroy,
+            component,
+            element
+        }
+    }
+    setTooltip(content: InteractMenuContent) {
+        const { create, destroy, component } = this.createInteractMenu(content);
+        this.pointerenter.subscribe(_ => {
+            create()
         })
-        this.pointerout.subscribe(_ => tooltip?.removeFromParent());
+        this.pointerout.subscribe(_ => {
+            destroy()
+        })
+    }
+    setContextmenu(content: InteractMenuContent) {
+        const { create, destroy, element, component } = this.createInteractMenu(content);
+        element.style.pointerEvents = "auto";
+        this.contextmenu.subscribe(_ => {
+            create()
+        })
+        if (component) {
+            component?.$on("mouseleave", () => {
+                destroy()
+            })
+        } else {
+            element.addEventListener("pointerout", () => {
+                destroy() 
+            })
+        }
     }
     getSize() {
         const boundingBox = new THREE.Box3().setFromObject(this)
