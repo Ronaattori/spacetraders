@@ -33,7 +33,6 @@
 
       container.style.top = `${rect.top + height}px`
       container.style.left = `${rect.left}px`
-    
   }
 
   export function show() {

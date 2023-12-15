@@ -4,12 +4,10 @@
     import { createTimer } from "$lib/lib";
     import { myAgent, notifications, windows } from "$lib/stores";
     import { createEventDispatcher } from "svelte";
-    import { tooltip } from "$lib/use";
     import ShipCargoWindow from "../window/ShipCargoWindow.svelte";
     import Card from "$lib/components/common/Card.svelte";
     import Button from "$lib/components/common/Button.svelte";
     import ItemList from "$lib/components/common/ItemList.svelte";
-    import type { InteractMenuItem } from "$lib/components/common/InteractMenu.svelte";
 
     export let ship: Ship;
     export let selected: boolean;
@@ -67,31 +65,48 @@
     }
 
 </script> 
-<Card class="backdrop-blur-md bg-background/80 shadow-lg">
-    <div class="flex flex-col gap-2">
-        <div class="flex gap-2">
-            <Button class={selected ? "bg-primary" : "bg-white"}
-            on:click={() => dispatch("select", ship)}>
-                Select: {ship.symbol}
-            </Button>
-            <Button on:click={() => windows.add("Ship inventory", ShipCargoWindow, {ship})}>
-                Inventory
-            </Button>
-        </div>
-        <div class="flex gap-2">
-            <Button on:click={toggleOrbit}>
+<Card class="backdrop-blur-md bg-background/80 shadow-lg text-white {selected ? 'border-2 border-highlight' : ''}">
+    <!-- svelte-ignore a11y-click-events-have-key-events -->
+    <!-- svelte-ignore a11y-no-static-element-interactions -->
+    <div class="flex gap-2 cursor-pointer pointer-events-auto" on:click={() => dispatch("select", ship)}>
+        <div class="flex flex-col">
+            <div class="flex gap-2">
+                <ItemList>
+                    <span>{ship.symbol}</span>
+                    <span>{ship.registration.role}</span>
+                </ItemList>
+                <ItemList>
+                    <span>F:
+                        <progress class="rounded-sm" value={ship.fuel.current} max={ship.fuel.capacity} />
+                    </span>
+                    <span>C:
+                        <progress class="rounded-sm" value={ship.cargo.units} max={ship.cargo.capacity} />
+                    </span>
+                </ItemList>
+            </div>
+            <div class="flex items-center h-full gap-2 m-1">
+                <Button class="bg-secondary" on:click={() => windows.add("Ship inventory", ShipCargoWindow, {ship})}>
+                    Inventory
+                </Button>
+                <div class="flex gap-2">
+                    <Button 
+                    class={autoExtractEnabled ? "bg-highlight" : "bg-secondary"}
+                    useTooltip={"Right click to enable auto-extract"}
+                    on:contextmenu={() => autoExtractEnabled = !autoExtractEnabled}
+                    on:click={extract}>
+                        Extract resources | CD: {$cooldown ?? "0"}s
+                    </Button>
+                </div>
+            </div>
+        </div> 
+        <ItemList>
+            <span>{ship.nav.waypointSymbol}</span>
+            <Button on:click={toggleOrbit} on:contextmenu={refuel} class="bg-secondary"
+            useTooltip={"Right click to refuel ship"}
+            >
                 {ship.nav.status} {$arrival ? ` | ${$arrival}s` : ""}
             </Button>
-            <Button 
-            class={autoExtractEnabled ? "bg-highlight" : "bg-white"}
-            useTooltip={"Right click to enable auto-extract"}
-            on:contextmenu={() => autoExtractEnabled = !autoExtractEnabled}
-            on:click={extract}>
-                Extract resources | CD: {$cooldown ?? "0"}s
-            </Button>
-        </div>
-        <div>
-            <select>
+            <select class="bg-secondary">
                 {#each Object.entries(ShipNavFlightMode) as [k, v]}
                   <option 
                   value={v}
@@ -102,19 +117,6 @@
                 </option>
                 {/each}
             </select>
-            <Button on:click={refuel}>
-                Refuel
-            </Button>
-        </div>
-        <span> Ship role: {ship.registration.role} </span>
-        <span> Current waypoint: {ship.nav.waypointSymbol} </span>
-        <ItemList>
-            <span>Fuel:
-                <progress class="progress" value={ship.fuel.current} max={ship.fuel.capacity} />
-            </span>
-            <span>Cargo:
-                <progress class="progress" value={ship.cargo.units} max={ship.cargo.capacity} />
-            </span>
         </ItemList>
     </div>
 </Card>
