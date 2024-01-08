@@ -8,7 +8,7 @@
 
 </script> 
 
-<ItemList class="max-w-fit mt-2 pointer-events-auto">
+<ItemList class="w-1/4 mt-2 pointer-events-auto">
    {#each ships as ship (ship.symbol)}
         <ShipSelectorShip 
             ship={ship}
