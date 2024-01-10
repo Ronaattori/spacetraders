@@ -3,6 +3,9 @@ export default {
   content: ['./src/**/*.{html,js,svelte,ts}'],
   theme: {
     extend: {
+      transitionProperty: {
+        height: "height",
+      },
       colors: {
         "primary": "#60a5fa",
         "secondary": "#64748b",
