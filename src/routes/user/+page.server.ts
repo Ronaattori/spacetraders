@@ -13,9 +13,10 @@ function setApiKey(cookies: Cookies, apiKey: string) {
 
     // Create a browser-accessible cookie that expires in a week
     cookies.set("apiKey", apiKey, {
-        httpOnly: false,
-        expires: date
-    })    
+            path: "/",
+            httpOnly: false,
+            expires: date
+        })    
 }
 export const actions = {
     login: async ({ request, cookies }) => {
@@ -28,11 +29,11 @@ export const actions = {
 
         // TODO: Check if the key was valid
         setApiKey(cookies, apiKey)
-        throw redirect(307, "/")
+        redirect(307, "/");
     }, 
     logout: async ({ request, cookies }) => {
-        cookies.delete("apiKey");
-        throw redirect(303, "/user/login")
+        cookies.delete("apiKey", {path: "/"});
+        redirect(303, "/user/login");
     },
     register: async ({ request, cookies }) => {
         const formData = await request.formData();
@@ -49,6 +50,6 @@ export const actions = {
         });
         const apiKey = res.data.token;
         setApiKey(cookies, apiKey)
-        throw redirect(307, "/")
+        redirect(307, "/");
     }
 } satisfies Actions

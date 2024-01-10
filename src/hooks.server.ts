@@ -6,7 +6,7 @@ export async function handle({ event, resolve }) {
     
     if (!event.url.pathname.startsWith("/user")) {
         if (!event.locals.apiKey) {
-            throw redirect(303, "/user/login")
+            redirect(303, "/user/login");
         }
     }
 
