@@ -8,6 +8,7 @@
     import { api } from "$lib/api";
     import { tweened } from "svelte/motion";
     import { notifications } from "$lib/stores";
+    import { millisecondsUntilDate } from "$lib/lib";
 
     export let ship: Ship;
     export let selected = false;
@@ -56,29 +57,32 @@
         three.scene.remove(mesh);
     })
 
-    function millisecondsUntilArrival(arrival: Date) {
-        const time = Math.round((arrival.getTime() - new Date().getTime()));        
-        return time;
-    }
 
     export async function navigateTo(waypoint: SystemWaypoint) {
-        // this.system.threeHelper.drawLine(this.position, waypoint.position)
-
-        const arrival = new Date(ship.nav.route.arrival);
-        const duration = millisecondsUntilArrival(arrival)
+        const duration = millisecondsUntilDate(new Date(ship.nav.route.arrival))
         notifications.success(`Ship ${ship.symbol} will arrive at ${waypoint.symbol} in ${duration/1000}s`)
+        const destination = new THREE.Vector3(waypoint.x, mesh.position.y, waypoint.y);
+
+        // Draw a line to the destination
+        const lineMaterial = new THREE.LineDashedMaterial()
+        const lineGeometry = new THREE.BufferGeometry()
+        const line = new THREE.Line(lineGeometry, lineMaterial);
+        three.scene.add(line)
 
         const pos = tweened(mesh.position, {duration});
-        pos.subscribe(pos => mesh.position.copy(pos)) 
-        pos.set(new THREE.Vector3(
-            waypoint.x,
-            mesh.position.y,
-            waypoint.y 
-        ))
+        pos.subscribe(pos => {
+            line.geometry.setFromPoints([
+                mesh.position,
+                destination,
+            ])
+            mesh.position.copy(pos)
+        }) 
+        pos.set(destination)
         notifications.success(`Started moving ship ${ship.symbol}`)
 
         setTimeout(() => {
             ship.nav.status = ShipNavStatus.IN_ORBIT;
+            three.scene.remove(line);
             notifications.success(`Ship ${ship.symbol} succesfully arrived at ${waypoint.symbol}`)
         }, duration);
     }

@@ -38,3 +38,6 @@ export function getCookies(){
     }
     return obj;
 }
+export function millisecondsUntilDate(date: Date) {
+    return Math.round((date.getTime() - new Date().getTime()));        
+}
