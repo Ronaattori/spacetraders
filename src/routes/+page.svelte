@@ -15,27 +15,32 @@
     
     let canvas: ThreeCanvas;
     
+    // Different parts of the state
     $: ships = $myAgent.ships;
     let selectedShip: Ship;
     let system: System;
     $: shipsInSystem = (selectedShip && system) ? ships.filter(ship => ship.nav.systemSymbol == system.symbol) : [];
     let waypoints: Map<string, Waypoint> = new Map();
 
+    // Select the first ship if nothing else is specified
+    $: if (ships.length > 0 && !selectedShip) selectedShip = ships[0];
+
+    // Update pretty much everything when ship changes
+    let prevShip: Ship;
+    $: if (selectedShip != prevShip) {
+        prevShip = selectedShip;
+        if (canvas) canvas.smoothLookAt(selectedShip.symbol)
+        getSystem(selectedShip)
+    }
+
     // Fetch our first data
     onMount(async () => {
-      const res = await api.agents.getMyAgent();
-      const agentData = {...$myAgent, ...res.data};
+      const res = (await api.agents.getMyAgent()).data;
       const ships = (await api.fleet.getMyShips()).data;
+      const agentData = {...$myAgent, ...res};
       agentData.ships = ships;
       $myAgent = Object.assign($myAgent, agentData)
     })
-    
-    // Trigger a refresh on ships when selectedShip changes
-    $: selectedShip, ships = ships;
-    
-    // Select the first ship if nothing else is specified
-    const selectFirst = (ships: Ship[]) => selectedShip = ships[0];
-    $: if (ships.length > 0 && !selectedShip) selectFirst(ships)
     
     // Update the system and it's related data when the system changes
     async function getSystem (ship: Ship) {
@@ -48,13 +53,6 @@
             notifications.success("Waypoint fetching done!")
         });
         system = newSys;
-    }
-    // Update pretty much everything when ship changes
-    let prevShip: Ship;
-    $: if (selectedShip != prevShip) {
-        prevShip = selectedShip;
-        if (canvas) canvas.smoothLookAt(selectedShip.symbol)
-        getSystem(selectedShip)
     }
     
     // Fetch all Waypoints in the given system
@@ -87,19 +85,19 @@
     <TopNavbar />
     <ShipSelector
         bind:selectedShip
-        ships={ships}
+        {ships}
     />
 </UiContainer>
 
 <ThreeCanvas bind:this={canvas}>
     {#if system}
-        <ThreeSystem system={system}>
+        <ThreeSystem {system}>
             <ThreeSun meshParamenters={{color: 0xffff00, emissive: 0xffff00}}/>
-            {#each system.waypoints as waypoint (waypoint.symbol)}
+            {#each system.waypoints as systemWaypoint (systemWaypoint.symbol)}
                 <ThreeSystemWaypoint
-                    systemWaypoint={waypoint}
-                    waypoint={waypoints.get(waypoint.symbol)}
-                    on:click={() => navigateShip(selectedShip, waypoint)}
+                    {systemWaypoint}
+                    waypoint={waypoints.get(systemWaypoint.symbol)}
+                    on:click={() => navigateShip(selectedShip, systemWaypoint)}
                 />
             {/each}
             {#each shipsInSystem as ship, i (ship.symbol)}
