@@ -13,7 +13,6 @@ export const $ContractTerms = {
         },
         payment: {
             type: 'ContractPayment',
-            description: `Payments for the contract.`,
             isRequired: true,
         },
         deliver: {

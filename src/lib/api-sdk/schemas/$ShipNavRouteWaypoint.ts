@@ -16,10 +16,8 @@ export const $ShipNavRouteWaypoint = {
             isRequired: true,
         },
         systemSymbol: {
-            type: 'string',
-            description: `The symbol of the system the waypoint is in.`,
+            type: 'SystemSymbol',
             isRequired: true,
-            minLength: 1,
         },
         'x': {
             type: 'number',

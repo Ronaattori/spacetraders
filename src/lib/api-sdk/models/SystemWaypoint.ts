@@ -2,15 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { WaypointOrbital } from './WaypointOrbital';
+import type { WaypointSymbol } from './WaypointSymbol';
 import type { WaypointType } from './WaypointType';
-
 export type SystemWaypoint = {
-    /**
-     * The symbol of the waypoint.
-     */
-    symbol: string;
+    symbol: WaypointSymbol;
     type: WaypointType;
     /**
      * Relative position of the waypoint on the system's x axis. This is not an absolute position in the universe.

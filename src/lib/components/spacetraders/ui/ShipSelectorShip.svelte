@@ -24,30 +24,33 @@
     
     async function toggleOrbit() {
         if (ship.nav.status == ShipNavStatus.DOCKED) {
-            const res = await api.fleet.orbitShip(ship.symbol);
+            const res = await api.fleet.orbitShip({shipSymbol: ship.symbol});
             notifications.success(`Ship ${ship.symbol} succesfully sent to orbit`)
             ship = Object.assign(ship, res.data)
         } else {
-            const res = await api.fleet.dockShip(ship.symbol);
+            const res = await api.fleet.dockShip({shipSymbol: ship.symbol});
             notifications.success(`Ship ${ship.symbol} succesfully docked`)
             ship = Object.assign(ship, res.data)
         }
     }
     async function setFlightMode(mode: ShipNavFlightMode) {
-        const res = await api.fleet.patchShipNav(ship.symbol, {
-            flightMode: mode
+        const res = await api.fleet.patchShipNav({
+            shipSymbol: ship.symbol,
+            requestBody: {
+                flightMode: mode
+            }
         });
         ship.nav = Object.assign(ship.nav, res.data)
         notifications.success(`${ship.symbol} flight mode set to ${mode}`)
     }
     async function refuel() {
-        const res = await api.fleet.refuelShip(ship.symbol)
+        const res = await api.fleet.refuelShip({shipSymbol: ship.symbol})
         ship.fuel = res.data.fuel;
         $myAgent = Object.assign($myAgent, res.data.agent)
         notifications.success(`${ship.symbol} refueled`)
     }
     async function extract() {
-        const res = await api.fleet.extractResources(ship.symbol);
+        const res = await api.fleet.extractResources({shipSymbol: ship.symbol});
         ship.cooldown = res.data.cooldown
         ship.cargo = res.data.cargo
         $myAgent.ships = $myAgent.ships;

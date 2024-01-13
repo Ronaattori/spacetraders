@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ShipRequirements } from './ShipRequirements';
-
 /**
  * A mount is installed on the exterier of a ship.
  */
@@ -31,9 +29,7 @@ export type ShipMount = {
     deposits?: Array<'QUARTZ_SAND' | 'SILICON_CRYSTALS' | 'PRECIOUS_STONES' | 'ICE_WATER' | 'AMMONIA_ICE' | 'IRON_ORE' | 'COPPER_ORE' | 'SILVER_ORE' | 'ALUMINUM_ORE' | 'GOLD_ORE' | 'PLATINUM_ORE' | 'DIAMONDS' | 'URANITE_ORE' | 'MERITIUM_ORE'>;
     requirements: ShipRequirements;
 };
-
 export namespace ShipMount {
-
     /**
      * Symbo of this mount.
      */
@@ -54,7 +50,5 @@ export namespace ShipMount {
         MOUNT_MISSILE_LAUNCHER_I = 'MOUNT_MISSILE_LAUNCHER_I',
         MOUNT_TURRET_I = 'MOUNT_TURRET_I',
     }
-
-
 }
 

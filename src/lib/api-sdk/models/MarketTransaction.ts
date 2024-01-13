@@ -2,15 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
+import type { WaypointSymbol } from './WaypointSymbol';
 /**
  * Result of a transaction with a market.
  */
 export type MarketTransaction = {
-    /**
-     * The symbol of the waypoint where the transaction took place.
-     */
-    waypointSymbol: string;
+    waypointSymbol: WaypointSymbol;
     /**
      * The symbol of the ship that made the transaction.
      */
@@ -40,9 +37,7 @@ export type MarketTransaction = {
      */
     timestamp: string;
 };
-
 export namespace MarketTransaction {
-
     /**
      * The type of transaction.
      */
@@ -50,7 +45,5 @@ export namespace MarketTransaction {
         PURCHASE = 'PURCHASE',
         SELL = 'SELL',
     }
-
-
 }
 

@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * The details of a delivery contract. Includes the type of good, units needed, and the destination.
  */

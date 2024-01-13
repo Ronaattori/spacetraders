@@ -6,26 +6,29 @@ import type { Agent } from '../models/Agent';
 import type { Contract } from '../models/Contract';
 import type { Meta } from '../models/Meta';
 import type { ShipCargo } from '../models/ShipCargo';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
-
 export class ContractsService {
-
     constructor(public readonly httpRequest: BaseHttpRequest) {}
-
     /**
      * List Contracts
      * Return a paginated list of all your contracts.
-     * @param page What entry offset to request
-     * @param limit How many entries to return per page
      * @returns any Succesfully listed contracts.
      * @throws ApiError
      */
-    public getContracts(
-        page: number = 1,
-        limit: number = 10,
-    ): CancelablePromise<{
+    public getContracts({
+        page = 1,
+        limit = 10,
+    }: {
+        /**
+         * What entry offset to request
+         */
+        page?: number,
+        /**
+         * How many entries to return per page
+         */
+        limit?: number,
+    }): CancelablePromise<{
         data: Array<Contract>;
         meta: Meta;
     }> {
@@ -38,17 +41,20 @@ export class ContractsService {
             },
         });
     }
-
     /**
      * Get Contract
      * Get the details of a contract by ID.
-     * @param contractId The contract ID
      * @returns any Successfully fetched contract.
      * @throws ApiError
      */
-    public getContract(
+    public getContract({
+        contractId,
+    }: {
+        /**
+         * The contract ID
+         */
         contractId: string,
-    ): CancelablePromise<{
+    }): CancelablePromise<{
         data: Contract;
     }> {
         return this.httpRequest.request({
@@ -59,19 +65,22 @@ export class ContractsService {
             },
         });
     }
-
     /**
      * Accept Contract
      * Accept a contract by ID.
      *
      * You can only accept contracts that were offered to you, were not accepted yet, and whose deadlines has not passed yet.
-     * @param contractId The contract ID to accept.
      * @returns any Succesfully accepted contract.
      * @throws ApiError
      */
-    public acceptContract(
+    public acceptContract({
+        contractId,
+    }: {
+        /**
+         * The contract ID to accept.
+         */
         contractId: string,
-    ): CancelablePromise<{
+    }): CancelablePromise<{
         data: {
             agent: Agent;
             contract: Contract;
@@ -85,7 +94,6 @@ export class ContractsService {
             },
         });
     }
-
     /**
      * Deliver Cargo to Contract
      * Deliver cargo to a contract.
@@ -93,12 +101,16 @@ export class ContractsService {
      * In order to use this API, a ship must be at the delivery location (denoted in the delivery terms as `destinationSymbol` of a contract) and must have a number of units of a good required by this contract in its cargo.
      *
      * Cargo that was delivered will be removed from the ship's cargo.
-     * @param contractId The ID of the contract.
-     * @param requestBody
      * @returns any Successfully delivered cargo to contract.
      * @throws ApiError
      */
-    public deliverContract(
+    public deliverContract({
+        contractId,
+        requestBody,
+    }: {
+        /**
+         * The ID of the contract.
+         */
         contractId: string,
         requestBody?: {
             /**
@@ -114,7 +126,7 @@ export class ContractsService {
              */
             units: number;
         },
-    ): CancelablePromise<{
+    }): CancelablePromise<{
         data: {
             contract: Contract;
             cargo: ShipCargo;
@@ -130,17 +142,20 @@ export class ContractsService {
             mediaType: 'application/json',
         });
     }
-
     /**
      * Fulfill Contract
      * Fulfill a contract. Can only be used on contracts that have all of their delivery terms fulfilled.
-     * @param contractId The ID of the contract to fulfill.
      * @returns any Successfully fulfilled a contract.
      * @throws ApiError
      */
-    public fulfillContract(
+    public fulfillContract({
+        contractId,
+    }: {
+        /**
+         * The ID of the contract to fulfill.
+         */
         contractId: string,
-    ): CancelablePromise<{
+    }): CancelablePromise<{
         data: {
             agent: Agent;
             contract: Contract;
@@ -154,5 +169,4 @@ export class ContractsService {
             },
         });
     }
-
 }

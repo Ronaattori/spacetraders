@@ -2,13 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
-import type { FactionSymbols } from './FactionSymbols';
-
+import type { FactionSymbol } from './FactionSymbol';
 /**
  * The faction that controls the waypoint.
  */
 export type WaypointFaction = {
-    symbol: FactionSymbols;
+    symbol: FactionSymbol;
 };
 

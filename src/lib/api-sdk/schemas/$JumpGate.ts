@@ -4,6 +4,10 @@
 /* eslint-disable */
 export const $JumpGate = {
     properties: {
+        symbol: {
+            type: 'WaypointSymbol',
+            isRequired: true,
+        },
         connections: {
             type: 'array',
             contains: {

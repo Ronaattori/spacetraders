@@ -10,10 +10,10 @@
     
     async function buyShip(shipType?: ShipType) {
         if (!shipType) return
-        const res = await api.fleet.purchaseShip({
+        const res = await api.fleet.purchaseShip({requestBody: {
             waypointSymbol: shipyard.symbol,
-            shipType: shipType
-        })
+            shipType
+        }})
         $myAgent.ships.push(res.data.ship);
         $myAgent = Object.assign($myAgent, res.data.agent);
     }

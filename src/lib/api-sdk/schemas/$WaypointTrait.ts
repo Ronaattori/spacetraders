@@ -5,7 +5,7 @@
 export const $WaypointTrait = {
     properties: {
         symbol: {
-            type: 'Enum',
+            type: 'WaypointTraitSymbol',
             isRequired: true,
         },
         name: {

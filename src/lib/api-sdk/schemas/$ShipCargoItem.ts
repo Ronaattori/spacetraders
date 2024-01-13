@@ -6,8 +6,7 @@ export const $ShipCargoItem = {
     description: `The type of cargo item and the number of units.`,
     properties: {
         symbol: {
-            type: 'string',
-            description: `The unique identifier of the cargo item type.`,
+            type: 'TradeSymbol',
             isRequired: true,
         },
         name: {

@@ -2,10 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ShipCondition } from './ShipCondition';
 import type { ShipRequirements } from './ShipRequirements';
-
 /**
  * The reactor of the ship. The reactor is responsible for powering the ship's systems and weapons.
  */
@@ -29,9 +27,7 @@ export type ShipReactor = {
     powerOutput: number;
     requirements: ShipRequirements;
 };
-
 export namespace ShipReactor {
-
     /**
      * Symbol of the reactor.
      */
@@ -42,7 +38,5 @@ export namespace ShipReactor {
         REACTOR_CHEMICAL_I = 'REACTOR_CHEMICAL_I',
         REACTOR_ANTIMATTER_I = 'REACTOR_ANTIMATTER_I',
     }
-
-
 }
 

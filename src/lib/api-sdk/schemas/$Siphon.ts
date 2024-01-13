@@ -13,7 +13,6 @@ export const $Siphon = {
         },
         yield: {
             type: 'SiphonYield',
-            description: `Yields from the siphon operation.`,
             isRequired: true,
         },
     },

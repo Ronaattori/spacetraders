@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ContractTerms } from './ContractTerms';
-
 /**
  * Contract details.
  */
@@ -21,9 +19,6 @@ export type Contract = {
      * Type of contract.
      */
     type: Contract.type;
-    /**
-     * The terms to fulfill the contract.
-     */
     terms: ContractTerms;
     /**
      * Whether the contract has been accepted by the agent
@@ -43,9 +38,7 @@ export type Contract = {
      */
     deadlineToAccept?: string;
 };
-
 export namespace Contract {
-
     /**
      * Type of contract.
      */
@@ -54,7 +47,5 @@ export namespace Contract {
         TRANSPORT = 'TRANSPORT',
         SHUTTLE = 'SHUTTLE',
     }
-
-
 }
 

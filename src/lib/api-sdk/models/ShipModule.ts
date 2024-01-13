@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ShipRequirements } from './ShipRequirements';
-
 /**
  * A module can be installed in a ship and provides a set of capabilities such as storage space or quarters for crew. Module installations are permanent.
  */
@@ -31,9 +29,7 @@ export type ShipModule = {
     description: string;
     requirements: ShipRequirements;
 };
-
 export namespace ShipModule {
-
     /**
      * The symbol of the module.
      */
@@ -59,7 +55,5 @@ export namespace ShipModule {
         MODULE_SHIELD_GENERATOR_I = 'MODULE_SHIELD_GENERATOR_I',
         MODULE_SHIELD_GENERATOR_II = 'MODULE_SHIELD_GENERATOR_II',
     }
-
-
 }
 

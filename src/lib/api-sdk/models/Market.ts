@@ -2,11 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { MarketTradeGood } from './MarketTradeGood';
 import type { MarketTransaction } from './MarketTransaction';
 import type { TradeGood } from './TradeGood';
-
 export type Market = {
     /**
      * The symbol of the market. The symbol is the same as the waypoint where the market is located.

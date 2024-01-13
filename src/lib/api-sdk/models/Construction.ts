@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ConstructionMaterial } from './ConstructionMaterial';
-
 /**
  * The construction details of a waypoint.
  */

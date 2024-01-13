@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ShipCargoItem } from './ShipCargoItem';
-
 /**
  * Ship cargo details.
  */

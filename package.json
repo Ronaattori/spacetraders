@@ -27,7 +27,7 @@
     "preview": "vite preview",
     "check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
     "check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-    "generate": "openapi --client axios --exportSchemas true -o ./src/lib/api-sdk --name SpacetradersClient -i 'https://stoplight.io/api/v1/projects/spacetraders/spacetraders/nodes/reference/SpaceTraders.json?fromExportButton=true&snapshotType=http_service&deref=optimizedBundle'"
+    "generate": "openapi --client axios --exportSchemas true --useOptions -o ./src/lib/api-sdk --name SpacetradersClient -i 'https://stoplight.io/api/v1/projects/spacetraders/spacetraders/nodes/reference/SpaceTraders.json?fromExportButton=true&snapshotType=http_service&deref=optimizedBundle'"
   },
   "type": "module",
   "dependencies": {

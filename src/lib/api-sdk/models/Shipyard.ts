@@ -2,11 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ShipType } from './ShipType';
 import type { ShipyardShip } from './ShipyardShip';
 import type { ShipyardTransaction } from './ShipyardTransaction';
-
 export type Shipyard = {
     /**
      * The symbol of the shipyard. The symbol is the same as the waypoint where the shipyard is located.
@@ -16,7 +14,7 @@ export type Shipyard = {
      * The list of ship types available for purchase at this shipyard.
      */
     shipTypes: Array<{
-        type?: ShipType;
+        type: ShipType;
     }>;
     /**
      * The list of recent transactions at this shipyard.

@@ -2,12 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
+import type { WaypointModifierSymbol } from './WaypointModifierSymbol';
 export type WaypointModifier = {
-    /**
-     * The unique identifier of the modifier.
-     */
-    symbol: WaypointModifier.symbol;
+    symbol: WaypointModifierSymbol;
     /**
      * The name of the trait.
      */
@@ -17,20 +14,4 @@ export type WaypointModifier = {
      */
     description: string;
 };
-
-export namespace WaypointModifier {
-
-    /**
-     * The unique identifier of the modifier.
-     */
-    export enum symbol {
-        STRIPPED = 'STRIPPED',
-        UNSTABLE = 'UNSTABLE',
-        RADIATION_LEAK = 'RADIATION_LEAK',
-        CRITICAL_LIMIT = 'CRITICAL_LIMIT',
-        CIVIL_UNREST = 'CIVIL_UNREST',
-    }
-
-
-}
 

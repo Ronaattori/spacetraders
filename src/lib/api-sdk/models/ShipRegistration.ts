@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ShipRole } from './ShipRole';
-
 /**
  * The public registration information of the ship
  */

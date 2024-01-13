@@ -2,18 +2,13 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
-import type { FactionSymbols } from './FactionSymbols';
+import type { FactionSymbol } from './FactionSymbol';
 import type { FactionTrait } from './FactionTrait';
-
 /**
  * Faction details.
  */
 export type Faction = {
-    /**
-     * Faction symbol.
-     */
-    symbol: FactionSymbols;
+    symbol: FactionSymbol;
     /**
      * Name of the faction.
      */

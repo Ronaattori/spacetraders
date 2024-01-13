@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * Result of a transaction for a ship modification, such as installing a mount or a module.
  */

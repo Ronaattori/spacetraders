@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { SystemType } from './SystemType';
-
 /**
  * Details of a system was that scanned.
  */

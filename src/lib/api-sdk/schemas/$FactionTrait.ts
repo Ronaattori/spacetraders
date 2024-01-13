@@ -5,7 +5,7 @@
 export const $FactionTrait = {
     properties: {
         symbol: {
-            type: 'Enum',
+            type: 'FactionTraitSymbol',
             isRequired: true,
         },
         name: {

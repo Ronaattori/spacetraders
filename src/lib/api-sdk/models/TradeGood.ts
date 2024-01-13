@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { TradeSymbol } from './TradeSymbol';
-
 /**
  * A good that can be traded for other goods or currency.
  */

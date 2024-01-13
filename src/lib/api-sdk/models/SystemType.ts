@@ -2,9 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
- * The type of waypoint.
+ * The type of system.
  */
 export enum SystemType {
     NEUTRON_STAR = 'NEUTRON_STAR',

@@ -36,7 +36,7 @@
     // Fetch our first data
     onMount(async () => {
       const res = (await api.agents.getMyAgent()).data;
-      const ships = (await api.fleet.getMyShips()).data;
+      const ships = (await api.fleet.getMyShips({})).data;
       const agentData = {...$myAgent, ...res};
       agentData.ships = ships;
       $myAgent = Object.assign($myAgent, agentData)
@@ -45,7 +45,7 @@
     // Update the system and it's related data when the system changes
     async function getSystem (ship: Ship) {
         if (system?.symbol == ship.nav.systemSymbol) return;
-        const newSys = (await api.systems.getSystem(ship.nav.systemSymbol)).data;
+        const newSys = (await api.systems.getSystem({systemSymbol: ship.nav.systemSymbol})).data;
         notifications.info("Starting to fetch waypoints...")
         getWaypoints(newSys).then(wps => {
             wps.map(wp => waypoints.set(wp.symbol, wp));
@@ -59,7 +59,7 @@
     async function getWaypoints(system: System, page = 1) {
         let wps: Waypoint[] = [];
         let pageSize = 20;
-        const res = (await api.systems.getSystemWaypoints(system.symbol, page, pageSize)).data;
+        const res = (await api.systems.getSystemWaypoints({systemSymbol: system.symbol, page, limit: pageSize})).data;
         wps = wps.concat(res)
         if (res.length == pageSize) {
             const more = (await getWaypoints(system , page+1));
@@ -70,7 +70,7 @@
     
     // Various things you can tell your ships to do
     async function navigateShip(ship: Ship, toWaypoint: SystemWaypoint) {
-        const res = await api.fleet.navigateShip(ship.symbol, {waypointSymbol: toWaypoint.symbol})
+        const res = await api.fleet.navigateShip({shipSymbol: ship.symbol, requestBody: {waypointSymbol: toWaypoint.symbol}})
         selectedShip = Object.assign(selectedShip, res.data)
     }
 </script>

@@ -2,26 +2,20 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { Chart } from './Chart';
+import type { SystemSymbol } from './SystemSymbol';
 import type { WaypointFaction } from './WaypointFaction';
 import type { WaypointOrbital } from './WaypointOrbital';
+import type { WaypointSymbol } from './WaypointSymbol';
 import type { WaypointTrait } from './WaypointTrait';
 import type { WaypointType } from './WaypointType';
-
 /**
  * A waypoint that was scanned by a ship.
  */
 export type ScannedWaypoint = {
-    /**
-     * Symbol of the waypoint.
-     */
-    symbol: string;
+    symbol: WaypointSymbol;
     type: WaypointType;
-    /**
-     * Symbol of the system.
-     */
-    systemSymbol: string;
+    systemSymbol: SystemSymbol;
     /**
      * Position in the universe in the x axis.
      */

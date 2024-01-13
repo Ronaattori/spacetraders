@@ -6,20 +6,16 @@ export const $ScannedWaypoint = {
     description: `A waypoint that was scanned by a ship.`,
     properties: {
         symbol: {
-            type: 'string',
-            description: `Symbol of the waypoint.`,
+            type: 'WaypointSymbol',
             isRequired: true,
-            minLength: 1,
         },
         type: {
             type: 'WaypointType',
             isRequired: true,
         },
         systemSymbol: {
-            type: 'string',
-            description: `Symbol of the system.`,
+            type: 'SystemSymbol',
             isRequired: true,
-            minLength: 1,
         },
         'x': {
             type: 'number',

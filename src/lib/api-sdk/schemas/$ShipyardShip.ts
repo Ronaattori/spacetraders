@@ -6,6 +6,7 @@ export const $ShipyardShip = {
     properties: {
         type: {
             type: 'ShipType',
+            isRequired: true,
         },
         name: {
             type: 'string',

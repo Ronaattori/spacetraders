@@ -16,6 +16,7 @@ export const $Shipyard = {
                 properties: {
                     type: {
                         type: 'ShipType',
+                        isRequired: true,
                     },
                 },
             },

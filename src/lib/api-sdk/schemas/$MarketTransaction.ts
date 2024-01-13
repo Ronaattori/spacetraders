@@ -6,8 +6,7 @@ export const $MarketTransaction = {
     description: `Result of a transaction with a market.`,
     properties: {
         waypointSymbol: {
-            type: 'string',
-            description: `The symbol of the waypoint where the transaction took place.`,
+            type: 'WaypointSymbol',
             isRequired: true,
         },
         shipSymbol: {

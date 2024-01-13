@@ -2,10 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ShipCondition } from './ShipCondition';
 import type { ShipRequirements } from './ShipRequirements';
-
 /**
  * The frame of the ship. The frame determines the number of modules and mounting points of the ship, as well as base fuel capacity. As the condition of the frame takes more wear, the ship will become more sluggish and less maneuverable.
  */
@@ -37,9 +35,7 @@ export type ShipFrame = {
     fuelCapacity: number;
     requirements: ShipRequirements;
 };
-
 export namespace ShipFrame {
-
     /**
      * Symbol of the frame.
      */
@@ -60,7 +56,5 @@ export namespace ShipFrame {
         FRAME_CRUISER = 'FRAME_CRUISER',
         FRAME_CARRIER = 'FRAME_CARRIER',
     }
-
-
 }
 

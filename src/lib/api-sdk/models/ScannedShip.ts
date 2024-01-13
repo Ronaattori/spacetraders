@@ -2,10 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ShipNav } from './ShipNav';
 import type { ShipRegistration } from './ShipRegistration';
-
 /**
  * The ship that was scanned. Details include information about the ship that could be detected by the scanner.
  */

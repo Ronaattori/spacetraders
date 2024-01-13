@@ -9,11 +9,6 @@ export const $ShipNavRoute = {
             type: 'ShipNavRouteWaypoint',
             isRequired: true,
         },
-        departure: {
-            type: 'ShipNavRouteWaypoint',
-            description: `Deprecated. Use origin instead.`,
-            isRequired: true,
-        },
         origin: {
             type: 'ShipNavRouteWaypoint',
             isRequired: true,

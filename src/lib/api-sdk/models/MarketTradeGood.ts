@@ -2,15 +2,11 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ActivityLevel } from './ActivityLevel';
 import type { SupplyLevel } from './SupplyLevel';
-
+import type { TradeSymbol } from './TradeSymbol';
 export type MarketTradeGood = {
-    /**
-     * The symbol of the trade good.
-     */
-    symbol: string;
+    symbol: TradeSymbol;
     /**
      * The type of trade good (export, import, or exchange).
      */
@@ -30,9 +26,7 @@ export type MarketTradeGood = {
      */
     sellPrice: number;
 };
-
 export namespace MarketTradeGood {
-
     /**
      * The type of trade good (export, import, or exchange).
      */
@@ -41,7 +35,5 @@ export namespace MarketTradeGood {
         IMPORT = 'IMPORT',
         EXCHANGE = 'EXCHANGE',
     }
-
-
 }
 

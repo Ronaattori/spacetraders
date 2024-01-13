@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * The ship's crew service and maintain the ship's systems and equipment.
  */
@@ -32,9 +31,7 @@ export type ShipCrew = {
      */
     wages: number;
 };
-
 export namespace ShipCrew {
-
     /**
      * The rotation of crew shifts. A stricter shift improves the ship's performance. A more relaxed shift improves the crew's morale.
      */
@@ -42,7 +39,5 @@ export namespace ShipCrew {
         STRICT = 'STRICT',
         RELAXED = 'RELAXED',
     }
-
-
 }
 

@@ -2,19 +2,21 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
+import type { WaypointSymbol } from './WaypointSymbol';
 /**
  * Results of a transaction with a shipyard.
  */
 export type ShipyardTransaction = {
+    waypointSymbol: WaypointSymbol;
     /**
-     * The symbol of the waypoint where the transaction took place.
+     * The symbol of the ship that was the subject of the transaction.
+     * @deprecated
      */
-    waypointSymbol: string;
+    shipSymbol: string;
     /**
      * The symbol of the ship that was the subject of the transaction.
      */
-    shipSymbol: string;
+    shipType: string;
     /**
      * The price of the transaction.
      */

@@ -6,7 +6,7 @@ export const $WaypointFaction = {
     description: `The faction that controls the waypoint.`,
     properties: {
         symbol: {
-            type: 'FactionSymbols',
+            type: 'FactionSymbol',
             isRequired: true,
         },
     },

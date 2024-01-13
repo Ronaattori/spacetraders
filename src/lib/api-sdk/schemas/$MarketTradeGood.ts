@@ -5,8 +5,7 @@
 export const $MarketTradeGood = {
     properties: {
         symbol: {
-            type: 'string',
-            description: `The symbol of the trade good.`,
+            type: 'TradeSymbol',
             isRequired: true,
         },
         type: {

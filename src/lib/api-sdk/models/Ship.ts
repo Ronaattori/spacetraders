@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { Cooldown } from './Cooldown';
 import type { ShipCargo } from './ShipCargo';
 import type { ShipCrew } from './ShipCrew';
@@ -14,7 +13,6 @@ import type { ShipMount } from './ShipMount';
 import type { ShipNav } from './ShipNav';
 import type { ShipReactor } from './ShipReactor';
 import type { ShipRegistration } from './ShipRegistration';
-
 /**
  * Ship details.
  */

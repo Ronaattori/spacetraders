@@ -5,7 +5,7 @@
 export const $SystemFaction = {
     properties: {
         symbol: {
-            type: 'FactionSymbols',
+            type: 'FactionSymbol',
             isRequired: true,
         },
     },

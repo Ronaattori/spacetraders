@@ -6,8 +6,7 @@ export const $Faction = {
     description: `Faction details.`,
     properties: {
         symbol: {
-            type: 'FactionSymbols',
-            description: `Faction symbol.`,
+            type: 'FactionSymbol',
             isRequired: true,
         },
         name: {

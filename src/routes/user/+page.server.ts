@@ -1,6 +1,6 @@
 import { goto } from "$app/navigation";
 import { api } from "$lib/api";
-import type { FactionSymbols } from "$lib/api-sdk";
+import type { FactionSymbol } from "$lib/api-sdk";
 import { type Actions, fail, redirect, type Cookies } from "@sveltejs/kit"
 
 export async function load() {
@@ -44,10 +44,10 @@ export const actions = {
             fail(401, {message: "Please enter a symbol and a faction"})
         }
 
-        const res = await api.default.register({
-            faction: faction as FactionSymbols,
-            symbol: symbol
-        });
+        const res = await api.default.register({requestBody: {
+            faction: faction as FactionSymbol,
+            symbol
+        }});
         const apiKey = res.data.token;
         setApiKey(cookies, apiKey)
         redirect(307, "/");

@@ -5,7 +5,7 @@
 export const $WaypointModifier = {
     properties: {
         symbol: {
-            type: 'Enum',
+            type: 'WaypointModifierSymbol',
             isRequired: true,
         },
         name: {

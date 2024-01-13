@@ -23,7 +23,6 @@ export const $Contract = {
         },
         terms: {
             type: 'ContractTerms',
-            description: `The terms to fulfill the contract.`,
             isRequired: true,
         },
         accepted: {

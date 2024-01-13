@@ -3,11 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export const $ExtractionYield = {
-    description: `Yields from the extract operation.`,
+    description: `A yield from the extraction operation.`,
     properties: {
         symbol: {
             type: 'TradeSymbol',
-            description: `Symbol of the good that was extracted.`,
             isRequired: true,
         },
         units: {

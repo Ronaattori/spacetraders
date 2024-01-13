@@ -2,11 +2,9 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { SystemFaction } from './SystemFaction';
 import type { SystemType } from './SystemType';
 import type { SystemWaypoint } from './SystemWaypoint';
-
 export type System = {
     /**
      * The symbol of the system.

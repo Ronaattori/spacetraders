@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * Agent details.
  */
@@ -30,6 +29,6 @@ export type Agent = {
     /**
      * How many ships are owned by the agent.
      */
-    shipCount?: number;
+    shipCount: number;
 };
 

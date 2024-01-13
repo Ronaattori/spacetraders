@@ -4,14 +4,10 @@
 /* eslint-disable */
 import type { Agent } from '../models/Agent';
 import type { Meta } from '../models/Meta';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
-
 export class AgentsService {
-
     constructor(public readonly httpRequest: BaseHttpRequest) {}
-
     /**
      * Get Agent
      * Fetch your agent's details.
@@ -26,19 +22,25 @@ export class AgentsService {
             url: '/my/agent',
         });
     }
-
     /**
      * List Agents
      * Fetch agents details.
-     * @param page What entry offset to request
-     * @param limit How many entries to return per page
      * @returns any Successfully fetched agents details.
      * @throws ApiError
      */
-    public getAgents(
-        page: number = 1,
-        limit: number = 10,
-    ): CancelablePromise<{
+    public getAgents({
+        page = 1,
+        limit = 10,
+    }: {
+        /**
+         * What entry offset to request
+         */
+        page?: number,
+        /**
+         * How many entries to return per page
+         */
+        limit?: number,
+    }): CancelablePromise<{
         data: Array<Agent>;
         meta: Meta;
     }> {
@@ -51,17 +53,20 @@ export class AgentsService {
             },
         });
     }
-
     /**
      * Get Public Agent
      * Fetch agent details.
-     * @param agentSymbol The agent symbol
      * @returns any Successfully fetched agent details.
      * @throws ApiError
      */
-    public getAgent(
-        agentSymbol: string = 'FEBA66',
-    ): CancelablePromise<{
+    public getAgent({
+        agentSymbol = 'FEBA66',
+    }: {
+        /**
+         * The agent symbol
+         */
+        agentSymbol?: string,
+    }): CancelablePromise<{
         data: Agent;
     }> {
         return this.httpRequest.request({
@@ -72,5 +77,4 @@ export class AgentsService {
             },
         });
     }
-
 }

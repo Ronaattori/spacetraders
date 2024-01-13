@@ -38,6 +38,7 @@ export const $Agent = {
         shipCount: {
             type: 'number',
             description: `How many ships are owned by the agent.`,
+            isRequired: true,
         },
     },
 } as const;

@@ -5,8 +5,7 @@
 export const $SystemWaypoint = {
     properties: {
         symbol: {
-            type: 'string',
-            description: `The symbol of the waypoint.`,
+            type: 'WaypointSymbol',
             isRequired: true,
         },
         type: {

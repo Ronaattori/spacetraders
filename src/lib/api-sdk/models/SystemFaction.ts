@@ -2,10 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
-import type { FactionSymbols } from './FactionSymbols';
-
+import type { FactionSymbol } from './FactionSymbol';
 export type SystemFaction = {
-    symbol: FactionSymbols;
+    symbol: FactionSymbol;
 };
 

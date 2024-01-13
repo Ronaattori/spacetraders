@@ -6,11 +6,15 @@ export const $ShipyardTransaction = {
     description: `Results of a transaction with a shipyard.`,
     properties: {
         waypointSymbol: {
-            type: 'string',
-            description: `The symbol of the waypoint where the transaction took place.`,
+            type: 'WaypointSymbol',
             isRequired: true,
         },
         shipSymbol: {
+            type: 'string',
+            description: `The symbol of the ship that was the subject of the transaction.`,
+            isRequired: true,
+        },
+        shipType: {
             type: 'string',
             description: `The symbol of the ship that was the subject of the transaction.`,
             isRequired: true,

@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ActivityLevel } from './ActivityLevel';
 import type { ShipEngine } from './ShipEngine';
 import type { ShipFrame } from './ShipFrame';
@@ -11,9 +10,8 @@ import type { ShipMount } from './ShipMount';
 import type { ShipReactor } from './ShipReactor';
 import type { ShipType } from './ShipType';
 import type { SupplyLevel } from './SupplyLevel';
-
 export type ShipyardShip = {
-    type?: ShipType;
+    type: ShipType;
     name: string;
     description: string;
     supply: SupplyLevel;

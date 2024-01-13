@@ -2,10 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { ShipCondition } from './ShipCondition';
 import type { ShipRequirements } from './ShipRequirements';
-
 /**
  * The engine determines how quickly a ship travels between waypoints.
  */
@@ -29,9 +27,7 @@ export type ShipEngine = {
     speed: number;
     requirements: ShipRequirements;
 };
-
 export namespace ShipEngine {
-
     /**
      * The symbol of the engine.
      */
@@ -41,7 +37,5 @@ export namespace ShipEngine {
         ENGINE_ION_DRIVE_II = 'ENGINE_ION_DRIVE_II',
         ENGINE_HYPER_DRIVE_I = 'ENGINE_HYPER_DRIVE_I',
     }
-
-
 }
 

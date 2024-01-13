@@ -6,20 +6,16 @@ export const $Waypoint = {
     description: `A waypoint is a location that ships can travel to such as a Planet, Moon or Space Station.`,
     properties: {
         symbol: {
-            type: 'string',
-            description: `Symbol fo the waypoint.`,
+            type: 'WaypointSymbol',
             isRequired: true,
-            minLength: 1,
         },
         type: {
             type: 'WaypointType',
             isRequired: true,
         },
         systemSymbol: {
-            type: 'string',
-            description: `The symbol of the system this waypoint belongs to.`,
+            type: 'SystemSymbol',
             isRequired: true,
-            minLength: 1,
         },
         'x': {
             type: 'number',

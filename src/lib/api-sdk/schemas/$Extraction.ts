@@ -13,7 +13,6 @@ export const $Extraction = {
         },
         yield: {
             type: 'ExtractionYield',
-            description: `Yields from the extract operation.`,
             isRequired: true,
         },
     },

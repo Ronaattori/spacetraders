@@ -3,11 +3,10 @@
 /* tslint:disable */
 /* eslint-disable */
 export const $SiphonYield = {
-    description: `Yields from the siphon operation.`,
+    description: `A yield from the siphon operation.`,
     properties: {
         symbol: {
             type: 'TradeSymbol',
-            description: `Symbol of the good that was siphoned.`,
             isRequired: true,
         },
         units: {

@@ -2,9 +2,8 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
+import type { SystemSymbol } from './SystemSymbol';
 import type { WaypointType } from './WaypointType';
-
 /**
  * The destination or departure of a ships nav route.
  */
@@ -14,10 +13,7 @@ export type ShipNavRouteWaypoint = {
      */
     symbol: string;
     type: WaypointType;
-    /**
-     * The symbol of the system the waypoint is in.
-     */
-    systemSymbol: string;
+    systemSymbol: SystemSymbol;
     /**
      * Position in the universe in the x axis.
      */

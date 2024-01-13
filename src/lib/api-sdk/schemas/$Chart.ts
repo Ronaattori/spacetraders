@@ -6,8 +6,7 @@ export const $Chart = {
     description: `The chart of a system or waypoint, which makes the location visible to other agents.`,
     properties: {
         waypointSymbol: {
-            type: 'string',
-            description: `The symbol of the waypoint.`,
+            type: 'WaypointSymbol',
         },
         submittedBy: {
             type: 'string',

@@ -2,9 +2,7 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 import type { SurveyDeposit } from './SurveyDeposit';
-
 /**
  * A resource survey of a waypoint, detailing a specific extraction location and the types of resources that can be found there.
  */
@@ -30,9 +28,7 @@ export type Survey = {
      */
     size: Survey.size;
 };
-
 export namespace Survey {
-
     /**
      * The size of the deposit. This value indicates how much can be extracted from the survey before it is exhausted.
      */
@@ -41,7 +37,5 @@ export namespace Survey {
         MODERATE = 'MODERATE',
         LARGE = 'LARGE',
     }
-
-
 }
 

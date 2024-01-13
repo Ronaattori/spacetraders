@@ -5,16 +5,12 @@
 import type { Agent } from '../models/Agent';
 import type { Contract } from '../models/Contract';
 import type { Faction } from '../models/Faction';
-import type { FactionSymbols } from '../models/FactionSymbols';
+import type { FactionSymbol } from '../models/FactionSymbol';
 import type { Ship } from '../models/Ship';
-
 import type { CancelablePromise } from '../core/CancelablePromise';
 import type { BaseHttpRequest } from '../core/BaseHttpRequest';
-
 export class DefaultService {
-
     constructor(public readonly httpRequest: BaseHttpRequest) {}
-
     /**
      * Get Status
      * Return the status of the game server.
@@ -106,7 +102,6 @@ export class DefaultService {
             url: '/',
         });
     }
-
     /**
      * Register New Agent
      * Creates a new agent and ties it to an account.
@@ -119,13 +114,14 @@ export class DefaultService {
      * > Save your token during the alpha phase. There is no way to regenerate this token without starting a new agent. In the future you will be able to generate and manage your tokens from the SpaceTraders website.
      *
      * If you are new to SpaceTraders, It is recommended to register with the COSMIC faction, a faction that is well connected to the rest of the universe. After registering, you should try our interactive [quickstart guide](https://docs.spacetraders.io/quickstart/new-game) which will walk you through basic API requests in just a few minutes.
-     * @param requestBody
      * @returns any Succesfully registered.
      * @throws ApiError
      */
-    public register(
+    public register({
+        requestBody,
+    }: {
         requestBody?: {
-            faction: FactionSymbols;
+            faction: FactionSymbol;
             /**
              * Your desired agent symbol. This will be a unique name used to represent your agent, and will be the prefix for your ships.
              */
@@ -135,7 +131,7 @@ export class DefaultService {
              */
             email?: string;
         },
-    ): CancelablePromise<{
+    }): CancelablePromise<{
         data: {
             agent: Agent;
             contract: Contract;
@@ -154,5 +150,4 @@ export class DefaultService {
             mediaType: 'application/json',
         });
     }
-
 }

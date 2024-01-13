@@ -79,7 +79,7 @@
     import * as THREE from "three";
     import { createEventDispatcher, getContext, onDestroy, onMount } from "svelte";
     import type { SystemContext, ThreeContext } from "$lib/three/contexts";
-    import { WaypointType, type SystemWaypoint, type System, type Waypoint, WaypointTrait } from "$lib/api-sdk";
+    import { WaypointType, type SystemWaypoint, type System, type Waypoint, WaypointTraitSymbol } from "$lib/api-sdk";
     import { randFloat, randInt } from "three/src/math/MathUtils";
     import { ExtendedMesh } from "$lib/three/ExtendedMesh";
     import { CSS2DObject } from "three/addons/renderers/CSS2DRenderer";
@@ -168,20 +168,20 @@
         const items: InteractMenuItem[] = [];
         for (const trait of waypoint.traits) {
             switch (trait.symbol) {
-                case (WaypointTrait.symbol.SHIPYARD):
+                case (WaypointTraitSymbol.SHIPYARD):
                     items.push({
                         label: "Open Shipyard shop",
                         onClick: async () => {
-                            const shipyard = (await api.systems.getShipyard(waypoint.systemSymbol, waypoint.symbol)).data;
+                            const shipyard = (await api.systems.getShipyard({systemSymbol: waypoint.systemSymbol, waypointSymbol: waypoint.symbol})).data;
                             windows.add("Shipyard", ShipyardWindow, {shipyard})
                         }
                     })
                     break;
-                case (WaypointTrait.symbol.MARKETPLACE):
+                case (WaypointTraitSymbol.MARKETPLACE):
                     items.push({
                         label: "Open Marketplace shop",
                         onClick: async () => {
-                            const marketplace = (await api.systems.getMarket(waypoint.systemSymbol, waypoint.symbol)).data;
+                            const marketplace = (await api.systems.getMarket({systemSymbol: waypoint.systemSymbol, waypointSymbol: waypoint.symbol})).data;
                             windows.add("Marketplace", MarketplaceWindow, {marketplace})
                         }
                     })

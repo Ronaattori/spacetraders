@@ -2,15 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
+import type { TradeSymbol } from './TradeSymbol';
 /**
  * The type of cargo item and the number of units.
  */
 export type ShipCargoItem = {
-    /**
-     * The unique identifier of the cargo item type.
-     */
-    symbol: string;
+    symbol: TradeSymbol;
     /**
      * The name of the cargo item type.
      */

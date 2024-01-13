@@ -2,15 +2,12 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
+import type { WaypointSymbol } from './WaypointSymbol';
 /**
  * The chart of a system or waypoint, which makes the location visible to other agents.
  */
 export type Chart = {
-    /**
-     * The symbol of the waypoint.
-     */
-    waypointSymbol?: string;
+    waypointSymbol?: WaypointSymbol;
     /**
      * The agent that submitted the chart for this waypoint.
      */

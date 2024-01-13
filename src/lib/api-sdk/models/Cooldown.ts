@@ -2,7 +2,6 @@
 /* istanbul ignore file */
 /* tslint:disable */
 /* eslint-disable */
-
 /**
  * A cooldown is a period of time in which a ship cannot perform certain actions.
  */
