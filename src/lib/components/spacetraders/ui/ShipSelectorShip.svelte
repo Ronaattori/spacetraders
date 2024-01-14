@@ -74,7 +74,8 @@
     <div class="grid grid-cols-12 transition-height {showPage1 ? 'h-16 overflow-hidden' : 'h-36'}">
         <div class="bg-secondary col-span-12 col-start-1 row-start-1 flex"
         on:pointerenter={() => showPage1 = false}
-        on:pointerleave={() => showPage1 = true}>
+        on:pointerleave={() => showPage1 = true}
+        >
             <div class="flex flex-col">
                 <div class="flex items-center h-full gap-2 m-1">
                     <Button class="bg-secondary" on:click={() => windows.add("Ship inventory", ShipCargoWindow, {ship})}>

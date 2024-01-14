@@ -5,7 +5,6 @@
 
     export let ships: Ship[];
     export let selectedShip: Ship;
-
 </script> 
 
 <ItemList class="w-1/4 mt-2 pointer-events-auto">

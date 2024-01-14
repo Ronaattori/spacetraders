@@ -8,8 +8,6 @@
     import img from '$lib/images/munkki.jpg';
     import { myAgent } from "$lib/stores";
     import { IconChecklist, IconLogin, IconLogout, IconPlus } from "@tabler/icons-svelte";
-
-    
 </script>
 
 <Navbar>

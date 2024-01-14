@@ -1,6 +1,6 @@
 <script lang="ts">
     import { api } from "$lib/api";
-    import type { WaypointTrait, Ship, System, SystemWaypoint, Waypoint } from "$lib/api-sdk";
+    import type { Ship, System, SystemWaypoint, Waypoint } from "$lib/api-sdk";
     import ShipSelector from "$lib/components/spacetraders/ui/ShipSelector.svelte";
     import ThreeCanvas from "$lib/components/three/ThreeCanvas.svelte";
     import ThreeSun from "$lib/components/three/ThreeSun.svelte";
@@ -23,14 +23,28 @@
     let waypoints: Map<string, Waypoint> = new Map();
 
     // Select the first ship if nothing else is specified
-    $: if (ships.length > 0 && !selectedShip) selectedShip = ships[0];
+    const selectFirstShip = () => selectedShip = ships[0];
+    $: if (ships.length > 0 && !selectedShip) selectFirstShip()
+    
+    // Fetch the System and Waypoints when the system changes
+    let prevSystem: string;
+    const getCurrentSystem = async () => {
+        notifications.info("Starting to fetch system info...")
+        const curSystem = selectedShip.nav.systemSymbol;
+        prevSystem = curSystem;
+        system = (await api.systems.getSystem({systemSymbol: curSystem})).data;
+        const wps = await api.getAll(api.systems.getSystemWaypoints, api.systems, {systemSymbol: system.symbol})
+        wps.map(wp => waypoints.set(wp.symbol, wp));
+        waypoints = waypoints;
+        notifications.success("System info fetching done!")
+    }
+    $: if (selectedShip?.nav.systemSymbol != prevSystem) getCurrentSystem()
 
-    // Update pretty much everything when ship changes
+    // Look at the ship when the selected ship changes
     let prevShip: Ship;
     $: if (selectedShip != prevShip) {
         prevShip = selectedShip;
         if (canvas) canvas.smoothLookAt(selectedShip.symbol)
-        getSystem(selectedShip)
     }
 
     // Fetch our first data
@@ -40,33 +54,8 @@
       const agentData = {...$myAgent, ...res};
       agentData.ships = ships;
       $myAgent = Object.assign($myAgent, agentData)
+      
     })
-    
-    // Update the system and it's related data when the system changes
-    async function getSystem (ship: Ship) {
-        if (system?.symbol == ship.nav.systemSymbol) return;
-        const newSys = (await api.systems.getSystem({systemSymbol: ship.nav.systemSymbol})).data;
-        notifications.info("Starting to fetch waypoints...")
-        getWaypoints(newSys).then(wps => {
-            wps.map(wp => waypoints.set(wp.symbol, wp));
-            waypoints = waypoints;
-            notifications.success("Waypoint fetching done!")
-        });
-        system = newSys;
-    }
-    
-    // Fetch all Waypoints in the given system
-    async function getWaypoints(system: System, page = 1) {
-        let wps: Waypoint[] = [];
-        let pageSize = 20;
-        const res = (await api.systems.getSystemWaypoints({systemSymbol: system.symbol, page, limit: pageSize})).data;
-        wps = wps.concat(res)
-        if (res.length == pageSize) {
-            const more = (await getWaypoints(system , page+1));
-            wps = wps.concat(more)
-        }
-        return wps;
-    }
     
     // Various things you can tell your ships to do
     async function navigateShip(ship: Ship, toWaypoint: SystemWaypoint) {

@@ -2,7 +2,6 @@
     import type { Waypoint } from "$lib/api-sdk";
 
     export let waypoint: Waypoint
-    
 </script>
 
 <div>
