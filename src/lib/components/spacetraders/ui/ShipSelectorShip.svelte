@@ -1,14 +1,13 @@
 <script lang="ts">
-    import { api } from "$lib/api";
-    import { ShipNavStatus, type Ship, ShipNavFlightMode } from "$lib/api-sdk";
+    import { type Ship, ShipNavFlightMode } from "$lib/api-sdk";
     import { createTimer } from "$lib/lib";
-    import { myAgent, notifications, windows } from "$lib/stores";
     import { createEventDispatcher } from "svelte";
     import ShipCargoWindow from "../window/ShipCargoWindow.svelte";
     import Card from "$lib/components/common/Card.svelte";
     import Button from "$lib/components/common/Button.svelte";
     import ItemList from "$lib/components/common/ItemList.svelte";
     import { slide } from "svelte/transition";
+    import { extractResources, refuelShip, pathShipNav, toggleShipOrbit } from "$lib/spaceControls";
 
     export let ship: Ship;
     export let selected: boolean;
@@ -22,48 +21,13 @@
     $: arrivingAt = new Date(ship.nav.route.arrival)
     $: arrival = arrivingAt > new Date() ? createTimer(arrivingAt): null
     
-    async function toggleOrbit() {
-        if (ship.nav.status == ShipNavStatus.DOCKED) {
-            const res = await api.fleet.orbitShip({shipSymbol: ship.symbol});
-            notifications.success(`Ship ${ship.symbol} succesfully sent to orbit`)
-            ship = Object.assign(ship, res.data)
-        } else {
-            const res = await api.fleet.dockShip({shipSymbol: ship.symbol});
-            notifications.success(`Ship ${ship.symbol} succesfully docked`)
-            ship = Object.assign(ship, res.data)
-        }
-    }
-    async function setFlightMode(mode: ShipNavFlightMode) {
-        const res = await api.fleet.patchShipNav({
-            shipSymbol: ship.symbol,
-            requestBody: {
-                flightMode: mode
-            }
-        });
-        ship.nav = Object.assign(ship.nav, res.data)
-        notifications.success(`${ship.symbol} flight mode set to ${mode}`)
-    }
-    async function refuel() {
-        const res = await api.fleet.refuelShip({shipSymbol: ship.symbol})
-        ship.fuel = res.data.fuel;
-        $myAgent = Object.assign($myAgent, res.data.agent)
-        notifications.success(`${ship.symbol} refueled`)
-    }
-    async function extract() {
-        const res = await api.fleet.extractResources({shipSymbol: ship.symbol});
-        ship.cooldown = res.data.cooldown
-        ship.cargo = res.data.cargo
-        $myAgent.ships = $myAgent.ships;
-        return res;
-    }
-    
     $: if (autoExtractEnabled) autoExtract()
     async function autoExtract() {
         try {
-            const res = await extract()
+            const res = await extractResources(ship)
             setTimeout(() => {
                 if (autoExtractEnabled) autoExtract()               
-            }, (res.data.cooldown.remainingSeconds + 1) * 1000);
+            }, (res.cooldown.remainingSeconds + 1) * 1000);
         } catch {
             autoExtractEnabled = false;
         }
@@ -78,21 +42,24 @@
         >
             <div class="flex flex-col">
                 <div class="flex items-center h-full gap-2 m-1">
-                    <Button class="bg-secondary" on:click={() => windows.add("Ship inventory", ShipCargoWindow, {ship})}>
+                    <Button class="bg-secondary"
+                    on:click={() => windows.add("Ship inventory", ShipCargoWindow, {ship})}
+                    >
                         Inventory
                     </Button>
-                    <Button 
-                    class={autoExtractEnabled ? "bg-highlight" : "bg-secondary"}
+                    <Button class={autoExtractEnabled ? "bg-highlight" : "bg-secondary"}
                     useTooltip={"Right click to enable auto-extract"}
                     on:contextmenu={() => autoExtractEnabled = !autoExtractEnabled}
-                    on:click={extract}>
+                    on:click={() => extractResources(ship)}>
                         Extract resources | CD: {$cooldown ?? "0"}s
                     </Button>
                 </div>
             </div> 
             <ItemList>
                 <span>{ship.nav.waypointSymbol}</span>
-                <Button on:click={toggleOrbit} on:contextmenu={refuel} class="bg-secondary"
+                <Button class="bg-secondary"
+                on:click={() => toggleShipOrbit(ship)}
+                on:contextmenu={() => refuelShip(ship)}
                 useTooltip={"Right click to refuel ship"}
                 >
                     {ship.nav.status} {$arrival ? ` | ${$arrival}s` : ""}
@@ -102,7 +69,7 @@
                       <option 
                       value={v}
                       selected={ship.nav.flightMode == v}
-                      on:click={() => setFlightMode(v)}
+                      on:click={() => pathShipNav(ship, v)}
                       >
                         {k}
                     </option>

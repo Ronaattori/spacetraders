@@ -12,6 +12,7 @@
     import TopNavbar from "$lib/components/common/TopNavbar.svelte";
     import UiContainer from "$lib/components/spacetraders/ui/UIContainer.svelte";
     import { onMount } from "svelte";
+    import { navigateShip } from "$lib/spaceControls";
     
     let canvas: ThreeCanvas;
     
@@ -57,11 +58,6 @@
       
     })
     
-    // Various things you can tell your ships to do
-    async function navigateShip(ship: Ship, toWaypoint: SystemWaypoint) {
-        const res = await api.fleet.navigateShip({shipSymbol: ship.symbol, requestBody: {waypointSymbol: toWaypoint.symbol}})
-        selectedShip = Object.assign(selectedShip, res.data)
-    }
 </script>
 
 {#each $windows as window (window.uuid)}
