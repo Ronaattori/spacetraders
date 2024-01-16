@@ -89,6 +89,7 @@
     import { windows } from "$lib/stores";
     import ShipyardWindow from "../spacetraders/window/ShipyardWindow.svelte";
     import MarketplaceWindow from "../spacetraders/window/MarketplaceWindow.svelte";
+    import { getMarket, getShipyard } from "$lib/spaceControls";
 
     export let systemWaypoint: SystemWaypoint; 
     export let waypoint: Waypoint | undefined; 
@@ -171,7 +172,7 @@
                     items.push({
                         label: "Open Shipyard shop",
                         onClick: async () => {
-                            const shipyard = (await api.systems.getShipyard({systemSymbol: waypoint.systemSymbol, waypointSymbol: waypoint.symbol})).data;
+                            const shipyard = await getShipyard(waypoint.systemSymbol, waypoint.symbol)
                             windows.add("Shipyard", ShipyardWindow, {shipyard})
                         }
                     })
@@ -180,7 +181,7 @@
                     items.push({
                         label: "Open Marketplace shop",
                         onClick: async () => {
-                            const marketplace = (await api.systems.getMarket({systemSymbol: waypoint.systemSymbol, waypointSymbol: waypoint.symbol})).data;
+                            const marketplace = await getMarket(waypoint.systemSymbol, waypoint.symbol)
                             windows.add("Marketplace", MarketplaceWindow, {marketplace})
                         }
                     })

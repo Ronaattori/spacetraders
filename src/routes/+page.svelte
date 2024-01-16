@@ -12,7 +12,7 @@
     import TopNavbar from "$lib/components/common/TopNavbar.svelte";
     import UiContainer from "$lib/components/spacetraders/ui/UIContainer.svelte";
     import { onMount } from "svelte";
-    import { navigateShip } from "$lib/spaceControls";
+    import { getMyAgent, getMyShips, getSystem, getSystemWaypoints, navigateShip } from "$lib/spaceControls";
     
     let canvas: ThreeCanvas;
     
@@ -29,17 +29,15 @@
     
     // Fetch the System and Waypoints when the system changes
     let prevSystem: string;
-    const getCurrentSystem = async () => {
-        notifications.info("Starting to fetch system info...")
+    const onSystemChange = async () => {
         const curSystem = selectedShip.nav.systemSymbol;
         prevSystem = curSystem;
-        system = (await api.systems.getSystem({systemSymbol: curSystem})).data;
-        const wps = await api.getAll(api.systems.getSystemWaypoints, api.systems, {systemSymbol: system.symbol})
+        system = await getSystem(curSystem)
+        const wps = await getSystemWaypoints(curSystem)
         wps.map(wp => waypoints.set(wp.symbol, wp));
         waypoints = waypoints;
-        notifications.success("System info fetching done!")
     }
-    $: if (selectedShip?.nav.systemSymbol != prevSystem) getCurrentSystem()
+    $: if (selectedShip?.nav.systemSymbol != prevSystem) onSystemChange()
 
     // Look at the ship when the selected ship changes
     let prevShip: Ship;
@@ -50,12 +48,11 @@
 
     // Fetch our first data
     onMount(async () => {
-      const res = (await api.agents.getMyAgent()).data;
-      const ships = (await api.fleet.getMyShips({})).data;
+      const res = await getMyAgent();
+      const ships = await getMyShips();
       const agentData = {...$myAgent, ...res};
       agentData.ships = ships;
       $myAgent = Object.assign($myAgent, agentData)
-      
     })
     
 </script>

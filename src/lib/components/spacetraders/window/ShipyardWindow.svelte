@@ -1,23 +1,12 @@
 <script lang="ts">
-    import type { ShipType, Shipyard } from "$lib/api-sdk";
-    import { api } from "$lib/api";
-    import { myAgent } from "$lib/stores";
+    import type { Shipyard } from "$lib/api-sdk";
     import Button from "$lib/components/common/Button.svelte";
     import Table from "$lib/components/common/Table.svelte";
     import ShipyardShipInfo from "../tooltip/ShipyardShipInfo.svelte";
+    import { purchaseShip } from "$lib/spaceControls";
 
     export let shipyard: Shipyard
     
-    async function buyShip(shipType?: ShipType) {
-        if (!shipType) return
-        const res = await api.fleet.purchaseShip({requestBody: {
-            waypointSymbol: shipyard.symbol,
-            shipType
-        }})
-        $myAgent.ships.push(res.data.ship);
-        $myAgent = Object.assign($myAgent, res.data.agent);
-    }
-
 </script>
 <Table columns={["Name", "Price", "Type", ""]}>
     {#if shipyard.ships}
@@ -30,7 +19,7 @@
                     <Button useTooltip={{component: ShipyardShipInfo, props: {ship}}}>
                         Full info
                     </Button>
-                    <Button on:click={() => buyShip(ship.type)}>
+                    <Button on:click={() => purchaseShip(shipyard, ship.type)}>
                         Buy
                     </Button>
                 </td>
