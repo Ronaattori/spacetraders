@@ -126,6 +126,12 @@ export async function negotiateContract(shipSymbol: string) {
     const res = await api.fleet.negotiateContract({shipSymbol});
     return res.data;
 }
+export async function acceptContract(contractId: string) {
+    const res = await api.contracts.acceptContract({contractId});
+    myAgent.update(myAgent => Object.assign(myAgent, res.data.agent));
+    notifications.success("Contract accepted")
+    return res.data;
+}
 
 //
 // Agent related

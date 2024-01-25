@@ -7,7 +7,7 @@
     export let selectedShip: Ship;
 </script> 
 
-<ItemList class="mt-2 pointer-events-auto row-start-2 col-span-3">
+<ItemList class="gap-2 pointer-events-auto row-start-2 col-span-3">
    {#each ships as ship (ship.symbol)}
         <ShipSelectorShip 
             ship={ship}
