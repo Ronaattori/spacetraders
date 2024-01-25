@@ -5,10 +5,21 @@
 
     export let text:string = "";
     export let open = false;
+    export let openMouseover = false;
+    
+   function pointerenter() {
+    if (openMouseover) open = true;
+   }
+   function pointerleave() {
+    if (openMouseover) open = false;
+   }
    
 </script>
 
-<Card>
+<Card 
+on:pointerenter={pointerenter}
+on:pointerleave={pointerleave}
+>
   <div slot="header">
     <button class="w-full flex" on:click={() => open = !open}>
       {text}

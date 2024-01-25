@@ -12,7 +12,10 @@
     import TopNavbar from "$lib/components/common/TopNavbar.svelte";
     import UiContainer from "$lib/components/spacetraders/ui/UIContainer.svelte";
     import { onMount } from "svelte";
-    import { getMyAgent, getMyShips, getSystem, getSystemWaypoints, navigateShip } from "$lib/spaceControls";
+    import { getContracts, getMyAgent, getMyShips, getSystem, getSystemWaypoints, navigateShip } from "$lib/spaceControls";
+    import Button from "$lib/components/common/Button.svelte";
+    import ShipCargoWindow from "$lib/components/spacetraders/window/ShipCargoWindow.svelte";
+    import ContractsWindow from "$lib/components/spacetraders/window/ContractsWindow.svelte";
     
     let canvas: ThreeCanvas;
     
@@ -69,6 +72,11 @@
         bind:selectedShip
         {ships}
     />
+    <Button class="pointer-events-auto col-start-12 row-span-1"
+    on:click={async () => windows.add("Contracts", ContractsWindow, {contracts: await getContracts(), canvas})}
+    >
+       Open contracts
+    </Button>
 </UiContainer>
 
 <ThreeCanvas bind:this={canvas}>

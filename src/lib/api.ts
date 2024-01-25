@@ -69,12 +69,14 @@ class ExtendedSpacetradersClient extends SpacetradersClient {
     total = meta.total;
 
     // Iterate over the pages we still need to fetch
-    const pages = [...Array(Math.ceil(total / limit - 1)).keys()].map(i => i + 2)
-    const pagesFetching = [];
-    for (const page of pages) {
-      pagesFetching.push(getPage(page))
+    if (results.length < total) {
+      const pages = [...Array(Math.ceil(total / limit - 1)).keys()].map(i => i + 2)
+      const pagesFetching = [];
+      for (const page of pages) {
+        pagesFetching.push(getPage(page))
+      }
+      await Promise.allSettled(pagesFetching);
     }
-    await Promise.allSettled(pagesFetching);
 
     return results;
   }

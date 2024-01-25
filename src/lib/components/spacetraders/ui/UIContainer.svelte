@@ -5,6 +5,6 @@
 
 </script>
 
-<div class="absolute w-full h-full pointer-events-none" bind:this={container}>
+<div class="absolute w-full h-full pointer-events-none grid grid-cols-12 grid-rows-12" bind:this={container}>
     <slot />
 </div>

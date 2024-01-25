@@ -8,6 +8,7 @@
     import ItemList from "$lib/components/common/ItemList.svelte";
     import { slide } from "svelte/transition";
     import { extractResources, refuelShip, pathShipNav, toggleShipOrbit } from "$lib/spaceControls";
+    import { windows } from "$lib/stores";
 
     export let ship: Ship;
     export let selected: boolean;

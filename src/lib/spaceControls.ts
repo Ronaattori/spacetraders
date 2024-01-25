@@ -116,6 +116,18 @@ export async function getMarket(systemSymbol: string, waypointSymbol: string) {
 }
 
 //
+// Contract related
+//
+export async function getContracts() {
+    const res = await api.getAll(api.contracts.getContracts, api.contracts, {});
+    return res
+}
+export async function negotiateContract(shipSymbol: string) {
+    const res = await api.fleet.negotiateContract({shipSymbol});
+    return res.data;
+}
+
+//
 // Agent related
 //
 export async function getMyAgent() {

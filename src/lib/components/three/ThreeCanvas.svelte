@@ -161,6 +161,15 @@
         })
         cmr.set(obj.position)
     }
+    
+    export function highlight(symbol: string) {
+        const obj = scene.getObjectByName(symbol) as ExtendedMesh;
+        if (!obj) return;
+        obj.glow.set(2);
+        setTimeout(() => {
+           obj.glow.set(null) 
+        }, 3000);
+    }
 
 
 </script>

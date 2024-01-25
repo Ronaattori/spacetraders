@@ -2,7 +2,7 @@
     export let columns: string[];
 </script>
 
-<table>
+<table {...$$restProps}>
   <thead>
     <tr>
         {#each columns as column}
